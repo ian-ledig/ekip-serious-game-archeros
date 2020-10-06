@@ -1,6 +1,7 @@
 {
   "java.project.referencedLibraries": [
     "lib/**/*.jar",
-    "/usr/share/openjfx/lib/*.jar"
+    "/usr/share/openjfx/lib/*.jar",
+    "/home/msd11/Programmation/T3/**/*.jar"
   ]
 }
