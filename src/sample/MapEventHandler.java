@@ -36,6 +36,15 @@ public class MapEventHandler implements EventHandler<MouseEvent> {
             double currentX = e.getSceneX();
             double currentY = e.getSceneY();
 
+            /*
+             * Note : On prends la direction du drag de la souris, et en fonction de ca on
+             * calcule la nouvelle translation et position de la map en sauvegardant la
+             * dernière position pour pouvoir reprendre de là où on est et ne pas
+             * "teleporter" la map sur la souris directement.
+             */
+
+            // TODO Optimiser pour ne pas avoir de FLICK_MOVEMENT
+
             Direction direction;
             // Detect as "right flick" if the previous flick direction is not right, and the
             // dragged pixels is more than 10
