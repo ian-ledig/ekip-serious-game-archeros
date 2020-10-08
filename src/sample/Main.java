@@ -2,10 +2,6 @@ package sample;
 
 import javafx.util.Duration;
 
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.texture.Texture;
-import com.almasb.fxgl.ui.*;
-
 import javafx.animation.*;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -33,7 +29,7 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Creation of map page
-        Map newMap = new Map();
+        sample.Map newMap = new Map();
         Group map = newMap.getGroup();
         root.getChildren().add(map);
 
