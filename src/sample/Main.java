@@ -17,7 +17,7 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Creation of map page
-        sample.Map newMap = new Map();
+        Map newMap = new Map();
         Group map = newMap.getGroup();
         root.getChildren().add(map);
 
