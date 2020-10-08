@@ -16,6 +16,8 @@ public class Main extends Application {
         Scene scene = new Scene(root, 850, 500);
         scene.setFill(Color.TRANSPARENT);
 
+        // Test git
+
         // Creation of map page
         Map newMap = new Map();
         Group map = newMap.getGroup();
