@@ -1,6 +1,6 @@
 package fr.lekip;
 
-import fr.lekip.components.Map;
+import fr.lekip.components.GameMap;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -18,7 +18,7 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Page creation
-        Group map = new Map();
+        Group map = new GameMap();
         root.getChildren().add(map);
 
         // Map Event Handler

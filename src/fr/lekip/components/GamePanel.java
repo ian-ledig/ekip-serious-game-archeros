@@ -3,7 +3,7 @@ package fr.lekip.components;
 import javafx.scene.Group;
 import javafx.scene.Node;
 
-public class Panel extends Group {
+public class GamePanel extends Group {
 
     public void add(Node node){
         getChildren().add(node);

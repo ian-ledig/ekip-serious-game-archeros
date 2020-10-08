@@ -8,12 +8,12 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class Map extends Panel {
+public class GameMap extends GamePanel {
 
     private final Image WORLD_MAP;
     private final Image WORLD_PIN;
 
-    public Map() throws FileNotFoundException {
+    public GameMap() throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
 
