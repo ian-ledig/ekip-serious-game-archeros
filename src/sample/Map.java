@@ -1,18 +1,14 @@
 package sample;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import javax.swing.plaf.basic.BasicTabbedPaneUI.MouseHandler;
-
 import javafx.animation.ScaleTransition;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class Map {
 
