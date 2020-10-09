@@ -8,18 +8,26 @@ import java.lang.reflect.InvocationTargetException;
 
 public class GameGroup extends Group {
 
+    /**
+     * Add a component to the current Group
+     * @param node component to add
+     */
     public void add(Node node){
         getChildren().add(node);
     }
 
-    public void addAll(Node node){
-        getChildren().addAll(node);
-    }
-
+    /**
+     * Remove a component to the current Group
+     * @param node component to remove
+     */
     public void remove(Node node){
         getChildren().remove(node);
     }
 
+    /**
+     * Add an event handler to the current Group
+     * @param eventHandler the event handler class
+     */
     public void addEventHandler(Class<? extends EventHandler> eventHandler){
         try {
             eventHandler.getConstructor(GameGroup.class).newInstance(this);

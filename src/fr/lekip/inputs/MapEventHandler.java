@@ -19,7 +19,10 @@ public class MapEventHandler extends GameEventHandler {
 
     public MapEventHandler(GameGroup group) {
         super(group);
+    }
 
+    @Override
+    public void loadEventHandler(GameGroup group) {
         // Save the mouse position
         group.setOnMousePressed((e) -> {
             lastXPosition = e.getSceneX();

@@ -31,6 +31,9 @@ public class PageMap extends GameGroup {
         addEventHandler(MapEventHandler.class);
     }
 
+    /**
+     * Adding the "wait for player" text
+     */
     public void loadText() {
         // Create text
         Text text = new Text("Cliquez pour commencer...");
