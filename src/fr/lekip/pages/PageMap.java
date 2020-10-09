@@ -1,5 +1,8 @@
-package fr.lekip.components;
+package fr.lekip.pages;
 
+import fr.lekip.components.GameGroup;
+import fr.lekip.components.GameImage;
+import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
@@ -8,12 +11,12 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class GameMap extends GamePanel {
+public class PageMap extends GameGroup {
 
     private final Image WORLD_MAP;
     private final Image WORLD_PIN;
 
-    public GameMap() throws FileNotFoundException {
+    public PageMap() throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
 
@@ -23,8 +26,14 @@ public class GameMap extends GamePanel {
 
         // Display text while waiting for the user
         loadText();
+
+        // Add map event handler
+        addEventHandler(MapEventHandler.class);
     }
 
+    /**
+     * Adding the "wait for player" text
+     */
     public void loadText() {
         // Create text
         Text text = new Text("Cliquez pour commencer...");

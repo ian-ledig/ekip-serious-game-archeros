@@ -1,7 +1,7 @@
 package fr.lekip;
 
-import fr.lekip.components.GameMap;
-import fr.lekip.inputs.MapEventHandler;
+import fr.lekip.pages.PageMap;
+import fr.lekip.components.GameGroup;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+    public static GameGroup showedPage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -18,15 +20,16 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Page creation
-        Group map = new GameMap();
-        root.getChildren().add(map);
-
-        // Map Event Handler
-        MapEventHandler event = new MapEventHandler(map);
+        setShowedPage(new PageMap());
+        root.getChildren().add(showedPage);
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static void setShowedPage(GameGroup showedPage) {
+        Main.showedPage = showedPage;
     }
 
     public static void main(String[] args) {
