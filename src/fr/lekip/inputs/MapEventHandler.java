@@ -1,7 +1,7 @@
 package fr.lekip.inputs;
 
 import fr.lekip.components.GameGroup;
-import javafx.scene.input.MouseEvent;
+import javafx.event.Event;
 
 public class MapEventHandler extends GameEventHandler {
 
@@ -60,5 +60,5 @@ public class MapEventHandler extends GameEventHandler {
     }
 
     @Override
-    public void handle(MouseEvent arg0) {}
+    public void handle(Event event) {}
 }
