@@ -1,5 +1,6 @@
 package fr.lekip.components;
 
+import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
@@ -23,6 +24,9 @@ public class GameMap extends GamePanel {
 
         // Display text while waiting for the user
         loadText();
+
+        // Enabling map event handler
+        new MapEventHandler(this);
     }
 
     public void loadText() {

@@ -30,8 +30,6 @@ public class MapEventHandler implements EventHandler<MouseEvent> {
             double currentX = e.getSceneX();
             double currentY = e.getSceneY();
 
-            // TODO Optimiser pour ne pas avoir de FLICK_MOVEMENT
-
             // Detect as "right flick" if the previous flick direction is not right, and the
             // dragged pixels is more than 10
             if (lastFlickDirection != Direction.RIGHT && currentX - lastXPosition > MIN_FLICK_PIXELS) {
