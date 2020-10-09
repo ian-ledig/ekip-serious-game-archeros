@@ -9,7 +9,7 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class GameMap extends GamePanel {
+public class GameMap extends GameGroup {
 
     private final Image WORLD_MAP;
     private final Image WORLD_PIN;
@@ -25,8 +25,8 @@ public class GameMap extends GamePanel {
         // Display text while waiting for the user
         loadText();
 
-        // Enabling map event handler
-        new MapEventHandler(this);
+        // Add map event handler
+        addEventHandler(MapEventHandler.class);
     }
 
     public void loadText() {

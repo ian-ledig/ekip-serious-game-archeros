@@ -1,8 +1,7 @@
 package fr.lekip;
 
 import fr.lekip.components.GameMap;
-import fr.lekip.components.GamePanel;
-import fr.lekip.inputs.MapEventHandler;
+import fr.lekip.components.GameGroup;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,7 +10,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    public static GamePanel showedPage;
+    public static GameGroup showedPage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -29,7 +28,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void setShowedPage(GamePanel showedPage) {
+    public static void setShowedPage(GameGroup showedPage) {
         Main.showedPage = showedPage;
     }
 
