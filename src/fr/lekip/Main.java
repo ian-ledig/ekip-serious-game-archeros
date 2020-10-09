@@ -1,6 +1,6 @@
 package fr.lekip;
 
-import fr.lekip.components.GameMap;
+import fr.lekip.pages.PageMap;
 import fr.lekip.components.GameGroup;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -20,7 +20,7 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Page creation
-        setShowedPage(new GameMap());
+        setShowedPage(new PageMap());
         root.getChildren().add(showedPage);
 
         primaryStage.setTitle("L'Ekip");
