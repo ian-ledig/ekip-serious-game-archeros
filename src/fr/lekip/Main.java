@@ -1,7 +1,7 @@
 package fr.lekip;
 
-import fr.lekip.pages.PageMap;
 import fr.lekip.components.GameGroup;
+import fr.lekip.pages.PageMap;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
