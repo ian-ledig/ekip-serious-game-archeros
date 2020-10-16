@@ -1,4 +1,4 @@
-package sample;
+package fr.lekip.controllers;
 
 public class Controller {
 
