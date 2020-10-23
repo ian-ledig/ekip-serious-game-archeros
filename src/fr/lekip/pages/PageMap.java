@@ -109,6 +109,7 @@ public class PageMap extends GameGroup {
     }
 
     private void loadPin() {
+        // TODO load ALL the pin
         GameImage imgPin = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
         imgPin.setOnMouseClicked(mouseEvent -> {
             System.out.println("Pin cliqué");
@@ -134,11 +135,14 @@ public class PageMap extends GameGroup {
         sideMenu.setMinSize(250, 750);
         sideMenu.setMaxSize(250, 750);
 
-        // TODO modify button and add custom entries for the different locations
+        // TODO modify button and add custom entries for the different locations by
+        // TODO using the map
 
         Button btnCongo = new Button("L'alaska");
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
+
+                // TODO to refactor
                 TranslateTransition tt = new TranslateTransition();
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
