@@ -9,6 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
@@ -36,7 +40,7 @@ public class PageMap extends GameGroup {
         sideMenu.setTranslateX(1200);
 
         mapp = new Pane();
-        GameImage image = new GameImage(WORLD_MAP, 0, 0, 1400, 958, true);
+        GameImage image = new GameImage(WORLD_MAP, 0, 0, 1700, 1250, true);
 
         mapp.getChildren().addAll(image);
         add(mapp);
@@ -91,8 +95,21 @@ public class PageMap extends GameGroup {
 
             // add(imgPin);
             mapp.getChildren().addAll(imgPin);
+
             // ici on load le menu aussi <---
-            sideMenu.setBackground(new Background(new BackgroundFill(Color.BLANCHEDALMOND, null, null)));
+            Image sand;
+            try {
+                // loading of background
+                sand = new Image(new FileInputStream("src/assets/images/Sand.png"));
+                BackgroundSize backgroundSize = new BackgroundSize(250, 750, false, false, true, false);
+                BackgroundImage backgroundImage = new BackgroundImage(sand, BackgroundRepeat.REPEAT,
+                        BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, backgroundSize);
+                sideMenu.setBackground(new Background(backgroundImage));
+
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
             sideMenu.setMinSize(250, 750);
             sideMenu.setMaxSize(250, 750);
             Button btnCongo = new Button("Le congo");

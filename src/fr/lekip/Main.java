@@ -25,6 +25,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
