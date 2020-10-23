@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         // Setup scene
         Group root = new Group();
-        Scene scene = new Scene(root, 850, 500);
+        Scene scene = new Scene(root, 1450, 750);
         scene.setFill(Color.TRANSPARENT);
 
         // Page creation
@@ -25,6 +25,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

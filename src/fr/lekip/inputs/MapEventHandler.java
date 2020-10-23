@@ -2,6 +2,7 @@ package fr.lekip.inputs;
 
 import fr.lekip.components.GameGroup;
 import javafx.event.Event;
+import javafx.scene.Node;
 
 public class MapEventHandler extends GameEventHandler {
 
@@ -23,42 +24,47 @@ public class MapEventHandler extends GameEventHandler {
 
     @Override
     public void loadEventHandler(GameGroup group) {
+        // We only take the map + all the pins to move
+        Node map = group.getChildren().get(0);
+
         // Save the mouse position
-        group.setOnMousePressed((e) -> {
+        map.setOnMousePressed((e) -> {
             lastXPosition = e.getSceneX();
             lastYPosition = e.getSceneY();
         });
 
-        group.setOnMouseDragged((e) -> {
+        map.setOnMouseDragged((e) -> {
             double currentX = e.getSceneX();
             double currentY = e.getSceneY();
 
             // Detect as "right flick" if the previous flick direction is not right, and the
             // dragged pixels is more than 10
             if (lastFlickDirection != Direction.RIGHT && currentX - lastXPosition > MIN_FLICK_PIXELS) {
-                group.setTranslateX(group.getTranslateX() + FLICK_MOVEMENT);
+                map.setTranslateX(map.getTranslateX() + FLICK_MOVEMENT);
                 lastXPosition = currentX;
             }
 
             // Detect as "left flick" if the previous flick direction is not left, and the
             // dragged pixels is more than -10
             else if (lastFlickDirection != Direction.LEFT && currentX - lastXPosition < -MIN_FLICK_PIXELS) {
-                group.setTranslateX(group.getTranslateX() - FLICK_MOVEMENT);
+                map.setTranslateX(map.getTranslateX() - FLICK_MOVEMENT);
                 lastXPosition = currentX;
             }
 
             else if (lastFlickDirection != Direction.DOWN && currentY - lastYPosition > MIN_FLICK_PIXELS) {
-                group.setTranslateY(group.getTranslateY() + FLICK_MOVEMENT);
+                map.setTranslateY(map.getTranslateY() + FLICK_MOVEMENT);
                 lastYPosition = currentY;
             }
 
             else if (lastFlickDirection != Direction.UP && currentY - lastYPosition < -MIN_FLICK_PIXELS) {
-                group.setTranslateY(group.getTranslateY() - FLICK_MOVEMENT);
+                map.setTranslateY(map.getTranslateY() - FLICK_MOVEMENT);
                 lastYPosition = currentY;
             }
         });
     }
 
     @Override
-    public void handle(Event event) {}
+    public void handle(Event event) {
+        //
+    }
 }
