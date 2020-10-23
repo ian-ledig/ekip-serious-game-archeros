@@ -4,6 +4,9 @@ import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -23,6 +26,8 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PageMap extends GameGroup {
 
@@ -30,11 +35,16 @@ public class PageMap extends GameGroup {
     private final Image WORLD_PIN;
     private final VBox sideMenu;
     private final Pane mapp;
+    private Map pinCombo;
 
     public PageMap() throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
 
+        // TODO add each pin in the Map pinCombo and create a button for each pin inside
+        // TODO it and add the butotn in the map value
+
+        pinCombo = new HashMap<GameImage, Button>();
         // Create the map
         sideMenu = new VBox();
         sideMenu.setTranslateX(1200);
@@ -88,13 +98,7 @@ public class PageMap extends GameGroup {
             st.stop();
             remove(text);
 
-            GameImage imgPin = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
-            imgPin.setOnMouseClicked(mouseEvent -> {
-                System.out.println("Pin cliqué");
-            });
-
-            // add(imgPin);
-            mapp.getChildren().addAll(imgPin);
+            loadPin();
 
             // ici on load le menu aussi <---
             loadMenu();
@@ -102,6 +106,15 @@ public class PageMap extends GameGroup {
             // Delete event
             setOnMouseClicked(null);
         });
+    }
+
+    private void loadPin() {
+        GameImage imgPin = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
+        imgPin.setOnMouseClicked(mouseEvent -> {
+            System.out.println("Pin cliqué");
+        });
+
+        mapp.getChildren().addAll(imgPin);
     }
 
     private void loadMenu() {
@@ -120,8 +133,28 @@ public class PageMap extends GameGroup {
 
         sideMenu.setMinSize(250, 750);
         sideMenu.setMaxSize(250, 750);
-        Button btnCongo = new Button("Le congo");
+
+        // TODO modify button and add custom entries for the different locations
+
+        Button btnCongo = new Button("L'alaska");
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                TranslateTransition tt = new TranslateTransition();
+                tt.setNode(mapp);
+                tt.setFromX(mapp.getTranslateX());
+                tt.setFromY(mapp.getTranslateY());
+                tt.setToX(500);
+                tt.setToY(225);
+                tt.setDuration(new Duration(1500));
+                tt.setCycleCount(1);
+                tt.setAutoReverse(true);
+                tt.play();
+            }
+        };
+        btnCongo.setOnAction(event);
+
         Button btnPyramide = new Button("La Pyramide \nDe Gisee");
+
         sideMenu.getChildren().add(btnCongo);
         sideMenu.getChildren().add(btnPyramide);
     }
