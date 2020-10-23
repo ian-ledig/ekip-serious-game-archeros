@@ -56,7 +56,7 @@ public class PageMap extends GameGroup {
     /**
      * Adding the "wait for player" text
      */
-    public void loadText() {
+    private void loadText() {
         // Create text
         Text text = new Text("Cliquez pour commencer...");
         text.setTranslateX(550);
@@ -97,28 +97,32 @@ public class PageMap extends GameGroup {
             mapp.getChildren().addAll(imgPin);
 
             // ici on load le menu aussi <---
-            Image sand;
-            try {
-                // loading of background
-                sand = new Image(new FileInputStream("src/assets/images/Sand.png"));
-                BackgroundSize backgroundSize = new BackgroundSize(250, 750, false, false, true, false);
-                BackgroundImage backgroundImage = new BackgroundImage(sand, BackgroundRepeat.REPEAT,
-                        BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, backgroundSize);
-                sideMenu.setBackground(new Background(backgroundImage));
-
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
-            }
-
-            sideMenu.setMinSize(250, 750);
-            sideMenu.setMaxSize(250, 750);
-            Button btnCongo = new Button("Le congo");
-            Button btnPyramide = new Button("La Pyramide \nDe Gisee");
-            sideMenu.getChildren().add(btnCongo);
-            sideMenu.getChildren().add(btnPyramide);
+            loadMenu();
 
             // Delete event
             setOnMouseClicked(null);
         });
+    }
+
+    private void loadMenu() {
+        Image sand;
+        try {
+            // loading of background
+            sand = new Image(new FileInputStream("src/assets/images/Sand.png"));
+            BackgroundSize backgroundSize = new BackgroundSize(250, 750, false, false, true, false);
+            BackgroundImage backgroundImage = new BackgroundImage(sand, BackgroundRepeat.REPEAT,
+                    BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, backgroundSize);
+            sideMenu.setBackground(new Background(backgroundImage));
+
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+
+        sideMenu.setMinSize(250, 750);
+        sideMenu.setMaxSize(250, 750);
+        Button btnCongo = new Button("Le congo");
+        Button btnPyramide = new Button("La Pyramide \nDe Gisee");
+        sideMenu.getChildren().add(btnCongo);
+        sideMenu.getChildren().add(btnPyramide);
     }
 }
