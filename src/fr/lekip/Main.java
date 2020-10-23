@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         // Setup scene
         Group root = new Group();
-        Scene scene = new Scene(root, 850, 500);
+        Scene scene = new Scene(root, 1450, 750);
         scene.setFill(Color.TRANSPARENT);
 
         // Page creation
@@ -28,15 +28,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-<<<<<<< HEAD:src/sample/Main.java
-        // Test !
-
-        // test
-
-=======
     public static void setShowedPage(GameGroup showedPage) {
         Main.showedPage = showedPage;
->>>>>>> master:src/fr/lekip/Main.java
     }
 
     public static void main(String[] args) {

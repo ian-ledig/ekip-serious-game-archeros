@@ -4,7 +4,16 @@ import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -15,14 +24,23 @@ public class PageMap extends GameGroup {
 
     private final Image WORLD_MAP;
     private final Image WORLD_PIN;
+    private final VBox sideMenu;
+    private final Pane mapp;
 
     public PageMap() throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
 
         // Create the map
+        sideMenu = new VBox();
+        sideMenu.setTranslateX(1200);
+
+        mapp = new Pane();
         GameImage image = new GameImage(WORLD_MAP, 0, 0, 1400, 958, true);
-        add(image);
+
+        mapp.getChildren().addAll(image);
+        add(mapp);
+        add(sideMenu);
 
         // Display text while waiting for the user
         loadText();
@@ -37,8 +55,8 @@ public class PageMap extends GameGroup {
     public void loadText() {
         // Create text
         Text text = new Text("Cliquez pour commencer...");
-        text.setTranslateX(250);
-        text.setTranslateY(250);
+        text.setTranslateX(550);
+        text.setTranslateY(375);
         text.setStyle("-fx-fill: purple;-fx-font: 30 arial; ");
 
         add(text);
@@ -71,9 +89,16 @@ public class PageMap extends GameGroup {
                 System.out.println("Pin cliqué");
             });
 
-            add(imgPin);
-
+            // add(imgPin);
+            mapp.getChildren().addAll(imgPin);
             // ici on load le menu aussi <---
+            sideMenu.setBackground(new Background(new BackgroundFill(Color.BLANCHEDALMOND, null, null)));
+            sideMenu.setMinSize(250, 750);
+            sideMenu.setMaxSize(250, 750);
+            Button btnCongo = new Button("Le congo");
+            Button btnPyramide = new Button("La Pyramide \nDe Gisee");
+            sideMenu.getChildren().add(btnCongo);
+            sideMenu.getChildren().add(btnPyramide);
 
             // Delete event
             setOnMouseClicked(null);
