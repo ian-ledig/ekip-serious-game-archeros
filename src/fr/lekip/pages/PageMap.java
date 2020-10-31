@@ -8,6 +8,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -26,6 +27,7 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +37,7 @@ public class PageMap extends GameGroup {
     private final Image WORLD_PIN;
     private final VBox sideMenu;
     private final Pane mapp;
-    private Map pinCombo;
+    private Object[][] pinCombo;
 
     public PageMap() throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
@@ -44,7 +46,9 @@ public class PageMap extends GameGroup {
         // TODO add each pin in the Map pinCombo and create a button for each pin inside
         // TODO it and add the butotn in the map value
 
-        pinCombo = new HashMap<GameImage, Button>();
+        // pinCombo = new HashMap<GameImage, Button>();
+        pinCombo = new Object[3][3];
+
         // Create the map
         sideMenu = new VBox();
         sideMenu.setTranslateX(1200);
@@ -110,12 +114,22 @@ public class PageMap extends GameGroup {
 
     private void loadPin() {
         // TODO load ALL the pin
-        GameImage imgPin = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
-        imgPin.setOnMouseClicked(mouseEvent -> {
-            System.out.println("Pin cliqué");
-        });
 
-        mapp.getChildren().addAll(imgPin);
+        pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
+        pinCombo[0][1] = "L'alaska";
+        pinCombo[1][0] = new GameImage(WORLD_PIN, 240, 300, 80, 80, true);
+        pinCombo[1][1] = "La tombe sacré";
+        pinCombo[2][0] = new GameImage(WORLD_PIN, 400, 230, 80, 80, true);
+        pinCombo[2][1] = "L'inconnu";
+
+        for (int i = 0; i < 3; i++) {
+            ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
+                System.out.println("Pin cliqué");
+            });
+            mapp.getChildren().addAll((GameImage) pinCombo[i][0]);
+
+        }
+
     }
 
     private void loadMenu() {
@@ -138,6 +152,12 @@ public class PageMap extends GameGroup {
         // TODO modify button and add custom entries for the different locations by
         // TODO using the map
 
+        for (int i = 0; i < 3; i++) {
+            pinCombo[i][2] = new Button((String) pinCombo[i][1]);
+
+            sideMenu.getChildren().add((Button) pinCombo[i][2]);
+        }
+
         Button btnCongo = new Button("L'alaska");
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
@@ -157,9 +177,5 @@ public class PageMap extends GameGroup {
         };
         btnCongo.setOnAction(event);
 
-        Button btnPyramide = new Button("La Pyramide \nDe Gisee");
-
-        sideMenu.getChildren().add(btnCongo);
-        sideMenu.getChildren().add(btnPyramide);
     }
 }
