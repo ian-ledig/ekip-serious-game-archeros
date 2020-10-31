@@ -187,15 +187,15 @@ public class PageMap extends GameGroup {
             public void handle(ActionEvent e) {
 
                 final double x = ((GameImage) pinCombo[1][0]).getXImage();
-                final double y = ((GameImage) pinCombo[1][0]).getYImage() - 300;
+                final double y = ((GameImage) pinCombo[1][0]).getYImage() - 800;
 
                 System.out.println(x);
                 TranslateTransition tt = new TranslateTransition();
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
                 tt.setFromY(mapp.getTranslateY());
-                tt.setToX(x);
-                tt.setToY(y);
+                tt.setToX(500);
+                tt.setToY(-400);
                 tt.setDuration(new Duration(1500));
                 tt.setCycleCount(1);
                 tt.setAutoReverse(true);
@@ -214,8 +214,8 @@ public class PageMap extends GameGroup {
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
                 tt.setFromY(mapp.getTranslateY());
-                tt.setToX(x);
-                tt.setToY(y);
+                tt.setToX(-350);
+                tt.setToY(-115);
                 tt.setDuration(new Duration(1500));
                 tt.setCycleCount(1);
                 tt.setAutoReverse(true);
