@@ -10,7 +10,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
@@ -37,6 +39,7 @@ public class PageMap extends GameGroup {
     private final Image WORLD_PIN;
     private final VBox sideMenu;
     private final Pane mapp;
+    private Object tempView;
     private Object[][] pinCombo;
 
     public PageMap() throws FileNotFoundException {
@@ -113,13 +116,13 @@ public class PageMap extends GameGroup {
     }
 
     private void loadPin() {
-        // TODO load ALL the pin
 
+        // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
         pinCombo[0][1] = "L'alaska";
-        pinCombo[1][0] = new GameImage(WORLD_PIN, 240, 300, 80, 80, true);
+        pinCombo[1][0] = new GameImage(WORLD_PIN, 240, 750, 80, 80, true);
         pinCombo[1][1] = "La tombe sacré";
-        pinCombo[2][0] = new GameImage(WORLD_PIN, 400, 230, 80, 80, true);
+        pinCombo[2][0] = new GameImage(WORLD_PIN, 800, 230, 80, 80, true);
         pinCombo[2][1] = "L'inconnu";
 
         for (int i = 0; i < 3; i++) {
@@ -149,33 +152,75 @@ public class PageMap extends GameGroup {
         sideMenu.setMinSize(250, 750);
         sideMenu.setMaxSize(250, 750);
 
-        // TODO modify button and add custom entries for the different locations by
-        // TODO using the map
+        loadButtons();
 
+    }
+
+    private void loadButtons() {
         for (int i = 0; i < 3; i++) {
             pinCombo[i][2] = new Button((String) pinCombo[i][1]);
-
             sideMenu.getChildren().add((Button) pinCombo[i][2]);
         }
 
-        Button btnCongo = new Button("L'alaska");
-        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+        // TODO to refactor
+        ((Button) pinCombo[0][2]).setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
 
-                // TODO to refactor
+                final double x = ((GameImage) pinCombo[0][0]).getXImage() + 350;
+                final double y = ((GameImage) pinCombo[0][0]).getYImage() + 75;
+
+                System.out.println(x);
                 TranslateTransition tt = new TranslateTransition();
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
                 tt.setFromY(mapp.getTranslateY());
-                tt.setToX(500);
-                tt.setToY(225);
+                tt.setToX(x);
+                tt.setToY(y);
                 tt.setDuration(new Duration(1500));
                 tt.setCycleCount(1);
                 tt.setAutoReverse(true);
                 tt.play();
             }
-        };
-        btnCongo.setOnAction(event);
+        });
 
+        ((Button) pinCombo[1][2]).setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+
+                final double x = ((GameImage) pinCombo[1][0]).getXImage();
+                final double y = ((GameImage) pinCombo[1][0]).getYImage() - 300;
+
+                System.out.println(x);
+                TranslateTransition tt = new TranslateTransition();
+                tt.setNode(mapp);
+                tt.setFromX(mapp.getTranslateX());
+                tt.setFromY(mapp.getTranslateY());
+                tt.setToX(x);
+                tt.setToY(y);
+                tt.setDuration(new Duration(1500));
+                tt.setCycleCount(1);
+                tt.setAutoReverse(true);
+                tt.play();
+            }
+        });
+
+        ((Button) pinCombo[2][2]).setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+
+                final double x = ((GameImage) pinCombo[2][0]).getXImage() + 350;
+                final double y = ((GameImage) pinCombo[2][0]).getYImage() + 75;
+
+                System.out.println(x);
+                TranslateTransition tt = new TranslateTransition();
+                tt.setNode(mapp);
+                tt.setFromX(mapp.getTranslateX());
+                tt.setFromY(mapp.getTranslateY());
+                tt.setToX(x);
+                tt.setToY(y);
+                tt.setDuration(new Duration(1500));
+                tt.setCycleCount(1);
+                tt.setAutoReverse(true);
+                tt.play();
+            }
+        });
     }
 }
