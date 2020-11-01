@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -46,9 +47,6 @@ public class PageMap extends GameGroup {
         WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
 
-        // TODO add each pin in the Map pinCombo and create a button for each pin inside
-        // TODO it and add the butotn in the map value
-
         // pinCombo = new HashMap<GameImage, Button>();
         pinCombo = new Object[3][3];
 
@@ -66,8 +64,6 @@ public class PageMap extends GameGroup {
         // Display text while waiting for the user
         loadText();
 
-        // Add map event handler
-        addEventHandler(MapEventHandler.class);
     }
 
     /**
@@ -109,6 +105,13 @@ public class PageMap extends GameGroup {
 
             // ici on load le menu aussi <---
             loadMenu();
+
+            try {
+                loadIntro();
+            } catch (FileNotFoundException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
 
             // Delete event
             setOnMouseClicked(null);
@@ -169,7 +172,6 @@ public class PageMap extends GameGroup {
                 final double x = ((GameImage) pinCombo[0][0]).getXImage() + 350;
                 final double y = ((GameImage) pinCombo[0][0]).getYImage() + 75;
 
-                System.out.println(x);
                 TranslateTransition tt = new TranslateTransition();
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
@@ -186,10 +188,6 @@ public class PageMap extends GameGroup {
         ((Button) pinCombo[1][2]).setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
 
-                final double x = ((GameImage) pinCombo[1][0]).getXImage();
-                final double y = ((GameImage) pinCombo[1][0]).getYImage() - 800;
-
-                System.out.println(x);
                 TranslateTransition tt = new TranslateTransition();
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
@@ -206,10 +204,6 @@ public class PageMap extends GameGroup {
         ((Button) pinCombo[2][2]).setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
 
-                final double x = ((GameImage) pinCombo[2][0]).getXImage() + 350;
-                final double y = ((GameImage) pinCombo[2][0]).getYImage() + 75;
-
-                System.out.println(x);
                 TranslateTransition tt = new TranslateTransition();
                 tt.setNode(mapp);
                 tt.setFromX(mapp.getTranslateX());
@@ -223,4 +217,33 @@ public class PageMap extends GameGroup {
             }
         });
     }
+
+    private void loadIntro() throws FileNotFoundException {
+        GameGroup introPage = new PageIntro();
+
+        BoxBlur boxBlur = new BoxBlur();
+        boxBlur.setWidth(8);
+        boxBlur.setHeight(4);
+        boxBlur.setIterations(2);
+
+        for (Node objects : super.getChildren()) {
+            objects.setEffect(boxBlur);
+        }
+        add(introPage);
+
+        introPage.requestFocus();
+        introPage.setOnKeyPressed((e) -> {
+            if (((PageIntro) introPage).isFinished()) {
+                for (Node objects : super.getChildren()) {
+                    objects.setEffect(null);
+                }
+                remove(introPage);
+
+                // Add map event handler
+                addEventHandler(MapEventHandler.class);
+            }
+        });
+
+    }
+
 }
