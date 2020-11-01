@@ -1,11 +1,19 @@
 package fr.lekip;
 
+import java.io.FileInputStream;
+
 import fr.lekip.components.GameGroup;
 import fr.lekip.pages.PageMap;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -17,8 +25,10 @@ public class Main extends Application {
         // Setup scene
         Group root = new Group();
         Scene scene = new Scene(root, 1450, 750);
-        scene.setFill(Color.TRANSPARENT);
 
+        // Set background image
+        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/images/brick2.png")));
+        scene.setFill(pattern);
         // Page creation
         setShowedPage(new PageMap());
         root.getChildren().add(showedPage);
