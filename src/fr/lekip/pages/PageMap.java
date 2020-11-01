@@ -221,11 +221,13 @@ public class PageMap extends GameGroup {
     private void loadIntro() throws FileNotFoundException {
         GameGroup introPage = new PageIntro();
 
+        // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
         boxBlur.setWidth(8);
         boxBlur.setHeight(4);
         boxBlur.setIterations(2);
 
+        // Add blur effect to all the nodes
         for (Node objects : super.getChildren()) {
             objects.setEffect(boxBlur);
         }

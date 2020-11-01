@@ -28,8 +28,7 @@ public class PageIntro extends GameGroup {
         StackPane mapp = new StackPane();
         GameImage image = new GameImage(overlayDialog, 0, 600, 1450, 150, false);
 
-        txt = new Text(
-                "Bienvenue sur [NOM] ! \nVous allez devoir découvrir des vestiges du passé en faisant attention de ne pas endommager les trouvailles !");
+        txt = new Text(dialog[0]);
         txt.setFont(new Font(18));
         mapp.getChildren().addAll(image);
         mapp.getChildren().addAll(txt);
