@@ -1,6 +1,7 @@
 package fr.lekip;
 
 import fr.lekip.components.GameGroup;
+import fr.lekip.pages.PageMap;
 import fr.lekip.utils.GroundType;
 import fr.lekip.pages.PageMining;
 import fr.lekip.pages.SkyboxType;
@@ -26,12 +27,14 @@ public class Main extends Application {
 
         // Page creation
 
-        // TEST
+        /* Page Mining
         List<GroundType> groundTypes = new ArrayList<>();
         groundTypes.add(GroundType.DIRT);
         groundTypes.add(GroundType.STONE);
-
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes));
+        */
+        setShowedPage(new PageMap());
+
         root.getChildren().add(showedPage);
 
         primaryStage.setTitle("L'Ekip");
