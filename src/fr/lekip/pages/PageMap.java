@@ -17,11 +17,11 @@ public class PageMap extends GameGroup {
     private final Image WORLD_PIN;
 
     public PageMap() throws FileNotFoundException {
-        WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
-        WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
+        WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
+        WORLD_PIN = new Image(new FileInputStream("src/assets/textures/pages/main/pin.png"));
 
         // Create the map
-        GameImage image = new GameImage(WORLD_MAP, 0, 0, 1400, 958, true);
+        GameImage image = new GameImage(WORLD_MAP, 0, 0, WORLD_MAP.getWidth(), WORLD_MAP.getHeight(), true);
         add(image);
 
         // Display text while waiting for the user
@@ -66,7 +66,7 @@ public class PageMap extends GameGroup {
             st.stop();
             remove(text);
 
-            GameImage imgPin = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
+            GameImage imgPin = new GameImage(WORLD_PIN, 150, 150, WORLD_PIN.getWidth(), WORLD_PIN.getHeight(), true);
             imgPin.setOnMouseClicked(mouseEvent -> {
                 System.out.println("Pin cliqué");
             });

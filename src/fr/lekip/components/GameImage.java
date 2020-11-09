@@ -5,6 +5,8 @@ import javafx.scene.image.ImageView;
 
 public class GameImage extends ImageView {
 
+
+
     public GameImage(Image img, double x, double y, double width, double height, boolean preserveRatio){
         setImage(img);
         setX(x);
@@ -12,5 +14,10 @@ public class GameImage extends ImageView {
         setFitWidth(width);
         setFitHeight(height);
         setPreserveRatio(preserveRatio);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new GameImage(getImage(), getX(), getY(), getFitWidth(), getFitHeight(), isPreserveRatio());
     }
 }
