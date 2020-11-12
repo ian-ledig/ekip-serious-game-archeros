@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 public abstract class GameEventHandler implements EventHandler {
 
     public GameEventHandler(GameGroup group){
+        group.setFocusTraversable(true);
         loadEventHandler(group);
     }
 

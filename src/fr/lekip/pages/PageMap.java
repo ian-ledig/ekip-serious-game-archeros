@@ -44,8 +44,8 @@ public class PageMap extends GameGroup {
     private Object[][] pinCombo;
 
     public PageMap() throws FileNotFoundException {
-        WORLD_MAP = new Image(new FileInputStream("src/assets/images/worldMap.png"));
-        WORLD_PIN = new Image(new FileInputStream("src/assets/images/pin.png"));
+        WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
+        WORLD_PIN = new Image(new FileInputStream("src/assets/textures/pages/main/pin.png"));
 
         // pinCombo = new HashMap<GameImage, Button>();
         pinCombo = new Object[3][3];

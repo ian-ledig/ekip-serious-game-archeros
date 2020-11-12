@@ -5,10 +5,9 @@ import javafx.scene.image.ImageView;
 
 public class GameImage extends ImageView {
 
-    double xPos;
-    double yPos;
 
-    public GameImage(Image img, double x, double y, double width, double height, boolean preserveRatio) {
+
+    public GameImage(Image img, double x, double y, double width, double height, boolean preserveRatio){
         setImage(img);
         xPos = x;
         yPos = y;
@@ -19,11 +18,8 @@ public class GameImage extends ImageView {
         setPreserveRatio(preserveRatio);
     }
 
-    public double getXImage() {
-        return xPos;
-    }
-
-    public double getYImage() {
-        return yPos;
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new GameImage(getImage(), getX(), getY(), getFitWidth(), getFitHeight(), isPreserveRatio());
     }
 }
