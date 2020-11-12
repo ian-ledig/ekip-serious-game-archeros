@@ -1,5 +1,7 @@
 package fr.lekip;
 
+import java.io.FileInputStream;
+
 import fr.lekip.components.GameGroup;
 import fr.lekip.pages.PageMap;
 import fr.lekip.utils.GroundType;
@@ -8,7 +10,13 @@ import fr.lekip.pages.SkyboxType;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -25,6 +33,9 @@ public class Main extends Application {
         Scene scene = new Scene(root, 1450, 750);
         scene.setFill(Color.TRANSPARENT);
 
+        // Set background image
+        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/images/brick2.png")));
+        scene.setFill(pattern);
         // Page creation
 
         /* Page Mining
@@ -39,6 +50,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
