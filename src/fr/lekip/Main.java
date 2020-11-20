@@ -4,9 +4,9 @@ import java.io.FileInputStream;
 
 import fr.lekip.components.GameGroup;
 import fr.lekip.pages.PageMap;
-import fr.lekip.utils.GroundType;
 import fr.lekip.pages.PageMining;
 import fr.lekip.pages.SkyboxType;
+import fr.lekip.utils.GroundType;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -38,12 +38,12 @@ public class Main extends Application {
         scene.setFill(pattern);
         // Page creation
 
-        /* Page Mining
-        List<GroundType> groundTypes = new ArrayList<>();
-        groundTypes.add(GroundType.DIRT);
-        groundTypes.add(GroundType.STONE);
-        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes));
-        */
+        // Page Mining
+        // List<GroundType> groundTypes = new ArrayList<>();
+        // groundTypes.add(GroundType.DIRT);
+        // groundTypes.add(GroundType.STONE);
+        // setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes));
+
         setShowedPage(new PageMap());
 
         root.getChildren().add(showedPage);
