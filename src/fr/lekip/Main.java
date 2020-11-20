@@ -39,12 +39,12 @@ public class Main extends Application {
         // Page creation
 
         // Page Mining
-        // List<GroundType> groundTypes = new ArrayList<>();
-        // groundTypes.add(GroundType.DIRT);
-        // groundTypes.add(GroundType.STONE);
-        // setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes));
+        List<GroundType> groundTypes = new ArrayList<>();
+        groundTypes.add(GroundType.DIRT);
+        groundTypes.add(GroundType.STONE);
+        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes));
 
-        setShowedPage(new PageMap());
+        // setShowedPage(new PageMap());
 
         root.getChildren().add(showedPage);
 
