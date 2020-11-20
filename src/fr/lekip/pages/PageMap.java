@@ -133,7 +133,7 @@ public class PageMap extends GameGroup {
         Image sand;
         try {
             // loading of background
-            sand = new Image(new FileInputStream("src/assets/images/fond.png"));
+            sand = new Image(new FileInputStream("src/assets/textures/pages/main/fond.png"));
             BackgroundSize backgroundSize = new BackgroundSize(250, 750, false, false, true, false);
             BackgroundImage backgroundImage = new BackgroundImage(sand, BackgroundRepeat.REPEAT,
                     BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, backgroundSize);
@@ -158,8 +158,8 @@ public class PageMap extends GameGroup {
         int y = 10;
         for (int i = 0; i < 3; i++) {
             // Load every button in the menu
-            GameImage btn = new GameImage(new Image(new FileInputStream("src/assets/images/btn.png")), 10, y, 170, 100,
-                    true);
+            GameImage btn = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/btn.png")), 10,
+                    y, 170, 100, true);
             Text btnTxt = new Text((String) pinCombo[i][1]);
             StackPane panel = new StackPane();
             panel.setPadding(new Insets(5, 5, 5, 5));
@@ -266,8 +266,9 @@ public class PageMap extends GameGroup {
         Pane pane = new Pane();
         try {
             // here we change the size of the background
-            GameImage back = new GameImage(new Image(new FileInputStream("src/assets/images/fondettout.png")), 0, 0,
-                    1250, 600, true);
+            GameImage back = new GameImage(
+                    new Image(new FileInputStream("src/assets/textures/pages/main/fondettout.png")), 0, 0, 1250, 600,
+                    true);
             pane.getChildren().add(back);
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
@@ -275,13 +276,14 @@ public class PageMap extends GameGroup {
 
         GameImage crossClose = null;
         try {
-            crossClose = new GameImage(new Image(new FileInputStream("src/assets/images/cross.png")), 1200, 5, 20, 20,
+            crossClose = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/cross.png")), 1200,
+                    5, 20, 20, true);
+            GameImage validate = new GameImage(
+                    new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970, 500, 200, 80,
                     true);
-            GameImage validate = new GameImage(new Image(new FileInputStream("src/assets/images/fouiller.png")), 970,
-                    500, 200, 80, true);
 
-            GameImage landscape = new GameImage(new Image(new FileInputStream("src/assets/images/brora.png")), 10, 10,
-                    500, 225, true);
+            GameImage landscape = new GameImage(
+                    new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
             pane.getChildren().add(landscape);
             pane.getChildren().add(crossClose);
             pane.getChildren().add(validate);

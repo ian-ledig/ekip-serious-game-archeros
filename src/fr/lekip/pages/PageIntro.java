@@ -26,7 +26,7 @@ public class PageIntro extends GameGroup {
             "Appuyez sur n'importe quelle touche pour commencer..." };
 
     public PageIntro() throws FileNotFoundException {
-        Image overlayDialog = new Image(new FileInputStream("src/assets/images/textbox.png"));
+        Image overlayDialog = new Image(new FileInputStream("src/assets/textures/pages/main/textbox.png"));
         StackPane mapp = new StackPane();
         GameImage image = new GameImage(overlayDialog, 0, 600, 1450, 150, false);
 

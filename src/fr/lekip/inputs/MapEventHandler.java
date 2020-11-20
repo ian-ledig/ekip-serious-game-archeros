@@ -13,7 +13,6 @@ public class MapEventHandler extends GameEventHandler {
     private double lastYPosition;
 
     private Direction lastFlickDirection;
-    private GameGroup grp;
 
     private enum Direction {
         LEFT, RIGHT, UP, DOWN
@@ -21,7 +20,6 @@ public class MapEventHandler extends GameEventHandler {
 
     public MapEventHandler(GameGroup group) {
         super(group);
-        grp = group;
     }
 
     @Override
