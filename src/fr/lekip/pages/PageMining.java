@@ -38,7 +38,22 @@ public class PageMining extends GameGroup {
         int x = 0;
         int y = 262;
         try {
+            // Item spawning
+            for (Item item : items) {
+                int spawnPosX = (int) (36 + Math.random() * 1422);
+                int spawnPosY = (int) (298 + Math.random() * 450);
+                GameImage newItem = item.cloneGameImage();
+                newItem.setX(spawnPosX);
+                newItem.setY(spawnPosY);
+                add(newItem);
+                groundItems.add(newItem);
 
+                // Delete the item and increase the number of objects found when item is clicked
+                newItem.setOnMouseClicked(mouseEvent -> {
+                    newItem.setImage(null);
+                    itemFoundCount++;
+                });
+            }
 
             // Ground box spawning
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
@@ -57,23 +72,6 @@ public class PageMining extends GameGroup {
                 groundBox[i].setX(x);
                 groundBox[i].setY(y);
                 add(groundBox[i]);
-            }
-
-            // Item spawning
-            for (Item item : items) {
-                int spawnPosX = (int) (36 + Math.random() * 1422);
-                int spawnPosY = (int) (298 + Math.random() * 450);
-                GameImage newItem = item.cloneGameImage();
-                newItem.setX(spawnPosX);
-                newItem.setY(spawnPosY);
-                add(newItem);
-                groundItems.add(newItem);
-
-                // Delete the item and increase the number of objects found when item is clicked
-                newItem.setOnMouseClicked(mouseEvent -> {
-                    newItem.setImage(null);
-                    itemFoundCount++;
-                });
             }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
