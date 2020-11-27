@@ -1,6 +1,7 @@
 package fr.lekip;
 
 import fr.lekip.components.GameGroup;
+import fr.lekip.pages.PageMap;
 import fr.lekip.pages.PageMining;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
@@ -41,6 +42,7 @@ public class Main extends Application {
         groundTypes.add(GroundType.DIRT);
         groundTypes.add(GroundType.STONE);
         List<Item> items = new ArrayList<>();
+        items.add(Item.ARTEFACT01);
         items.add(Item.ARTEFACT01);
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));
 

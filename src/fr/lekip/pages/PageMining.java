@@ -22,6 +22,8 @@ public class PageMining extends GameGroup {
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
     private ProgressBar energyBar = new ProgressBar();
+    private double energyValue = 0;
+    private double energyDefault = 0;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
             throws FileNotFoundException {
@@ -35,15 +37,6 @@ public class PageMining extends GameGroup {
         int x = 0;
         int y = 262;
         try {
-            // Item spawning
-            for (Item item : items) {
-                int spawnPosX = (int) (36 + Math.random() * 1422);
-                int spawnPosY = (int) (298 + Math.random() * 450);
-                GameImage newItem = item.cloneGameImage();
-                newItem.setX(spawnPosX);
-                newItem.setY(spawnPosY);
-                add(newItem);
-            }
 
             // Ground box spawning
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
@@ -63,6 +56,48 @@ public class PageMining extends GameGroup {
                 groundBox[i].setY(y);
                 add(groundBox[i]);
             }
+
+            // Item spawning
+            for (Item item : items) {
+                int spawnPosX = (int) (36 + Math.random() * 1422);
+                int spawnPosY = (int) (298 + Math.random() * 450);
+                GameImage newItem = item.cloneGameImage();
+                newItem.setX(spawnPosX);
+                newItem.setY(spawnPosY);
+                add(newItem);
+            }
+
+            int Y1 = 0;
+            int Y2 = 0;
+            for (int i = 0; i < 4; i++) {
+                energyDefault += (getGroundItems.get(i).getY() - 262) * 1.2 + 7;
+
+                // TODO Prendre le plus grand Y et le petit Y de la liste 
+                if((getGroundItems.get(i).getY() - 262) > Y1)
+            }
+
+            double malus;
+            if (tempY < tempY2) {
+
+                malus = (tempY2 * 1) - tempY;
+
+            } else {
+                malus = (tempY * 1) - tempY2;
+            }
+
+            /*
+             * valeur absolu de [Y de l'item le plus profond x (nombre d'items - 1) - (Y de
+             * tous les autres objets)] -> a si a < 10 energieMax - ([10 - a] x 2)
+             */
+
+            if (malus < 0) {
+                malus *= -1;
+            }
+            if (malus < 180) {
+                energyDefault -= (180 - malus) * 2;
+            }
+
+            energyValue = energyDefault;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -101,12 +136,19 @@ public class PageMining extends GameGroup {
         hbox.setSpacing(5);
         hbox.getChildren().addAll(lightning, energyBar);
         add(hbox);
+        setOnMouseClicked((e) -> {
+            decreaseEnergy(player.getTool().getStrength());
+        });
 
         // Calculation of the maximal energy
         //
     }
 
-    public void decreaseEnergy() {
+    public void decreaseEnergy(int strength) {
+        System.out.println(energyValue);
+        energyValue -= strength * 18;
+        System.out.println(((energyValue * 100) / energyDefault) * 0.01);
+        energyBar.setProgress(((energyValue * 100) / energyDefault) * 0.01);
         // to finish
         // energybar.setProgress(oldValue - energyConsumed in percentage ->) percentage
         // calculation : (newValue * 100) / initValue
