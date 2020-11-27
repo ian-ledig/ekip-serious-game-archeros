@@ -1,8 +1,12 @@
 package fr.lekip.inputs;
 
+import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GamePlayer;
 import fr.lekip.pages.PageMining;
+import fr.lekip.utils.Direction;
+import fr.lekip.utils.Movement;
+import fr.lekip.utils.Tool;
 import javafx.event.Event;
 
 public class PlayerMovementsEventHandler extends GameEventHandler{
@@ -21,14 +25,62 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
         if(player != null){
             group.setOnKeyPressed(keyEvent -> {
 
+                int delta = 10;
                 switch (keyEvent.getCode()){
+                    // Left movement
                     case Q:
-                        player.decrementX(10);
+                    case LEFT:
+                        player.setMovements(Movement.LEFT);
+                        if(player.getTranslateX() - delta > 0 && player.canPlayerGo(Direction.LEFT))
+                            player.decrementX(delta);
                         break;
+
+                    // Right movement
                     case D:
-                        player.incrementX(10);
+                    case RIGHT:
+                        player.setMovements(Movement.RIGHT);
+                        if(player.getTranslateX() - delta < Main.WINDOWS_WIDTH - 80 && player.canPlayerGo(Direction.RIGHT))
+                            player.incrementX(delta);
                         break;
-                    case SPACE:
+
+                    // Down movement
+                    case DOWN:
+                    case S:
+                        player.setMovements(Movement.IDLE);
+                        if(player.canPlayerGo(Direction.DOWN))
+                            player.decrementY(delta);
+                        break;
+
+                    // Up movement
+                    case UP:
+                    case Z:
+                        player.setMovements(Movement.IDLE);
+                        if(player.canPlayerGo(Direction.UP))
+                            player.incrementY(delta);
+                        break;
+
+                    // Switch tool
+                    case F:
+                        int toolIndex = 0;
+
+                        if(player.getTool() != null){
+                            toolIndex = player.getTool().ordinal() + 1;
+                            if(toolIndex == Tool.values().length)
+                                toolIndex = 0;
+                        }
+                        else
+                            toolIndex = Tool.SHOVEL.ordinal();
+
+                        player.setTool(Tool.values()[toolIndex]);
+                        break;
+                }
+            });
+
+            group.setOnMousePressed(mouseEvent -> {
+                switch (mouseEvent.getButton()){
+                    // Try to break
+                    case PRIMARY:
+                        player.tryToBreak();
                         break;
                 }
             });
@@ -36,7 +88,5 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
     }
 
     @Override
-    public void handle(Event event) {
-
-    }
+    public void handle(Event event) {}
 }

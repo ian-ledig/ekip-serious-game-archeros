@@ -1,6 +1,7 @@
 package fr.lekip.inputs;
 
 import fr.lekip.components.GameGroup;
+import fr.lekip.utils.Direction;
 import javafx.event.Event;
 import javafx.scene.Node;
 
@@ -13,10 +14,6 @@ public class MapEventHandler extends GameEventHandler {
     private double lastYPosition;
 
     private Direction lastFlickDirection;
-
-    private enum Direction {
-        LEFT, RIGHT, UP, DOWN
-    }
 
     public MapEventHandler(GameGroup group) {
         super(group);

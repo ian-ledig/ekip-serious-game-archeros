@@ -14,8 +14,9 @@ import java.util.List;
 public class PageMining extends GameGroup {
 
     public static final int GROUND_BLOCKS_NUMBER = 2187;
+    public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
-    private GamePlayer player = new GamePlayer();
+    private GamePlayer player = new GamePlayer(this);
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes) throws FileNotFoundException {
         Image skyBox = new Image(new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
@@ -36,7 +37,7 @@ public class PageMining extends GameGroup {
 
                 // Drawing ground blocks
                 x += 18;
-                if(i % 81 == 0){
+                if(i % GROUND_BLOCKS_LINE_NUMBER == 0){
                     y += 18;
                     x = 0;
                 }
@@ -53,6 +54,14 @@ public class PageMining extends GameGroup {
 
         // Add map event handler
         addEventHandler(PlayerMovementsEventHandler.class);
+    }
+
+    public GameImage[] getGroundBox() {
+        return groundBox;
+    }
+
+    public void setGroundBox(GameImage[] groundBox) {
+        this.groundBox = groundBox;
     }
 
     public GamePlayer getPlayer() {
