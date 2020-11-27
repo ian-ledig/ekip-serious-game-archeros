@@ -97,7 +97,9 @@ public class PageMining extends GameGroup {
     }
 
     public boolean isEnd(){
-        return itemFoundCount == groundItems.size() - 1;
+        return
+                itemFoundCount == groundItems.size() - 1 ||
+                energyBar.getProgress() <= 0;
     }
 
     public List<GameImage> getGroundItems() {
@@ -118,6 +120,10 @@ public class PageMining extends GameGroup {
 
     public GamePlayer getPlayer() {
         return player;
+    }
+
+    public void setEnergyBar(ProgressBar energyBar) {
+        this.energyBar = energyBar;
     }
 
     public int getItemFoundCount() {

@@ -50,7 +50,6 @@ public class Main extends Application {
 
 
         // setShowedPage(new PageMap());
-
         root.getChildren().add(showedPage);
 
         primaryStage.setTitle("L'Ekip");
