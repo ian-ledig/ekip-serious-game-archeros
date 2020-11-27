@@ -8,11 +8,15 @@ import fr.lekip.utils.GroundType;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
+import javafx.scene.text.Font;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,14 @@ public class Main extends Application {
         // Page creation
 
         // Page Mining
+        int x = 4;
+        Label score = new Label("Objets : " + x + "/4");
+        score.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
+        HBox hbox = new HBox(20);
+        hbox.setTranslateX(1300);
+        hbox.setTranslateY(80);
+        hbox.setSpacing(5);
+        hbox.getChildren().add(score);
         List<GroundType> groundTypes = new ArrayList<>();
         groundTypes.add(GroundType.DIRT);
         groundTypes.add(GroundType.STONE);
@@ -44,9 +56,11 @@ public class Main extends Application {
         items.add(Item.ARTEFACT01);
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));
 
+
         // setShowedPage(new PageMap());
 
         root.getChildren().add(showedPage);
+        root.getChildren().add(hbox);
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
