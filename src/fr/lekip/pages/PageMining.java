@@ -5,6 +5,8 @@ import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
 import fr.lekip.inputs.PlayerMovementsEventHandler;
 import fr.lekip.utils.GroundType;
+import fr.lekip.utils.Item;
+import fr.lekip.utils.SkyboxType;
 import javafx.scene.image.Image;
 
 import java.io.FileInputStream;
@@ -18,7 +20,7 @@ public class PageMining extends GameGroup {
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
 
-    public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes) throws FileNotFoundException {
+    public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items) throws FileNotFoundException {
         Image skyBox = new Image(new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
 
         // Create the map
@@ -28,12 +30,23 @@ public class PageMining extends GameGroup {
         int x = 0;
         int y = 262;
         try {
+            // Item spawning
+            for(Item item : items){
+                int spawnPosX = (int) (36 + Math.random() * 1422);
+                int spawnPosY = (int) (298 + Math.random() * 450);
+                GameImage newItem = item.cloneGameImage();
+                newItem.setX(spawnPosX);
+                newItem.setY(spawnPosY);
+                add(newItem);
+            }
+
+            // Ground box spawning
             for(int i = 0; i < GROUND_BLOCKS_NUMBER; i++){
                 if(i < 780) {
-                    groundBox[i] = groundTypes.get(0).getGameImage();
+                    groundBox[i] = groundTypes.get(0).cloneGameImage();
                 }
                 else
-                    groundBox[i] = groundTypes.get(1).getGameImage();
+                    groundBox[i] = groundTypes.get(1).cloneGameImage();
 
                 // Drawing ground blocks
                 x += 18;

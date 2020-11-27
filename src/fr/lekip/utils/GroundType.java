@@ -24,7 +24,7 @@ public enum GroundType {
         }
     }
 
-    public GameImage getGameImage() throws CloneNotSupportedException {
+    public GameImage cloneGameImage() throws CloneNotSupportedException {
         return (GameImage) gameImage.clone();
     }
 

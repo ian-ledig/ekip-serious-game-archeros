@@ -1,4 +1,4 @@
-package fr.lekip.pages;
+package fr.lekip.utils;
 
 public enum SkyboxType {
     BLUE_SKY(0), BLUE_SKY_CLOUDS(1), DARK_SKY(2);
