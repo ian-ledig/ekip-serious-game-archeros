@@ -7,10 +7,13 @@ import fr.lekip.inputs.PlayerMovementsEventHandler;
 import fr.lekip.utils.GroundType;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,10 +23,12 @@ public class PageMining extends GameGroup {
 
     public static final int GROUND_BLOCKS_NUMBER = 2187;
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
+    public static final String SCORE_BASE_TEXT = "Objets : ";
     private List<GameImage> groundItems = new ArrayList<>();
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
     private ProgressBar energyBar = new ProgressBar();
+    private Label score;
     private int itemFoundCount = 0;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
@@ -52,6 +57,11 @@ public class PageMining extends GameGroup {
                 newItem.setOnMouseClicked(mouseEvent -> {
                     newItem.setImage(null);
                     itemFoundCount++;
+                    score.setText(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
+
+                    if(isEnd()){
+                        // TO DO : End the party
+                    }
                 });
             }
 
@@ -78,10 +88,16 @@ public class PageMining extends GameGroup {
         }
 
         add(player);
+
         loadEnergyBar();
+        loadLabels();
 
         // Add map event handler
         addEventHandler(PlayerMovementsEventHandler.class);
+    }
+
+    public boolean isEnd(){
+        return itemFoundCount == groundItems.size() - 1;
     }
 
     public List<GameImage> getGroundItems() {
@@ -126,6 +142,17 @@ public class PageMining extends GameGroup {
 
         // Calculation of the maximal energy
         //
+    }
+
+    public void loadLabels() throws FileNotFoundException {
+        score = new Label(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
+        score.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
+        HBox hbox = new HBox(20);
+        hbox.setTranslateX(1300);
+        hbox.setTranslateY(80);
+        hbox.setSpacing(5);
+        hbox.getChildren().add(score);
+        add(hbox);
     }
 
     public void decreaseEnergy() {

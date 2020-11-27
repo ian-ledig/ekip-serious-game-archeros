@@ -41,14 +41,6 @@ public class Main extends Application {
         // Page creation
 
         // Page Mining
-        int x = 4;
-        Label score = new Label("Objets : " + x + "/4");
-        score.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
-        HBox hbox = new HBox(20);
-        hbox.setTranslateX(1300);
-        hbox.setTranslateY(80);
-        hbox.setSpacing(5);
-        hbox.getChildren().add(score);
         List<GroundType> groundTypes = new ArrayList<>();
         groundTypes.add(GroundType.DIRT);
         groundTypes.add(GroundType.STONE);
@@ -60,7 +52,6 @@ public class Main extends Application {
         // setShowedPage(new PageMap());
 
         root.getChildren().add(showedPage);
-        root.getChildren().add(hbox);
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
