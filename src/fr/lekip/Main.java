@@ -44,7 +44,7 @@ public class Main extends Application {
         items.add(Item.ARTEFACT01);
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));
 
-        //setShowedPage(new PageMap());
+        // setShowedPage(new PageMap());
 
         root.getChildren().add(showedPage);
 
