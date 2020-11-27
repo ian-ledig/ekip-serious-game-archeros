@@ -13,15 +13,18 @@ import javafx.scene.layout.HBox;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PageMining extends GameGroup {
 
     public static final int GROUND_BLOCKS_NUMBER = 2187;
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
+    private List<GameImage> groundItems = new ArrayList<>();
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
     private ProgressBar energyBar = new ProgressBar();
+    private int itemFoundCount = 0;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
             throws FileNotFoundException {
@@ -35,15 +38,7 @@ public class PageMining extends GameGroup {
         int x = 0;
         int y = 262;
         try {
-            // Item spawning
-            for (Item item : items) {
-                int spawnPosX = (int) (36 + Math.random() * 1422);
-                int spawnPosY = (int) (298 + Math.random() * 450);
-                GameImage newItem = item.cloneGameImage();
-                newItem.setX(spawnPosX);
-                newItem.setY(spawnPosY);
-                add(newItem);
-            }
+
 
             // Ground box spawning
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
@@ -63,6 +58,23 @@ public class PageMining extends GameGroup {
                 groundBox[i].setY(y);
                 add(groundBox[i]);
             }
+
+            // Item spawning
+            for (Item item : items) {
+                int spawnPosX = (int) (36 + Math.random() * 1422);
+                int spawnPosY = (int) (298 + Math.random() * 450);
+                GameImage newItem = item.cloneGameImage();
+                newItem.setX(spawnPosX);
+                newItem.setY(spawnPosY);
+                add(newItem);
+                groundItems.add(newItem);
+
+                // Delete the item and increase the number of objects found when item is clicked
+                newItem.setOnMouseClicked(mouseEvent -> {
+                    newItem.setImage(null);
+                    itemFoundCount++;
+                });
+            }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -72,6 +84,14 @@ public class PageMining extends GameGroup {
 
         // Add map event handler
         addEventHandler(PlayerMovementsEventHandler.class);
+    }
+
+    public List<GameImage> getGroundItems() {
+        return groundItems;
+    }
+
+    public void setGroundItems(List<GameImage> groundItems) {
+        this.groundItems = groundItems;
     }
 
     public GameImage[] getGroundBox() {
@@ -84,6 +104,10 @@ public class PageMining extends GameGroup {
 
     public GamePlayer getPlayer() {
         return player;
+    }
+
+    public int getItemFoundCount() {
+        return itemFoundCount;
     }
 
     public void loadEnergyBar() throws FileNotFoundException {
