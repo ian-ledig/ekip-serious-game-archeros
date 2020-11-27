@@ -8,9 +8,7 @@ import java.io.FileNotFoundException;
 
 public enum GroundType {
 
-    DIRT("src/assets/textures/pages/mining/dirt.png", 1),
-    STONE("src/assets/textures/pages/mining/stone.png", 10)
-    ;
+    DIRT("src/assets/textures/pages/mining/dirt.png", 1), STONE("src/assets/textures/pages/mining/stone.png", 10);
 
     private GameImage gameImage;
     private int resistance;

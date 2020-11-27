@@ -38,6 +38,7 @@ public class PageIntro extends GameGroup {
         mapp.getChildren().addAll(txt);
 
         // TODO Change pos of text
+        // TODO Use CSS padding or margin to change text's pos
         mapp.setTranslateY(600);
         mapp.setAlignment(Pos.CENTER);
         add(mapp);
