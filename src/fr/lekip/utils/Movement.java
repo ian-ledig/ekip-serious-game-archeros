@@ -2,7 +2,8 @@ package fr.lekip.utils;
 
 public enum Movement {
 
-    IDLE("src/assets/textures/player/player_idle.png"),
+    UP("src/assets/textures/player/player_up.png"),
+    DOWN("src/assets/textures/player/player_down.png"),
     RIGHT("src/assets/textures/player/player_right.png"),
     LEFT("src/assets/textures/player/player_left.png");
 

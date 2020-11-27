@@ -31,7 +31,7 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Set background image
-        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/images/brick2.png")));
+        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png")));
         scene.setFill(pattern);
         // Page creation
 

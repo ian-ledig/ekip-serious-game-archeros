@@ -15,10 +15,10 @@ public class GamePlayer extends GameGroup{
     private final int TEXTURE_DELTA = 19;
     private final int TEXTURE_WIDTH = 55;
     private final int TEXTURE_HEIGHT = 98;
-    private GameImage playerTexture = new GameImage(new Image(new FileInputStream(Movement.IDLE.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
+    private GameImage playerTexture = new GameImage(new Image(new FileInputStream(Movement.DOWN.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
     private GameImage toolTexture = new GameImage(null, 10, 48, 40, 48, true);
 
-    private Movement movements = Movement.IDLE;
+    private Movement movements = Movement.DOWN;
     private Tool tool;
     
     private PageMining parent;
@@ -63,7 +63,11 @@ public class GamePlayer extends GameGroup{
             double breakPositionX = 0;
             double breakPositionY = 0;
             switch (movements){
-                case IDLE:
+                case UP:
+                    breakPositionX = getTranslateX() + TEXTURE_WIDTH/2;
+                    breakPositionY = getTranslateY() + TEXTURE_HEIGHT - BREAKING_DELTA;
+                    break;
+                case DOWN:
                     breakPositionX = getTranslateX() + TEXTURE_WIDTH/2;
                     breakPositionY = getTranslateY() + TEXTURE_HEIGHT + BREAKING_DELTA;
                     break;
@@ -83,7 +87,7 @@ public class GamePlayer extends GameGroup{
             deleteGround(getIndexOf(groundBox, pos[0], pos[1]), 0, groundBox, pos[0], pos[1]);
             parent.setGroundBox(groundBox);
 
-            while (canPlayerGo(Direction.DOWN))
+            while (canPlayerGo(Direction.DOWN) && movements != Movement.UP)
                 decrementY(7);
         }
     }

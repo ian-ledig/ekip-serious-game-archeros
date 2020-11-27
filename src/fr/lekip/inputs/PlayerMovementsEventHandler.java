@@ -46,7 +46,7 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
                     // Down movement
                     case DOWN:
                     case S:
-                        player.setMovements(Movement.IDLE);
+                        player.setMovements(Movement.DOWN);
                         if(player.canPlayerGo(Direction.DOWN))
                             player.decrementY(delta);
                         break;
@@ -54,7 +54,7 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
                     // Up movement
                     case UP:
                     case Z:
-                        player.setMovements(Movement.IDLE);
+                        player.setMovements(Movement.UP);
                         if(player.canPlayerGo(Direction.UP))
                             player.incrementY(delta);
                         break;
