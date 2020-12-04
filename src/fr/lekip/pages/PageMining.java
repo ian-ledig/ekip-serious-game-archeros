@@ -74,11 +74,12 @@ public class PageMining extends GameGroup {
             for (int i = 0; i < 4; i++) {
                 energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
 
-                // TODO Prendre le plus grand Y et le petit Y de la liste
+                // We take the deepest item Y
                 if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
                     Y1 = (getGroundItems().get(i).getYImage() - 262);
                 }
 
+                // We save the first item in X basis and the last item
                 if ((getGroundItems().get(i).getXImage()) < xG) {
                     xG = getGroundItems().get(i).getXImage();
                 }
@@ -89,6 +90,7 @@ public class PageMining extends GameGroup {
             }
             energyDefault += (xD - xG);
 
+            // We calculate the malus
             double malus;
             malus = Y1 * 3;
             for (GameImage item : getGroundItems()) {
@@ -102,6 +104,7 @@ public class PageMining extends GameGroup {
              * tous les autres objets)] -> a si a < 10 energieMax - ([10 - a] x 2)
              */
 
+            // If the malus is less than 180, we give him a malus of energy
             if (malus < 0) {
                 malus *= -1;
             }
