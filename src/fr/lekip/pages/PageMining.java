@@ -1,5 +1,6 @@
 package fr.lekip.pages;
 
+import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
@@ -7,11 +8,15 @@ import fr.lekip.inputs.PlayerMovementsEventHandler;
 import fr.lekip.utils.GroundType;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.io.File;
@@ -36,6 +41,11 @@ public class PageMining extends GameGroup {
 
     private Label score;
     private int itemFoundCount = 0;
+
+    private Button btnPause = new Button("II");
+    private Button btnResume = new Button("Reprendre");
+    private Button btnRestart = new Button("Recommencer");
+    private Button btnAbandon = new Button("Abandonner");
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
             throws FileNotFoundException {
@@ -109,7 +119,7 @@ public class PageMining extends GameGroup {
                     itemFoundCount++;
                     score.setText(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
 
-                    if(isEnd()){
+                    if (isEnd()) {
                         // TO DO : End the party
                     }
                 });
@@ -170,6 +180,7 @@ public class PageMining extends GameGroup {
 
         loadEnergyBar();
         loadLabels();
+        pause();
 
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
@@ -241,12 +252,82 @@ public class PageMining extends GameGroup {
 
     public void loadLabels() throws FileNotFoundException {
         score = new Label(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
-        score.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
+        score.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
         HBox hbox = new HBox(20);
         hbox.setTranslateX(1300);
         hbox.setTranslateY(80);
         hbox.setSpacing(5);
         hbox.getChildren().add(score);
         add(hbox);
+    }
+
+    public void pause() {
+        btnPause.setMinSize(40, 40);
+        HBox hbox = new HBox(20);
+        hbox.setTranslateX(20);
+        hbox.setTranslateY(40);
+        hbox.getChildren().add(btnPause);
+        add(hbox);
+
+        btnPause.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+
+                VBox vbox = new VBox();
+                vbox.setPrefWidth(150);
+                btnResume.setMinHeight(30);
+                btnRestart.setMinHeight(30);
+                btnAbandon.setMinHeight(30);
+                btnResume.setMinWidth(vbox.getPrefWidth());
+                btnRestart.setMinWidth(vbox.getPrefWidth());
+                btnAbandon.setMinWidth(vbox.getPrefWidth());
+                vbox.setTranslateX(650);
+                vbox.setTranslateY(300);
+                vbox.setSpacing(25);
+                vbox.getChildren().addAll(btnResume, btnRestart, btnAbandon);
+
+                add(vbox);
+
+                btnResume.setVisible(true);
+                btnRestart.setVisible(true);
+                btnAbandon.setVisible(true);
+            }
+        });
+
+        btnResume.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+               //Retirer pause
+               btnResume.setVisible(false);
+               btnRestart.setVisible(false);
+               btnAbandon.setVisible(false);
+            }
+        });
+
+        btnRestart.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+               //Recommencer
+            }
+        });
+
+        btnAbandon.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    Main.setShowedPage(new PageMap());
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        
     }
 }
