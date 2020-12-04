@@ -75,8 +75,6 @@ public class PageMining extends GameGroup {
 
             // Item spawning
             for (Item item : items) {
-                int spawnPosX = (int) (36 + Math.random() * 1422);
-                int spawnPosY = (int) (298 + Math.random() * 450);
                 double itemSize = item.getTextureSize();
                 int spawnPosX = tryAPos(itemSize, (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE));
                 int spawnPosY = tryAPos(itemSize, (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262));
