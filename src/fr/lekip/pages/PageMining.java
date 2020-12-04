@@ -258,6 +258,14 @@ public class PageMining extends GameGroup {
         return itemsLost;
     }
 
+    public List<GroundType> getGroundTypes() {
+        return groundTypes;
+    }
+
+    public int getNextLayerIndex() {
+        return nextLayerIndex;
+    }
+
     public void loadEnergyBar() throws FileNotFoundException {
 
         // Init energyBar

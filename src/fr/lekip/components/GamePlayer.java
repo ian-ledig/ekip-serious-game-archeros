@@ -1,10 +1,7 @@
 package fr.lekip.components;
 
 import fr.lekip.pages.PageMining;
-import fr.lekip.utils.Direction;
-import fr.lekip.utils.Item;
-import fr.lekip.utils.Movement;
-import fr.lekip.utils.Tool;
+import fr.lekip.utils.*;
 import javafx.scene.image.Image;
 
 import java.io.FileInputStream;
@@ -56,6 +53,7 @@ public class GamePlayer extends GameGroup{
     }
 
     public void tryToBreak(){
+        // Check for the target position
         if(tool != null){
             double breakPositionX = 0;
             double breakPositionY = 0;
@@ -93,20 +91,35 @@ public class GamePlayer extends GameGroup{
         if(defaultIndex != -1){
             int nextIndex = getIndexOf(groundBox, posX, posY);
             if(nextIndex != -1){
+                int groundTypeIndex = 0;
                 int indexBoxToBreak = getIndexOf(groundBox, posX, posY);
+                int nextLayerIndex = parent.getNextLayerIndex();
 
-                if(indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
-                    if (groundBox[indexBoxToBreak].getImage() != null){
-                        groundBox[indexBoxToBreak].setImage(null);
-                    }
+                // Get the resistance of target block
+                if(indexBoxToBreak > PageMining.GROUND_BLOCKS_LINE_NUMBER) {
+                    if (indexBoxToBreak < nextLayerIndex)
+                        groundTypeIndex = 1;
+                    else
+                        groundTypeIndex = 2;
                 }
+                int resistance = parent.getGroundTypes().get(groundTypeIndex).getResistance();
 
-                if(index < tool.getStrength()){
-                    index++;
-                    deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
-                    deleteGround(defaultIndex, index, groundBox, posX + 18, posY);
-                    deleteGround(defaultIndex, index, groundBox, posX, posY - 18);
-                    deleteGround(defaultIndex, index, groundBox, posX, posY + 18);
+                // Break the block if the tool is sufficiently effective
+                if(tool.getStrength() >= resistance){
+                    if(indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
+                        if (groundBox[indexBoxToBreak].getImage() != null){
+                            groundBox[indexBoxToBreak].setImage(null);
+                        }
+                    }
+
+                    // Try to break the neighbors
+                    if(index < tool.getStrength() - resistance / 2){
+                        index++;
+                        deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
+                        deleteGround(defaultIndex, index, groundBox, posX + 18, posY);
+                        deleteGround(defaultIndex, index, groundBox, posX, posY - 18);
+                        deleteGround(defaultIndex, index, groundBox, posX, posY + 18);
+                    }
                 }
             }
         }
@@ -155,6 +168,7 @@ public class GamePlayer extends GameGroup{
         double[] pos;
         int index;
 
+        // Check for a direction
         switch (direction){
             case DOWN:
                 posX = getTranslateX() + TEXTURE_WIDTH/2;

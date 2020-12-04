@@ -10,9 +10,9 @@ public enum GroundType {
 
     GRASS("src/assets/textures/pages/mining/grass.png", 1),
     DIRT("src/assets/textures/pages/mining/dirt.png", 1),
-    STONE("src/assets/textures/pages/mining/stone.png", 10),
+    STONE("src/assets/textures/pages/mining/stone.png", 2),
     SAND("src/assets/textures/pages/mining/sand.png", 1),
-    SANDSTONE("src/assets/textures/pages/mining/sandstone.png", 10)
+    SANDSTONE("src/assets/textures/pages/mining/sandstone.png", 1)
     ;
 
     public static final int GROUND_SIZE = 18;
