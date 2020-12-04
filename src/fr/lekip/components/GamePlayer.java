@@ -2,6 +2,7 @@ package fr.lekip.components;
 
 import fr.lekip.pages.PageMining;
 import fr.lekip.utils.Direction;
+import fr.lekip.utils.Item;
 import fr.lekip.utils.Movement;
 import fr.lekip.utils.Tool;
 import javafx.scene.image.Image;
@@ -16,7 +17,7 @@ public class GamePlayer extends GameGroup{
     private final int TEXTURE_WIDTH = 55;
     private final int TEXTURE_HEIGHT = 98;
     private GameImage playerTexture = new GameImage(new Image(new FileInputStream(Movement.DOWN.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
-    private GameImage toolTexture = new GameImage(null, 10, 48, 40, 48, true);
+    private GameImage toolTexture = new GameImage(null, 10, 76, 40, 48, true);
 
     private Movement movements = Movement.DOWN;
     private Tool tool;
@@ -32,14 +33,10 @@ public class GamePlayer extends GameGroup{
 
     public void decrementX(int delta){
         setTranslateX(getTranslateX() - delta);
-        movements = Movement.LEFT;
-        updateMovements();
     }
 
     public void incrementX(int delta){
         setTranslateX(getTranslateX() + delta);
-        movements = Movement.RIGHT;
-        updateMovements();
     }
 
     public void decrementY(int delta){
@@ -87,7 +84,7 @@ public class GamePlayer extends GameGroup{
             deleteGround(getIndexOf(groundBox, pos[0], pos[1]), 0, groundBox, pos[0], pos[1]);
             parent.setGroundBox(groundBox);
 
-            while (canPlayerGo(Direction.DOWN) && movements == Movement.DOWN)
+            while (movements == Movement.DOWN && canPlayerGo(Direction.DOWN))
                 decrementY(7);
         }
     }
@@ -97,9 +94,11 @@ public class GamePlayer extends GameGroup{
             int nextIndex = getIndexOf(groundBox, posX, posY);
             if(nextIndex != -1){
                 int indexBoxToBreak = getIndexOf(groundBox, posX, posY);
+
                 if(indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
-                    if (groundBox[indexBoxToBreak].getImage() != null)
+                    if (groundBox[indexBoxToBreak].getImage() != null){
                         groundBox[indexBoxToBreak].setImage(null);
+                    }
                 }
 
                 if(index < tool.getStrength()){
@@ -162,6 +161,8 @@ public class GamePlayer extends GameGroup{
                 posY = getTranslateY() + TEXTURE_HEIGHT + BREAKING_DELTA;
                 pos = getBoxPos(groundBox, posX, posY);
 
+                movements = Movement.DOWN;
+
                 if(pos[0] != -1){
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if(groundBox[index].getImage() != null || index > PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1))
@@ -172,6 +173,8 @@ public class GamePlayer extends GameGroup{
                 posX = getTranslateX() + TEXTURE_WIDTH/2;
                 posY = getTranslateY() + TEXTURE_HEIGHT - BREAKING_DELTA;
                 pos = getBoxPos(groundBox, posX, posY);
+
+                movements = Movement.UP;
 
                 if(pos[0] != -1){
                     index = getIndexOf(groundBox, pos[0], pos[1]);
@@ -186,6 +189,8 @@ public class GamePlayer extends GameGroup{
                 posY = getTranslateY() + TEXTURE_HEIGHT;
                 pos = getBoxPos(groundBox, posX, posY);
 
+                movements = Movement.RIGHT;
+
                 if(pos[0] != -1){
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if(groundBox[index].getImage() != null)
@@ -197,6 +202,8 @@ public class GamePlayer extends GameGroup{
                 posY = getTranslateY() + TEXTURE_HEIGHT;
                 pos = getBoxPos(groundBox, posX, posY);
 
+                movements = Movement.LEFT;
+
                 if(pos[0] != -1){
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if(groundBox[index].getImage() != null)
@@ -204,6 +211,7 @@ public class GamePlayer extends GameGroup{
                 }
                 break;
         }
+        updateMovements();
 
         return result;
     }
