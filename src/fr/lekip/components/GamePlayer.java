@@ -13,13 +13,14 @@ public class GamePlayer extends GameGroup{
     private final int TEXTURE_DELTA = 19;
     private final int TEXTURE_WIDTH = 55;
     private final int TEXTURE_HEIGHT = 98;
-    private GameImage playerTexture = new GameImage(new Image(new FileInputStream(Movement.DOWN.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
-    private GameImage toolTexture = new GameImage(null, 10, 76, 40, 48, true);
+
+    private final GameImage playerTexture = new GameImage(new Image(new FileInputStream(Movement.DOWN.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
+    private final GameImage toolTexture = new GameImage(null, 10, 76, 40, 48, true);
+
+    private final PageMining parent;
 
     private Movement movements = Movement.DOWN;
     private Tool tool;
-    
-    private PageMining parent;
 
     public GamePlayer(PageMining parent) throws FileNotFoundException {
         this.parent = parent;

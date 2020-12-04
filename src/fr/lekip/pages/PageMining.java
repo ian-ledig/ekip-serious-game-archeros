@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PageMining extends GameGroup {
 
@@ -106,6 +105,7 @@ public class PageMining extends GameGroup {
                 int spawnPosX = 0;
                 int spawnPosY = 0;
 
+                // Try to create a position far enough away from other items
                 while(!correctPos){
                     correctPos = true;
                     spawnPosX = (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE);
@@ -127,6 +127,7 @@ public class PageMining extends GameGroup {
                     }
                 }
 
+                // Add and position the item
                 GameImage newItem = item.cloneGameImage();
                 newItem.setX(spawnPosX);
                 newItem.setY(spawnPosY);
@@ -138,6 +139,9 @@ public class PageMining extends GameGroup {
                     if(newItem.getImage() != null){
 
                         Tool tool = player.getTool();
+
+                        // If the used tool is strong enough
+                        // Try to add the item to the founded or lost lists
                         if(tool != null && tool.getStrength() >= item.getMinResistance()){
                             if(tool.getStrength() <= item.getMaxResistance()){
                                 this.itemsFound.add(item);
@@ -151,6 +155,7 @@ public class PageMining extends GameGroup {
                             newItem.setImage(null);
                             score.setText(SCORE_BASE_TEXT + this.itemsFound.size() + "/" + itemsRemaining);
 
+                            // Check if the game can be stop
                             if (isEnd()) {
                                 // TO DO : End the party
                             }
@@ -214,7 +219,7 @@ public class PageMining extends GameGroup {
 
         loadEnergyBar();
         loadLabels();
-        pause();
+        loadPause();
 
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
@@ -308,7 +313,7 @@ public class PageMining extends GameGroup {
         add(hbox);
     }
 
-    public void pause() {
+    public void loadPause() {
         btnPause.setMinSize(40, 40);
         HBox hbox = new HBox(20);
         hbox.setTranslateX(20);
@@ -316,30 +321,26 @@ public class PageMining extends GameGroup {
         hbox.getChildren().add(btnPause);
         add(hbox);
 
-        btnPause.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+        btnPause.setOnAction( event -> {
 
-            @Override
-            public void handle(ActionEvent event) {
+            VBox vbox = new VBox();
+            vbox.setPrefWidth(150);
+            btnResume.setMinHeight(30);
+            btnRestart.setMinHeight(30);
+            btnAbandon.setMinHeight(30);
+            btnResume.setMinWidth(vbox.getPrefWidth());
+            btnRestart.setMinWidth(vbox.getPrefWidth());
+            btnAbandon.setMinWidth(vbox.getPrefWidth());
+            vbox.setTranslateX(650);
+            vbox.setTranslateY(300);
+            vbox.setSpacing(25);
+            vbox.getChildren().addAll(btnResume, btnRestart, btnAbandon);
 
-                VBox vbox = new VBox();
-                vbox.setPrefWidth(150);
-                btnResume.setMinHeight(30);
-                btnRestart.setMinHeight(30);
-                btnAbandon.setMinHeight(30);
-                btnResume.setMinWidth(vbox.getPrefWidth());
-                btnRestart.setMinWidth(vbox.getPrefWidth());
-                btnAbandon.setMinWidth(vbox.getPrefWidth());
-                vbox.setTranslateX(650);
-                vbox.setTranslateY(300);
-                vbox.setSpacing(25);
-                vbox.getChildren().addAll(btnResume, btnRestart, btnAbandon);
+            add(vbox);
 
-                add(vbox);
-
-                btnResume.setVisible(true);
-                btnRestart.setVisible(true);
-                btnAbandon.setVisible(true);
-            }
+            btnResume.setVisible(true);
+            btnRestart.setVisible(true);
+            btnAbandon.setVisible(true);
         });
 
         btnResume.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
