@@ -4,10 +4,14 @@ import fr.lekip.pages.PageMining;
 import fr.lekip.utils.Direction;
 import fr.lekip.utils.Movement;
 import fr.lekip.utils.Tool;
+import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 public class GamePlayer extends GameGroup{
 
@@ -87,7 +91,7 @@ public class GamePlayer extends GameGroup{
             deleteGround(getIndexOf(groundBox, pos[0], pos[1]), 0, groundBox, pos[0], pos[1]);
             parent.setGroundBox(groundBox);
 
-            while (canPlayerGo(Direction.DOWN) && movements != Movement.UP)
+            while (canPlayerGo(Direction.DOWN) && movements == Movement.DOWN)
                 decrementY(7);
         }
     }
@@ -97,8 +101,10 @@ public class GamePlayer extends GameGroup{
             int nextIndex = getIndexOf(groundBox, posX, posY);
             if(nextIndex != -1){
                 int indexBoxToBreak = getIndexOf(groundBox, posX, posY);
-                if(indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1))
-                    groundBox[indexBoxToBreak].setImage(null);
+                if(indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
+                    if (groundBox[indexBoxToBreak].getImage() != null)
+                        groundBox[indexBoxToBreak].setImage(null);
+                }
 
                 if(index < tool.getStrength()){
                     index++;
