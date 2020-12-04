@@ -17,6 +17,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.File;
@@ -24,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PageMining extends GameGroup {
 
@@ -36,6 +38,16 @@ public class PageMining extends GameGroup {
     private final List<GroundType> groundTypes;
     private final List<Item> items;
 
+    private final Button btnPause = new Button("II");
+    private final Button btnResume = new Button("Reprendre");
+    private final Button btnRestart = new Button("Recommencer");
+    private final Button btnAbandon = new Button("Abandonner");
+
+    private final List<Item> itemsFound = new ArrayList<>();
+    private final List<Item> itemsLost = new ArrayList<>();
+
+    private int itemsRemaining;
+
     private List<GameImage> groundItems = new ArrayList<>();
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
@@ -45,12 +57,6 @@ public class PageMining extends GameGroup {
     private double energyDefault = 0;
 
     private Label score;
-    private int itemFoundCount = 0;
-
-    private final Button btnPause = new Button("II");
-    private final Button btnResume = new Button("Reprendre");
-    private final Button btnRestart = new Button("Recommencer");
-    private final Button btnAbandon = new Button("Abandonner");
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
             throws FileNotFoundException {
@@ -88,6 +94,7 @@ public class PageMining extends GameGroup {
                 add(groundBox[i]);
             }
 
+            this.itemsRemaining = this.items.size();
             // Item spawning
             for (Item item : items) {
                 double itemSize = item.getTextureSize();
@@ -124,12 +131,26 @@ public class PageMining extends GameGroup {
 
                 // Delete the item and increase the number of objects found when item is clicked
                 newItem.setOnMouseClicked(mouseEvent -> {
-                    newItem.setImage(null);
-                    itemFoundCount++;
-                    score.setText(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
+                    if(newItem.getImage() != null){
 
-                    if (isEnd()) {
-                        // TO DO : End the party
+                        Tool tool = player.getTool();
+                        if(tool != null && tool.getStrength() >= item.getMinResistance()){
+                            if(tool.getStrength() <= item.getMaxResistance()){
+                                this.itemsFound.add(item);
+                            }
+                            else{
+                                this.itemsLost.add(item);
+                                itemsRemaining--;
+                                score.setTextFill(Color.INDIANRED);
+                            }
+
+                            newItem.setImage(null);
+                            score.setText(SCORE_BASE_TEXT + this.itemsFound.size() + "/" + itemsRemaining);
+
+                            if (isEnd()) {
+                                // TO DO : End the party
+                            }
+                        }
                     }
                 });
             }
@@ -197,7 +218,7 @@ public class PageMining extends GameGroup {
     
     public boolean isEnd(){
         return
-                itemFoundCount == groundItems.size() - 1 ||
+                this.itemsFound.size() == groundItems.size() - 1 ||
                 energyBar.getProgress() <= 0;
     }
 
@@ -225,8 +246,12 @@ public class PageMining extends GameGroup {
         this.energyBar = energyBar;
     }
 
-    public int getItemFoundCount() {
-        return itemFoundCount;
+    public List<Item> getItemsFound() {
+        return itemsFound;
+    }
+
+    public List<Item> getItemsLost() {
+        return itemsLost;
     }
 
     public void loadEnergyBar() throws FileNotFoundException {
@@ -260,7 +285,7 @@ public class PageMining extends GameGroup {
     }
 
     public void loadLabels() throws FileNotFoundException {
-        score = new Label(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
+        score = new Label(SCORE_BASE_TEXT + "0/" + groundItems.size());
         score.setFont(
                 Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
         HBox hbox = new HBox(20);
