@@ -1,6 +1,7 @@
 package fr.lekip;
 
 import fr.lekip.components.GameGroup;
+import fr.lekip.pages.PageMap;
 import fr.lekip.pages.PageMining;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
@@ -26,31 +27,28 @@ public class Main extends Application {
     public static int WINDOWS_WIDTH = 1450;
     public static int WINDOWS_HEIGHT = 750;
 
-    public static GameGroup showedPage;
+    public static GameGroup root = new GameGroup();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Setup scene
-        Group root = new Group();
         Scene scene = new Scene(root, WINDOWS_WIDTH, WINDOWS_HEIGHT);
         scene.setFill(Color.TRANSPARENT);
 
         // Set background image
         ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png")));
         scene.setFill(pattern);
-        // Page creation
 
+        // Page creation
         // Page Mining
         List<GroundType> groundTypes = new ArrayList<>();
         groundTypes.add(GroundType.DIRT);
         groundTypes.add(GroundType.STONE);
         List<Item> items = new ArrayList<>();
-        items.add(Item.ARTEFACT01);
+        for (int i = 0; i < 5; i++) {
+            items.add(Item.ARTEFACT01);
+        }
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));
-
-
-        // setShowedPage(new PageMap());
-        root.getChildren().add(showedPage);
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
@@ -59,7 +57,8 @@ public class Main extends Application {
     }
 
     public static void setShowedPage(GameGroup showedPage) {
-        Main.showedPage = showedPage;
+        Main.root.getChildren().clear();
+        Main.root.add(showedPage);
     }
 
     public static void main(String[] args) {
