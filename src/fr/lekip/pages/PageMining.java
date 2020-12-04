@@ -77,10 +77,13 @@ public class PageMining extends GameGroup {
 
             // Ground box spawning
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
-                if (i < 780) {
+                if(i < GROUND_BLOCKS_LINE_NUMBER){
                     groundBox[i] = groundTypes.get(0).cloneGameImage();
-                } else
+                }
+                else if (i < 780) {
                     groundBox[i] = groundTypes.get(1).cloneGameImage();
+                } else
+                    groundBox[i] = groundTypes.get(2).cloneGameImage();
 
                 // Drawing ground blocks
                 x += GroundType.GROUND_SIZE;
