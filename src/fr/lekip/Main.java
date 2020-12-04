@@ -40,7 +40,7 @@ public class Main extends Application {
         groundTypes.add(GroundType.DIRT);
         groundTypes.add(GroundType.STONE);
         List<Item> items = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             items.add(Item.ARTEFACT01);
         }
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));

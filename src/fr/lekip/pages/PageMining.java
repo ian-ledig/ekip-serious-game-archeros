@@ -7,6 +7,7 @@ import fr.lekip.inputs.PlayerMovementsEventHandler;
 import fr.lekip.utils.GroundType;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
+import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -71,8 +72,30 @@ public class PageMining extends GameGroup {
             // Item spawning
             for (Item item : items) {
                 double itemSize = item.getTextureSize();
-                int spawnPosX = tryAPos(itemSize, true);
-                int spawnPosY = tryAPos(itemSize, false);
+                boolean correctPos = false;
+                int spawnPosX = 0;
+                int spawnPosY = 0;
+
+                while(!correctPos){
+                    correctPos = true;
+                    spawnPosX = (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE);
+                    spawnPosY = (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
+
+                    if(!groundItems.isEmpty()){
+                        for(GameImage imgItem : groundItems){
+                            if(
+                                    spawnPosX + itemSize >= imgItem.getXImage()  &&
+                                    spawnPosX <= imgItem.getXImage() + imgItem.getFitWidth() ||
+                                    spawnPosY + itemSize >= imgItem.getYImage()  &&
+                                    spawnPosY <= imgItem.getYImage() + imgItem.getFitHeight() ||
+                                    Math.abs(Math.sqrt(Math.pow(spawnPosX - imgItem.getXImage(), 2) + Math.pow(spawnPosY - imgItem.getYImage(), 2))) < 200
+                            ){
+                                correctPos = false;
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 GameImage newItem = item.cloneGameImage();
                 newItem.setX(spawnPosX);
@@ -96,7 +119,7 @@ public class PageMining extends GameGroup {
             double Y1 = 0;
             double xG = 1450;
             double xD = 0;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < groundItems.size(); i++) {
                 energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
 
                 // We take the deepest item Y
@@ -151,33 +174,6 @@ public class PageMining extends GameGroup {
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
     }
-
-    public int tryAPos(double objectSize, boolean isXChecker){
-        int result = 0;
-        boolean correctPos = false;
-
-        while(!correctPos){
-            correctPos = true;
-            result = isXChecker ?
-                    (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE) :
-                    (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
-
-            if(groundItems.isEmpty())
-                correctPos = true;
-            else {
-                for(GameImage imgItem : groundItems){
-                    if(
-                            result + objectSize >= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())  &&
-                            result <= (isXChecker ? imgItem.getXImage() : imgItem.getYImage()) + imgItem.getFitWidth()
-                    ){
-                        correctPos = false;
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
-    }
     
     public boolean isEnd(){
         return
@@ -229,7 +225,9 @@ public class PageMining extends GameGroup {
         hbox.getChildren().addAll(lightning, energyBar);
         add(hbox);
         setOnMouseClicked((e) -> {
-            decreaseEnergy(player.getTool().getStrength());
+            Tool tool = player.getTool();
+            if(tool != null)
+                decreaseEnergy(player.getTool().getStrength());
         });
 
         // Calculation of the maximal energy
@@ -237,9 +235,7 @@ public class PageMining extends GameGroup {
     }
 
     public void decreaseEnergy(int strength) {
-        System.out.println(energyValue);
         energyValue -= strength * 18;
-        System.out.println(((energyValue * 100) / energyDefault) * 0.01);
         energyBar.setProgress(((energyValue * 100) / energyDefault) * 0.01);
     }
 
