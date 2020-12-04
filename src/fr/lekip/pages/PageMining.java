@@ -72,18 +72,18 @@ public class PageMining extends GameGroup {
             int xG = 1450;
             int xD = 0;
             for (int i = 0; i < 4; i++) {
-                energyDefault += (getGroundItems().get(i).getY() - 262) * 1.2 + 7;
+                energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
 
                 // TODO Prendre le plus grand Y et le petit Y de la liste
-                if ((getGroundItems().get(i).getY() - 262) > Y1) {
-                    Y1 = (getGroundItems().get(i).getY() - 262);
+                if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
+                    Y1 = (getGroundItems().get(i).getYImage() - 262);
                 }
 
-                if ((getGroundItems().get(i).getX()) < xG) {
-                    xG = getGroundItems().get(i).getX();
+                if ((getGroundItems().get(i).getXImage()) < xG) {
+                    xG = getGroundItems().get(i).getXImage();
                 }
-                if ((getGroundItems().get(i).getX()) > xD) {
-                    xD = getGroundItems().get(i).getX();
+                if ((getGroundItems().get(i).getXImage()) > xD) {
+                    xD = getGroundItems().get(i).getXImage();
                 }
 
             }
