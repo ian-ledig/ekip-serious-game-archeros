@@ -67,22 +67,34 @@ public class PageMining extends GameGroup {
                 add(newItem);
             }
 
+            // Calculation of the energy max
             int Y1 = 0;
-            int Y2 = 0;
+            int xG = 1450;
+            int xD = 0;
             for (int i = 0; i < 4; i++) {
-                energyDefault += (getGroundItems.get(i).getY() - 262) * 1.2 + 7;
+                energyDefault += (getGroundItems().get(i).getY() - 262) * 1.2 + 7;
 
-                // TODO Prendre le plus grand Y et le petit Y de la liste 
-                if((getGroundItems.get(i).getY() - 262) > Y1)
+                // TODO Prendre le plus grand Y et le petit Y de la liste
+                if ((getGroundItems().get(i).getY() - 262) > Y1) {
+                    Y1 = (getGroundItems().get(i).getY() - 262);
+                }
+
+                if ((getGroundItems().get(i).getX()) < xG) {
+                    xG = getGroundItems().get(i).getX();
+                }
+                if ((getGroundItems().get(i).getX()) > xD) {
+                    xD = getGroundItems().get(i).getX();
+                }
+
             }
+            energyDefault += (xD - xG);
 
             double malus;
-            if (tempY < tempY2) {
-
-                malus = (tempY2 * 1) - tempY;
-
-            } else {
-                malus = (tempY * 1) - tempY2;
+            malus = Y1 * 3;
+            for (GameImage item : getGroundItems()) {
+                if (item.getY() != Y1) {
+                    malus -= item.getY();
+                }
             }
 
             /*
