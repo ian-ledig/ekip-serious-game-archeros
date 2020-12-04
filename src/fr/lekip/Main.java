@@ -45,7 +45,7 @@ public class Main extends Application {
         items.add(Item.BUTTON);
         items.add(Item.PRIEST);
         items.add(Item.NAIL);
-        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));
+        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900));
 
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);

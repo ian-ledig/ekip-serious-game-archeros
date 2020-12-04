@@ -37,6 +37,7 @@ public class PageMining extends GameGroup {
     private final SkyboxType skyboxType;
     private final List<GroundType> groundTypes;
     private final List<Item> items;
+    private final int nextLayerIndex;
 
     private final Button btnPause = new Button("II");
     private final Button btnResume = new Button("Reprendre");
@@ -58,11 +59,12 @@ public class PageMining extends GameGroup {
 
     private Label score;
 
-    public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
+    public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex)
             throws FileNotFoundException {
         this.skyboxType = skyboxType;
         this.groundTypes = groundTypes;
         this.items = items;
+        this.nextLayerIndex = nextLayerIndex;
 
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
@@ -79,8 +81,7 @@ public class PageMining extends GameGroup {
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
                 if(i < GROUND_BLOCKS_LINE_NUMBER){
                     groundBox[i] = groundTypes.get(0).cloneGameImage();
-                }
-                else if (i < 780) {
+                } else if (i < nextLayerIndex) {
                     groundBox[i] = groundTypes.get(1).cloneGameImage();
                 } else
                     groundBox[i] = groundTypes.get(2).cloneGameImage();
@@ -349,7 +350,7 @@ public class PageMining extends GameGroup {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    Main.setShowedPage(new PageMining(skyboxType, groundTypes, items));
+                    Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
