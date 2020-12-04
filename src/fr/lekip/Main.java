@@ -31,6 +31,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         // Setup scene
         Scene scene = new Scene(root, WINDOWS_WIDTH, WINDOWS_HEIGHT);
         scene.setFill(Color.TRANSPARENT);
