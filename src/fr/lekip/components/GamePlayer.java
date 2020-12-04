@@ -4,14 +4,10 @@ import fr.lekip.pages.PageMining;
 import fr.lekip.utils.Direction;
 import fr.lekip.utils.Movement;
 import fr.lekip.utils.Tool;
-import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
 
 public class GamePlayer extends GameGroup{
 

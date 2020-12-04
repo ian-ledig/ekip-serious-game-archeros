@@ -1,23 +1,17 @@
 package fr.lekip;
 
 import fr.lekip.components.GameGroup;
-import fr.lekip.pages.PageMap;
 import fr.lekip.pages.PageMining;
+import fr.lekip.utils.GroundType;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
-import fr.lekip.utils.GroundType;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
-import javafx.scene.text.Font;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;

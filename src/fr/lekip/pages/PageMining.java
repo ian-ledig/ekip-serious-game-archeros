@@ -1,6 +1,5 @@
 package fr.lekip.pages;
 
-import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
@@ -11,7 +10,6 @@ import fr.lekip.utils.SkyboxType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
@@ -20,9 +18,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class PageMining extends GameGroup {
 
@@ -83,12 +78,24 @@ public class PageMining extends GameGroup {
                 newItem.setX(spawnPosX);
                 newItem.setY(spawnPosY);
                 add(newItem);
+                groundItems.add(newItem);
+
+                // Delete the item and increase the number of objects found when item is clicked
+                newItem.setOnMouseClicked(mouseEvent -> {
+                    newItem.setImage(null);
+                    itemFoundCount++;
+                    score.setText(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
+
+                    if(isEnd()){
+                        // TO DO : End the party
+                    }
+                });
             }
 
             // Calculation of the energy max
-            int Y1 = 0;
-            int xG = 1450;
-            int xD = 0;
+            double Y1 = 0;
+            double xG = 1450;
+            double xD = 0;
             for (int i = 0; i < 4; i++) {
                 energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
 
@@ -131,19 +138,7 @@ public class PageMining extends GameGroup {
             }
 
             energyValue = energyDefault;
-                groundItems.add(newItem);
 
-                // Delete the item and increase the number of objects found when item is clicked
-                newItem.setOnMouseClicked(mouseEvent -> {
-                    newItem.setImage(null);
-                    itemFoundCount++;
-                    score.setText(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
-
-                    if(isEnd()){
-                        // TO DO : End the party
-                    }
-                });
-            }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
