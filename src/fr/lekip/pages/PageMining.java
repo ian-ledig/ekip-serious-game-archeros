@@ -185,45 +185,11 @@ public class PageMining extends GameGroup {
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
     }
-<<<<<<< src/fr/lekip/pages/PageMining.java
-
-    public int tryAPos(double objectSize, boolean isXChecker) {
-        int result = 0;
-        boolean correctPos = false;
-
-        while (!correctPos) {
-            correctPos = true;
-            result = isXChecker
-                    ? (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE
-                            - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE)
-                    : (int) ((Math.random()
-                            * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
-
-            if (groundItems.isEmpty())
-                correctPos = true;
-            else {
-                for (GameImage imgItem : groundItems) {
-                    if (result + objectSize >= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())
-                            && result <= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())
-                                    + imgItem.getFitWidth()) {
-                        correctPos = false;
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    public boolean isEnd() {
-        return itemFoundCount == groundItems.size() - 1 || energyBar.getProgress() <= 0;
-=======
     
     public boolean isEnd(){
         return
                 itemFoundCount == groundItems.size() - 1 ||
                 energyBar.getProgress() <= 0;
->>>>>>> src/fr/lekip/pages/PageMining.java
     }
 
     public List<GameImage> getGroundItems() {
