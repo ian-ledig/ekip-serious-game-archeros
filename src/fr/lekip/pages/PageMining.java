@@ -49,25 +49,6 @@ public class PageMining extends GameGroup {
         int y = 262;
         try {
 
-            // Ground box spawning
-            for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
-                if (i < 780) {
-                    groundBox[i] = groundTypes.get(0).cloneGameImage();
-                } else
-                    groundBox[i] = groundTypes.get(1).cloneGameImage();
-
-                // Drawing ground blocks
-                x += GroundType.GROUND_SIZE;
-                if (i % GROUND_BLOCKS_LINE_NUMBER == 0) {
-                    y += GroundType.GROUND_SIZE;
-                    x = 0;
-                }
-
-                groundBox[i].setX(x);
-                groundBox[i].setY(y);
-                add(groundBox[i]);
-            }
-
             // Item spawning
             for (Item item : items) {
                 double itemSize = item.getTextureSize();
@@ -86,7 +67,7 @@ public class PageMining extends GameGroup {
                     itemFoundCount++;
                     score.setText(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
 
-                    if(isEnd()){
+                    if (isEnd()) {
                         // TO DO : End the party
                     }
                 });
@@ -139,6 +120,25 @@ public class PageMining extends GameGroup {
 
             energyValue = energyDefault;
 
+            // Ground box spawning
+            for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
+                if (i < 780) {
+                    groundBox[i] = groundTypes.get(0).cloneGameImage();
+                } else
+                    groundBox[i] = groundTypes.get(1).cloneGameImage();
+
+                // Drawing ground blocks
+                x += GroundType.GROUND_SIZE;
+                if (i % GROUND_BLOCKS_LINE_NUMBER == 0) {
+                    y += GroundType.GROUND_SIZE;
+                    x = 0;
+                }
+
+                groundBox[i].setX(x);
+                groundBox[i].setY(y);
+                add(groundBox[i]);
+            }
+
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -152,24 +152,25 @@ public class PageMining extends GameGroup {
         addEventHandler(PlayerMovementsEventHandler.class);
     }
 
-    public int tryAPos(double objectSize, boolean isXChecker){
+    public int tryAPos(double objectSize, boolean isXChecker) {
         int result = 0;
         boolean correctPos = false;
 
-        while(!correctPos){
+        while (!correctPos) {
             correctPos = true;
-            result = isXChecker ?
-                    (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE) :
-                    (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
+            result = isXChecker
+                    ? (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE
+                            - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE)
+                    : (int) ((Math.random()
+                            * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
 
-            if(groundItems.isEmpty())
+            if (groundItems.isEmpty())
                 correctPos = true;
             else {
-                for(GameImage imgItem : groundItems){
-                    if(
-                            result + objectSize >= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())  &&
-                            result <= (isXChecker ? imgItem.getXImage() : imgItem.getYImage()) + imgItem.getFitWidth()
-                    ){
+                for (GameImage imgItem : groundItems) {
+                    if (result + objectSize >= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())
+                            && result <= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())
+                                    + imgItem.getFitWidth()) {
                         correctPos = false;
                         break;
                     }
@@ -178,15 +179,17 @@ public class PageMining extends GameGroup {
         }
         return result;
     }
-    
-    public boolean isEnd(){
-        return
-                itemFoundCount == groundItems.size() - 1 ||
-                energyBar.getProgress() <= 0;
+
+    public boolean isEnd() {
+        return itemFoundCount == groundItems.size() - 1 || energyBar.getProgress() <= 0;
     }
 
     public List<GameImage> getGroundItems() {
         return groundItems;
+    }
+
+    public void removeGroundItem(GameImage item) {
+        groundItems.remove(item);
     }
 
     public void setGroundItems(List<GameImage> groundItems) {
@@ -245,7 +248,8 @@ public class PageMining extends GameGroup {
 
     public void loadLabels() throws FileNotFoundException {
         score = new Label(SCORE_BASE_TEXT + itemFoundCount + "/" + groundItems.size());
-        score.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
+        score.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
         HBox hbox = new HBox(20);
         hbox.setTranslateX(1300);
         hbox.setTranslateY(80);

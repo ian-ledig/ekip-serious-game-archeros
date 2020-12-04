@@ -9,7 +9,7 @@ import fr.lekip.utils.Movement;
 import fr.lekip.utils.Tool;
 import javafx.event.Event;
 
-public class PlayerMovementsEventHandler extends GameEventHandler{
+public class PlayerMovementsEventHandler extends GameEventHandler {
 
     private GamePlayer player;
 
@@ -19,19 +19,19 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
 
     @Override
     public void loadEventHandler(GameGroup group) {
-        if(group instanceof PageMining)
+        if (group instanceof PageMining)
             player = ((PageMining) group).getPlayer();
 
-        if(player != null){
+        if (player != null) {
             group.setOnKeyPressed(keyEvent -> {
 
                 int delta = 10;
-                switch (keyEvent.getCode()){
+                switch (keyEvent.getCode()) {
                     // Left movement
                     case Q:
                     case LEFT:
                         player.setMovements(Movement.LEFT);
-                        if(player.getTranslateX() - delta > 0 && player.canPlayerGo(Direction.LEFT))
+                        if (player.getTranslateX() - delta > 0 && player.canPlayerGo(Direction.LEFT))
                             player.decrementX(delta);
                         break;
 
@@ -39,7 +39,8 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
                     case D:
                     case RIGHT:
                         player.setMovements(Movement.RIGHT);
-                        if(player.getTranslateX() - delta < Main.WINDOWS_WIDTH - 80 && player.canPlayerGo(Direction.RIGHT))
+                        if (player.getTranslateX() - delta < Main.WINDOWS_WIDTH - 80
+                                && player.canPlayerGo(Direction.RIGHT))
                             player.incrementX(delta);
                         break;
 
@@ -47,7 +48,7 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
                     case DOWN:
                     case S:
                         player.setMovements(Movement.DOWN);
-                        if(player.canPlayerGo(Direction.DOWN))
+                        if (player.canPlayerGo(Direction.DOWN))
                             player.decrementY(delta);
                         break;
 
@@ -55,7 +56,7 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
                     case UP:
                     case Z:
                         player.setMovements(Movement.UP);
-                        if(player.canPlayerGo(Direction.UP))
+                        if (player.canPlayerGo(Direction.UP))
                             player.incrementY(delta);
                         break;
 
@@ -63,12 +64,11 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
                     case F:
                         int toolIndex = 0;
 
-                        if(player.getTool() != null){
+                        if (player.getTool() != null) {
                             toolIndex = player.getTool().ordinal() + 1;
-                            if(toolIndex == Tool.values().length)
+                            if (toolIndex == Tool.values().length)
                                 toolIndex = 0;
-                        }
-                        else
+                        } else
                             toolIndex = Tool.SHOVEL.ordinal();
 
                         player.setTool(Tool.values()[toolIndex]);
@@ -77,16 +77,22 @@ public class PlayerMovementsEventHandler extends GameEventHandler{
             });
 
             group.setOnMousePressed(mouseEvent -> {
-                switch (mouseEvent.getButton()){
-                    // Try to break
-                    case PRIMARY:
-                        player.tryToBreak();
-                        break;
+                if (player.getTool() == Tool.PROBE) {
+                    player.probe();
+                } else {
+                    switch (mouseEvent.getButton()) {
+                        // Try to break
+                        case PRIMARY:
+                            player.tryToBreak();
+                            break;
+                    }
                 }
+
             });
         }
     }
 
     @Override
-    public void handle(Event event) {}
+    public void handle(Event event) {
+    }
 }
