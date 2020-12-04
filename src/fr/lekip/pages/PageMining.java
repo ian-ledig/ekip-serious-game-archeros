@@ -31,6 +31,11 @@ public class PageMining extends GameGroup {
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
     public static final int GROUND_BLOCKS_ROW_NUMBER = 27;
     public static final String SCORE_BASE_TEXT = "Objets : ";
+
+    private final SkyboxType skyboxType;
+    private final List<GroundType> groundTypes;
+    private final List<Item> items;
+
     private List<GameImage> groundItems = new ArrayList<>();
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
@@ -42,13 +47,17 @@ public class PageMining extends GameGroup {
     private Label score;
     private int itemFoundCount = 0;
 
-    private Button btnPause = new Button("II");
-    private Button btnResume = new Button("Reprendre");
-    private Button btnRestart = new Button("Recommencer");
-    private Button btnAbandon = new Button("Abandonner");
+    private final Button btnPause = new Button("II");
+    private final Button btnResume = new Button("Reprendre");
+    private final Button btnRestart = new Button("Recommencer");
+    private final Button btnAbandon = new Button("Abandonner");
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items)
             throws FileNotFoundException {
+        this.skyboxType = skyboxType;
+        this.groundTypes = groundTypes;
+        this.items = items;
+
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
 
@@ -311,7 +320,11 @@ public class PageMining extends GameGroup {
 
             @Override
             public void handle(ActionEvent event) {
-               //Recommencer
+                try {
+                    Main.setShowedPage(new PageMining(skyboxType, groundTypes, items));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -322,12 +335,9 @@ public class PageMining extends GameGroup {
                 try {
                     Main.setShowedPage(new PageMap());
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
         });
-
-        
     }
 }
