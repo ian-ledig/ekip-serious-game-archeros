@@ -73,8 +73,8 @@ public class PageMining extends GameGroup {
             // Item spawning
             for (Item item : items) {
                 double itemSize = item.getTextureSize();
-                int spawnPosX = tryAPos(itemSize, (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE));
-                int spawnPosY = tryAPos(itemSize, (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262));
+                int spawnPosX = tryAPos(itemSize, true);
+                int spawnPosY = tryAPos(itemSize, false);
 
                 GameImage newItem = item.cloneGameImage();
                 newItem.setX(spawnPosX);
@@ -106,23 +106,25 @@ public class PageMining extends GameGroup {
         addEventHandler(PlayerMovementsEventHandler.class);
     }
 
-    public int tryAPos(double objectSize, int formula){
+    public int tryAPos(double objectSize, boolean isXChecker){
         int result = 0;
-        boolean e = false;
+        boolean correctPos = false;
 
-        while(!e){
-            e = true;
-            result = formula;
+        while(!correctPos){
+            correctPos = true;
+            result = isXChecker ?
+                    (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE) :
+                    (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
 
             if(groundItems.isEmpty())
-                e = true;
+                correctPos = true;
             else {
                 for(GameImage imgItem : groundItems){
                     if(
-                            result + objectSize >= imgItem.getXImage() &&
-                            result <= imgItem.getXImage() + imgItem.getFitWidth()
+                            result + objectSize >= (isXChecker ? imgItem.getXImage() : imgItem.getYImage())  &&
+                            result <= (isXChecker ? imgItem.getXImage() : imgItem.getYImage()) + imgItem.getFitWidth()
                     ){
-                        e = false;
+                        correctPos = false;
                         break;
                     }
                 }
