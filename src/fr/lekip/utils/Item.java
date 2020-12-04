@@ -10,6 +10,8 @@ public enum Item {
 
     ARTEFACT01("", "", "src/assets/textures/items/artefact01.png", 36);
 
+    public static final int MAX_ITEM_SIZE = 36;
+
     private String name;
     private String lore;
     private GameImage gameImage;
@@ -31,6 +33,10 @@ public enum Item {
 
     public String getLore() {
         return lore;
+    }
+
+    public double getTextureSize() {
+        return gameImage.getFitWidth();
     }
 
     public GameImage cloneGameImage() throws CloneNotSupportedException {

@@ -1,5 +1,6 @@
 package fr.lekip.pages;
 
+import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
@@ -10,6 +11,7 @@ import fr.lekip.utils.SkyboxType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
@@ -18,11 +20,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class PageMining extends GameGroup {
 
     public static final int GROUND_BLOCKS_NUMBER = 2187;
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
+    public static final int GROUND_BLOCKS_ROW_NUMBER = 27;
     public static final String SCORE_BASE_TEXT = "Objets : ";
     private List<GameImage> groundItems = new ArrayList<>();
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
@@ -43,10 +49,33 @@ public class PageMining extends GameGroup {
         int x = 0;
         int y = 262;
         try {
+
+
+            // Ground box spawning
+            for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
+                if (i < 780) {
+                    groundBox[i] = groundTypes.get(0).cloneGameImage();
+                } else
+                    groundBox[i] = groundTypes.get(1).cloneGameImage();
+
+                // Drawing ground blocks
+                x += GroundType.GROUND_SIZE;
+                if (i % GROUND_BLOCKS_LINE_NUMBER == 0) {
+                    y += GroundType.GROUND_SIZE;
+                    x = 0;
+                }
+
+                groundBox[i].setX(x);
+                groundBox[i].setY(y);
+                add(groundBox[i]);
+            }
+
             // Item spawning
             for (Item item : items) {
-                int spawnPosX = (int) (36 + Math.random() * 1422);
-                int spawnPosY = (int) (298 + Math.random() * 450);
+                double itemSize = item.getTextureSize();
+                int spawnPosX = tryAPos(itemSize, (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE));
+                int spawnPosY = tryAPos(itemSize, (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262));
+
                 GameImage newItem = item.cloneGameImage();
                 newItem.setX(spawnPosX);
                 newItem.setY(spawnPosY);
@@ -64,25 +93,6 @@ public class PageMining extends GameGroup {
                     }
                 });
             }
-
-            // Ground box spawning
-            for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
-                if (i < 780) {
-                    groundBox[i] = groundTypes.get(0).cloneGameImage();
-                } else
-                    groundBox[i] = groundTypes.get(1).cloneGameImage();
-
-                // Drawing ground blocks
-                x += 18;
-                if (i % GROUND_BLOCKS_LINE_NUMBER == 0) {
-                    y += 18;
-                    x = 0;
-                }
-
-                groundBox[i].setX(x);
-                groundBox[i].setY(y);
-                add(groundBox[i]);
-            }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -92,10 +102,35 @@ public class PageMining extends GameGroup {
         loadEnergyBar();
         loadLabels();
 
-        // Add map event handler
+        // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
     }
 
+    public int tryAPos(double objectSize, int formula){
+        int result = 0;
+        boolean e = false;
+
+        while(!e){
+            e = true;
+            result = formula;
+
+            if(groundItems.isEmpty())
+                e = true;
+            else {
+                for(GameImage imgItem : groundItems){
+                    if(
+                            result + objectSize >= imgItem.getXImage() &&
+                            result <= imgItem.getXImage() + imgItem.getFitWidth()
+                    ){
+                        e = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
     public boolean isEnd(){
         return
                 itemFoundCount == groundItems.size() - 1 ||

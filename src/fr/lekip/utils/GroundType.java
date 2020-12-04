@@ -12,6 +12,8 @@ public enum GroundType {
     STONE("src/assets/textures/pages/mining/stone.png", 10)
     ;
 
+    public static final int GROUND_SIZE = 18;
+
     private GameImage gameImage;
     private int resistance;
 
