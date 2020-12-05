@@ -168,11 +168,8 @@ public class PageMining extends GameGroup {
                             // If the mandatory item is found : set it to null
                             if(newItem.equals(groundItemWin)){
                                 groundItemWin = null;
-                                if(itemsFound.contains(item)){
+                                if(itemsFound.contains(item))
                                     scoreMandatory.setTextFill(Color.DARKGREEN);
-                                }
-                                else
-                                    scoreMandatory.setTextFill(Color.INDIANRED);
                             }
 
                             newItem.setImage(null);
@@ -330,11 +327,11 @@ public class PageMining extends GameGroup {
     }
 
     public void loadLabels() throws FileNotFoundException {
-        scoreMandatory = new Label("Objet obligatoire : ");
+        scoreMandatory = new Label("Objectif : ");
         scoreMandatory.setFont(
                 Font.loadFont(new FileInputStream(new File(FONT)), 27.0));
         HBox hbxScoreMand = new HBox(20);
-        hbxScoreMand.setTranslateX(1201);
+        hbxScoreMand.setTranslateX(1285);
         hbxScoreMand.setTranslateY(71);
         hbxScoreMand.setSpacing(5);
         hbxScoreMand.getChildren().add(scoreMandatory);
