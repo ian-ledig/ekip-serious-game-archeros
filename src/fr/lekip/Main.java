@@ -50,6 +50,7 @@ public class Main extends Application {
         primaryStage.setTitle("L'Ekip");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
         primaryStage.show();
     }
 
