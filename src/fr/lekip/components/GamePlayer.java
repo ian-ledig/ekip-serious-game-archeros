@@ -111,9 +111,7 @@ public class GamePlayer extends GameGroup {
     }
 
     public void deleteGround(int defaultIndex, int index, GameImage[] groundBox, double posX, double posY) {
-        if (tool.getStrength() == 7) {
-
-        } else {
+        if (tool.getStrength() != 7) {
             if (defaultIndex != -1) {
                 int nextIndex = getIndexOf(groundBox, posX, posY);
                 if (nextIndex != -1) {
