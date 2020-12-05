@@ -15,6 +15,7 @@ import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -365,23 +366,23 @@ public class PageMining extends GameGroup {
         hbox.getChildren().add(btnPause);
         add(hbox);
 
+        VBox vbxPause = new VBox();
+        vbxPause.setPrefWidth(150);
+        btnResume.setMinHeight(30);
+        btnRestart.setMinHeight(30);
+        btnAbandon.setMinHeight(30);
+        btnResume.setMinWidth(vbxPause.getPrefWidth());
+        btnRestart.setMinWidth(vbxPause.getPrefWidth());
+        btnAbandon.setMinWidth(vbxPause.getPrefWidth());
+        vbxPause.setTranslateX(650);
+        vbxPause.setTranslateY(300);
+        vbxPause.setSpacing(25);
+        vbxPause.getChildren().addAll(btnResume, btnRestart, btnAbandon);
+        vbxPause.setVisible(false);
+        add(vbxPause);
+
         btnPause.setOnAction( event -> {
-
-            VBox vbox = new VBox();
-            vbox.setPrefWidth(150);
-            btnResume.setMinHeight(30);
-            btnRestart.setMinHeight(30);
-            btnAbandon.setMinHeight(30);
-            btnResume.setMinWidth(vbox.getPrefWidth());
-            btnRestart.setMinWidth(vbox.getPrefWidth());
-            btnAbandon.setMinWidth(vbox.getPrefWidth());
-            vbox.setTranslateX(650);
-            vbox.setTranslateY(300);
-            vbox.setSpacing(25);
-            vbox.getChildren().addAll(btnResume, btnRestart, btnAbandon);
-
-            add(vbox);
-
+            vbxPause.setVisible(!vbxPause.isVisible());
             btnResume.setVisible(true);
             btnRestart.setVisible(true);
             btnAbandon.setVisible(true);
@@ -391,7 +392,6 @@ public class PageMining extends GameGroup {
 
             @Override
             public void handle(ActionEvent event) {
-               //Retirer pause
                btnResume.setVisible(false);
                btnRestart.setVisible(false);
                btnAbandon.setVisible(false);
