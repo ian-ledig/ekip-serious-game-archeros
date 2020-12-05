@@ -8,10 +8,10 @@ import java.io.FileNotFoundException;
 
 public enum Item {
 
-    COIN("", "", 3, 5,"src/assets/textures/items/coin.png", 36),
-    BUTTON("", "", 3, 5,"src/assets/textures/items/button.png", 36),
-    PRIEST("", "", 3, 5,"src/assets/textures/items/priest.png", 36),
-    NAIL("", "", 3, 5,"src/assets/textures/items/nail.png", 36);
+    COIN("", "", 1, 1,"src/assets/textures/items/coin.png", 36),
+    BUTTON("", "", 1, 1,"src/assets/textures/items/button.png", 36),
+    PRIEST("", "", 1, 2,"src/assets/textures/items/priest.png", 36),
+    NAIL("", "", 1, 1,"src/assets/textures/items/nail.png", 36);
 
     public static final int MAX_ITEM_SIZE = 36;
 

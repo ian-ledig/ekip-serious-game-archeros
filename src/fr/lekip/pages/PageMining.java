@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,6 +38,7 @@ public class PageMining extends GameGroup {
     private final List<GroundType> groundTypes;
     private final List<Item> items;
     private final int nextLayerIndex;
+    private Item itemWin;
 
     private final Button btnPause = new Button("II");
     private final Button btnResume = new Button("Reprendre");
@@ -49,6 +51,7 @@ public class PageMining extends GameGroup {
     private int itemsRemaining;
 
     private List<GameImage> groundItems = new ArrayList<>();
+    private GameImage groundItemWin;
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private GamePlayer player = new GamePlayer(this);
     private ProgressBar energyBar = new ProgressBar();
@@ -98,6 +101,7 @@ public class PageMining extends GameGroup {
             }
 
             this.itemsRemaining = this.items.size();
+            boolean itemWinAssigned = false;
             // Item spawning
             for (Item item : items) {
                 double itemSize = item.getTextureSize();
@@ -132,6 +136,16 @@ public class PageMining extends GameGroup {
                 newItem.setX(spawnPosX);
                 newItem.setY(spawnPosY);
                 add(newItem);
+
+                // Try to set item to mandatory object
+                if(!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 2) == 0)){
+                    itemWinAssigned = true;
+                    groundItemWin = newItem;
+                    itemWin = item;
+                    ColorAdjust colorAdjust = new ColorAdjust();
+                    colorAdjust.setBrightness(-1);
+                    newItem.setEffect(colorAdjust);
+                }
                 groundItems.add(newItem);
 
                 // Delete the item and increase the number of objects found when item is clicked
@@ -152,13 +166,15 @@ public class PageMining extends GameGroup {
                                 score.setTextFill(Color.INDIANRED);
                             }
 
+                            // If the mandatory item is found : set it to null
+                            if(newItem.equals(groundItemWin))
+                                groundItemWin = null;
+
                             newItem.setImage(null);
                             score.setText(SCORE_BASE_TEXT + this.itemsFound.size() + "/" + itemsRemaining);
 
                             // Check if the game can be stop
-                            if (isEnd()) {
-                                // TO DO : End the party
-                            }
+                            tryToEndGame();
                         }
                     }
                 });
@@ -224,10 +240,17 @@ public class PageMining extends GameGroup {
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
     }
+
+    public void tryToEndGame(){
+        if(isEnd()){
+            System.out.println("END !");
+        }
+    }
     
     public boolean isEnd(){
         return
-                this.itemsFound.size() == groundItems.size() - 1 ||
+                groundItemWin == null && !itemsFound.contains(itemWin)||
+                itemsFound.size() + itemsLost.size() == groundItems.size() ||
                 energyBar.getProgress() <= 0;
     }
 
@@ -370,11 +393,7 @@ public class PageMining extends GameGroup {
 
             @Override
             public void handle(ActionEvent event) {
-                try {
-                    Main.setShowedPage(new PageMap());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                tryToEndGame();
             }
         });
     }
