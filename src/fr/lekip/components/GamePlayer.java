@@ -4,12 +4,18 @@ import fr.lekip.pages.PageMining;
 import fr.lekip.utils.Direction;
 import fr.lekip.utils.Movement;
 import fr.lekip.utils.Tool;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.util.Duration;
@@ -28,6 +34,10 @@ public class GamePlayer extends GameGroup {
 
     private Movement movements = Movement.DOWN;
     private Tool tool;
+
+    // We declare it here because otherwise MediaPlayer class will delete it before
+    // the audio finish to play
+    private MediaPlayer audioPlay;
 
     private PageMining parent;
 
@@ -250,52 +260,84 @@ public class GamePlayer extends GameGroup {
 
         // Create a shape of signal where items that are inside of this shape will
         // appear on screen
-        for (double i = playerTexture.getYImage(); i < 751; i++) {
+        for (double i = playerTexture.getYImage() + 50; i < 751; i++) {
 
-            // Starting from the player to the ground we create invisible GameImage that we
-            // will use to interact with hidden items
-            try {
-                GameImage cir;
-                cir = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/probeSignal.png")),
-                        0, 0, width, 2, false);
-                cir.setTranslateX(getTranslateX() + 27 - index);
-                cir.setTranslateY(i);
-                probeSignal.add(cir);
-                parent.add(cir);
-                width += 0.6;
-                index += 0.3;
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        }
-
-        // We check which items are in the range of the probe and we show an area to the
-        // player where the item should be
-        List<Circle> tempShape = new ArrayList<>();
-        for (GameImage signal : probeSignal) {
-            for (GameImage item : parent.getGroundItems()) {
-                if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
-                    Circle cercTemp = new Circle(20);
-                    cercTemp.setFill(Color.GREEN);
-                    cercTemp.setCenterX(item.getXImage());
-                    cercTemp.setCenterY(item.getYImage());
-                    parent.add(cercTemp);
-                    tempShape.add(cercTemp);
-
+            if (i < 280) {
+                // Init size of the area
+                width += 0.3;
+                index += 0.15;
+            } else {
+                // Starting from the player to the ground we create invisible GameImage that we
+                // will use to interact with hidden items
+                try {
+                    GameImage cir;
+                    cir = new GameImage(
+                            new Image(new FileInputStream("src/assets/textures/pages/mining/probeSignal.png")), 0, 0,
+                            width, 2, false);
+                    cir.setTranslateX(getTranslateX() + 27 - index);
+                    cir.setTranslateY(i);
+                    probeSignal.add(cir);
+                    parent.add(cir);
+                    width += 0.6;
+                    index += 0.3;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
+
         }
 
-        // After 2 seconds, we remove the shapes that show where are the items
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
-        delay.setOnFinished(event -> {
-            for (Circle circle : tempShape) {
-                parent.remove(circle);
+        // We play the probe's sound
+        Media media = new Media(new File("src/assets/audio/tools/probe.mp3").toURI().toString());
+        audioPlay = new MediaPlayer(media);
+        audioPlay.play();
+
+        // After 2 seconds of the sound
+        PauseTransition waitAudio = new PauseTransition(Duration.seconds(2));
+        waitAudio.setOnFinished(event -> {
+            // We check which items are in the range of the probe and we show an area to the
+            // player where the item should be
+            BoxBlur boxBlur = new BoxBlur();
+            boxBlur.setWidth(10);
+            boxBlur.setHeight(10);
+            boxBlur.setIterations(10);
+            List<Circle> tempShape = new ArrayList<>();
+            for (GameImage signal : probeSignal) {
+                for (GameImage item : parent.getGroundItems()) {
+                    if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
+                        Circle cercTemp = new Circle(20);
+                        cercTemp.setFill(Color.GREEN);
+                        cercTemp.setCenterX(item.getXImage() + item.getFitWidth() / 2);
+                        cercTemp.setCenterY(item.getYImage() + item.getFitHeight() / 2);
+                        cercTemp.setEffect(boxBlur);
+                        parent.add(cercTemp);
+                        tempShape.add(cercTemp);
+
+                        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), cercTemp);
+                        fadeTransition.setFromValue(1.0);
+                        fadeTransition.setToValue(0.0);
+                        fadeTransition.setCycleCount(Animation.INDEFINITE);
+                        fadeTransition.play();
+
+                    }
+                }
             }
+
+            // After 2 seconds, we remove the shapes that show where are the items &
+            // probeSignal
+            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            delay.setOnFinished((e) -> {
+                for (Circle circle : tempShape) {
+                    parent.remove(circle);
+                }
+                for (GameImage signal : probeSignal) {
+                    parent.remove(signal);
+                }
+            });
+            delay.play();
         });
-        delay.play();
+
+        waitAudio.play();
 
     }
 }
