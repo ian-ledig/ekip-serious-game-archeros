@@ -305,14 +305,18 @@ public class GamePlayer extends GameGroup {
             for (GameImage signal : probeSignal) {
                 for (GameImage item : parent.getGroundItems()) {
                     if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
+                        // We create a new circle to show area where is the item
                         Circle cercTemp = new Circle(20);
                         cercTemp.setFill(Color.GREEN);
                         cercTemp.setCenterX(item.getXImage() + item.getFitWidth() / 2);
                         cercTemp.setCenterY(item.getYImage() + item.getFitHeight() / 2);
+
+                        // We blur the circle
                         cercTemp.setEffect(boxBlur);
                         parent.add(cercTemp);
                         tempShape.add(cercTemp);
 
+                        // We make a blinking animation
                         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), cercTemp);
                         fadeTransition.setFromValue(1.0);
                         fadeTransition.setToValue(0.0);

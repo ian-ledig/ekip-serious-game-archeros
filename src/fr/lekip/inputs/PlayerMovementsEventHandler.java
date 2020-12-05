@@ -77,6 +77,7 @@ public class PlayerMovementsEventHandler extends GameEventHandler {
             });
 
             group.setOnMousePressed(mouseEvent -> {
+                // If the tool is the probe, we call the function probe()
                 if (player.getTool() == Tool.PROBE) {
                     player.probe();
                 } else {
