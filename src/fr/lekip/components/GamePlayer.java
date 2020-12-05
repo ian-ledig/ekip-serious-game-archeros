@@ -97,29 +97,15 @@ public class GamePlayer extends GameGroup {
         }
     }
 
-    public void deleteGround(int defaultIndex, int index, GameImage[] groundBox, double posX, double posY){
-        if(tool.getStrength() != 7){
-
-         if(defaultIndex != -1){
-            int nextIndex = getIndexOf(groundBox, posX, posY);
-            if(nextIndex != -1){
-                int groundTypeIndex = 0;
-                int indexBoxToBreak = getIndexOf(groundBox, posX, posY);
-                int nextLayerIndex = parent.getNextLayerIndex();
-
-                // Get the resistance of target block
-                if(indexBoxToBreak > PageMining.GROUND_BLOCKS_LINE_NUMBER) {
-                    if (indexBoxToBreak < nextLayerIndex)
-                        groundTypeIndex = 1;
-                    else
-                        groundTypeIndex = 2;
-                }
-                int resistance = parent.getGroundTypes().get(groundTypeIndex).getResistance();
-
-                // Break the block if the tool is sufficiently effective
-                if(tool.getStrength() >= resistance){
-                    if(indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
-                        if (groundBox[indexBoxToBreak].getImage() != null){
+    public void deleteGround(int defaultIndex, int index, GameImage[] groundBox, double posX, double posY) {
+        if (tool.getStrength() != 7) {
+            if (defaultIndex != -1) {
+                int nextIndex = getIndexOf(groundBox, posX, posY);
+                if (nextIndex != -1) {
+                    int indexBoxToBreak = getIndexOf(groundBox, posX, posY);
+                    if (indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER
+                            - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
+                        if (groundBox[indexBoxToBreak].getImage() != null)
                             groundBox[indexBoxToBreak].setImage(null);
                         }
                     }
