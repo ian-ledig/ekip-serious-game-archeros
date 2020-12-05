@@ -37,17 +37,20 @@ public class Main extends Application {
         // Page creation
         // Page Mining
         List<GroundType> groundTypes = new ArrayList<>();
-        groundTypes.add(GroundType.DIRT);
+        groundTypes.add(GroundType.SAND);
+        groundTypes.add(GroundType.SANDSTONE);
         groundTypes.add(GroundType.STONE);
         List<Item> items = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            items.add(Item.ARTEFACT01);
-        }
-        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items));
+        items.add(Item.COIN);
+        items.add(Item.BUTTON);
+        items.add(Item.PRIEST);
+        items.add(Item.NAIL);
+        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900));
 
-        primaryStage.setTitle("L'Ekip");
+        primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
         primaryStage.show();
     }
 

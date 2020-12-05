@@ -8,17 +8,24 @@ import java.io.FileNotFoundException;
 
 public enum Item {
 
-    ARTEFACT01("", "", "src/assets/textures/items/artefact01.png", 36);
+    COIN("Pièce", "", 1, 1,"src/assets/textures/items/coin.png", 36),
+    BUTTON("Bouton", "", 1, 1,"src/assets/textures/items/button.png", 36),
+    PRIEST("Prêtre du moyen âge", "", 1, 2,"src/assets/textures/items/priest.png", 36),
+    NAIL("Instrument de mesure", "", 1, 1,"src/assets/textures/items/nail.png", 36);
 
     public static final int MAX_ITEM_SIZE = 36;
 
     private String name;
     private String lore;
+    private int minResistance;
+    private int maxResistance;
     private GameImage gameImage;
 
-    Item(String name, String lore, String texturePath, int size){
+    Item(String name, String lore, int minResistance, int maxResistance, String texturePath, int size){
         this.name = name;
         this.lore = lore;
+        this.minResistance = minResistance;
+        this.maxResistance = maxResistance;
 
         try {
             this.gameImage = new GameImage(new Image(new FileInputStream(texturePath)), 0, 0, size, size, true);
@@ -33,6 +40,14 @@ public enum Item {
 
     public String getLore() {
         return lore;
+    }
+
+    public int getMinResistance() {
+        return minResistance;
+    }
+
+    public int getMaxResistance() {
+        return maxResistance;
     }
 
     public double getTextureSize() {
