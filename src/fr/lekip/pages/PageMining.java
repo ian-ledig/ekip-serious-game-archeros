@@ -32,6 +32,7 @@ public class PageMining extends GameGroup {
     public static final int GROUND_BLOCKS_NUMBER = 2187;
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
     public static final int GROUND_BLOCKS_ROW_NUMBER = 27;
+    public static final String FONT = "src/assets/font/bebas_neue/BebasNeue-Regular.ttf";
     public static final String SCORE_BASE_TEXT = "Objets : ";
 
     private final SkyboxType skyboxType;
@@ -59,6 +60,7 @@ public class PageMining extends GameGroup {
     private double energyValue = 0;
     private double energyDefault = 0;
 
+    private Label scoreMandatory;
     private Label score;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex)
@@ -138,13 +140,10 @@ public class PageMining extends GameGroup {
                 add(newItem);
 
                 // Try to set item to mandatory object
-                if(!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 2) == 0)){
+                if(!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 3) == 0)){
                     itemWinAssigned = true;
                     groundItemWin = newItem;
                     itemWin = item;
-                    ColorAdjust colorAdjust = new ColorAdjust();
-                    colorAdjust.setBrightness(-1);
-                    newItem.setEffect(colorAdjust);
                 }
                 groundItems.add(newItem);
 
@@ -167,8 +166,14 @@ public class PageMining extends GameGroup {
                             }
 
                             // If the mandatory item is found : set it to null
-                            if(newItem.equals(groundItemWin))
+                            if(newItem.equals(groundItemWin)){
                                 groundItemWin = null;
+                                if(itemsFound.contains(item)){
+                                    scoreMandatory.setTextFill(Color.DARKGREEN);
+                                }
+                                else
+                                    scoreMandatory.setTextFill(Color.INDIANRED);
+                            }
 
                             newItem.setImage(null);
                             score.setText(SCORE_BASE_TEXT + this.itemsFound.size() + "/" + itemsRemaining);
@@ -325,15 +330,34 @@ public class PageMining extends GameGroup {
     }
 
     public void loadLabels() throws FileNotFoundException {
+        scoreMandatory = new Label("Objet obligatoire : ");
+        scoreMandatory.setFont(
+                Font.loadFont(new FileInputStream(new File(FONT)), 27.0));
+        HBox hbxScoreMand = new HBox(20);
+        hbxScoreMand.setTranslateX(1201);
+        hbxScoreMand.setTranslateY(71);
+        hbxScoreMand.setSpacing(5);
+        hbxScoreMand.getChildren().add(scoreMandatory);
+        add(hbxScoreMand);
+
+        try {
+            GameImage imgItemWin = itemWin.cloneGameImage();
+            imgItemWin.setLayoutX(1370);
+            imgItemWin.setLayoutY(71);
+            add(imgItemWin);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
         score = new Label(SCORE_BASE_TEXT + "0/" + groundItems.size());
         score.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0));
-        HBox hbox = new HBox(20);
-        hbox.setTranslateX(1300);
-        hbox.setTranslateY(80);
-        hbox.setSpacing(5);
-        hbox.getChildren().add(score);
-        add(hbox);
+                Font.loadFont(new FileInputStream(new File(FONT)), 27.0));
+        HBox hbxScore = new HBox(20);
+        hbxScore.setTranslateX(1300);
+        hbxScore.setTranslateY(100);
+        hbxScore.setSpacing(5);
+        hbxScore.getChildren().add(score);
+        add(hbxScore);
     }
 
     public void loadPause() {
