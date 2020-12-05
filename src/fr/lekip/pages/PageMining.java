@@ -10,6 +10,8 @@ import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
@@ -17,10 +19,13 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +38,7 @@ public class PageMining extends GameGroup {
     public static final int GROUND_BLOCKS_NUMBER = 2187;
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
     public static final int GROUND_BLOCKS_ROW_NUMBER = 27;
-    public static final String FONT = "src/assets/font/bebas_neue/BebasNeue-Regular.ttf";
+    public final Font FONT;
     public static final String SCORE_BASE_TEXT = "Objets : ";
 
     private final SkyboxType skyboxType;
@@ -42,10 +47,10 @@ public class PageMining extends GameGroup {
     private final int nextLayerIndex;
     private Item itemWin;
 
-    private final Button btnPause = new Button("II");
-    private final Button btnResume = new Button("Reprendre");
-    private final Button btnRestart = new Button("Recommencer");
-    private final Button btnAbandon = new Button("Abandonner");
+    private final GameImage btnPause = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btnPause.png")), 0, 0, 40, 40, true);
+    private final GameImage btnResume;
+    private final GameImage btnRestart;
+    private final GameImage btnAbandon;
 
     private final List<Item> itemsFound = new ArrayList<>();
     private final List<Item> itemsLost = new ArrayList<>();
@@ -65,11 +70,15 @@ public class PageMining extends GameGroup {
     private Label score;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex)
-            throws FileNotFoundException {
+            throws FileNotFoundException, CloneNotSupportedException {
+        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0);
         this.skyboxType = skyboxType;
         this.groundTypes = groundTypes;
         this.items = items;
         this.nextLayerIndex = nextLayerIndex;
+        this.btnResume = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btn.png")), 0, 0, 150, 30, true);
+        this.btnRestart = (GameImage) btnResume.clone();
+        this.btnAbandon = (GameImage) btnResume.clone();
 
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
@@ -329,8 +338,7 @@ public class PageMining extends GameGroup {
 
     public void loadLabels() throws FileNotFoundException {
         scoreMandatory = new Label("Objectif : ");
-        scoreMandatory.setFont(
-                Font.loadFont(new FileInputStream(new File(FONT)), 27.0));
+        scoreMandatory.setFont(FONT);
         HBox hbxScoreMand = new HBox(20);
         hbxScoreMand.setTranslateX(1285);
         hbxScoreMand.setTranslateY(71);
@@ -348,8 +356,7 @@ public class PageMining extends GameGroup {
         }
 
         score = new Label(SCORE_BASE_TEXT + "0/" + groundItems.size());
-        score.setFont(
-                Font.loadFont(new FileInputStream(new File(FONT)), 27.0));
+        score.setFont(FONT);
         HBox hbxScore = new HBox(20);
         hbxScore.setTranslateX(1300);
         hbxScore.setTranslateY(100);
@@ -359,63 +366,68 @@ public class PageMining extends GameGroup {
     }
 
     public void loadPause() {
-        btnPause.setMinSize(40, 40);
-        HBox hbox = new HBox(20);
-        hbox.setTranslateX(20);
-        hbox.setTranslateY(40);
-        hbox.getChildren().add(btnPause);
-        add(hbox);
+        StackPane spnPause = new StackPane();
+        Text txtPause = new Text("II");
+        txtPause.setFont(FONT);
+        spnPause.setTranslateX(20);
+        spnPause.setTranslateY(40);
+        spnPause.setAlignment(Pos.CENTER);
+        spnPause.getChildren().addAll(btnPause, txtPause);
+        add(spnPause);
+
+        StackPane spnResume = new StackPane();
+        Text txtResume = new Text("Reprendre");
+        txtResume.setFont(FONT);
+        spnResume.setAlignment(Pos.CENTER);
+        spnResume.getChildren().addAll(btnResume, txtResume);
+        add(spnResume);
+
+        StackPane spnRestart = new StackPane();
+        Text txtRestart = new Text("Recommencer");
+        txtRestart.setFont(FONT);
+        spnRestart.setAlignment(Pos.CENTER);
+        spnRestart.getChildren().addAll(btnRestart, txtRestart);
+        add(spnRestart);
+
+        StackPane spnAbandon = new StackPane();
+        Text txtAbandon = new Text("Abandonner");
+        txtAbandon.setFont(FONT);
+        spnAbandon.setAlignment(Pos.CENTER);
+        spnAbandon.getChildren().addAll(btnAbandon, txtAbandon);
+        add(spnAbandon);
 
         VBox vbxPause = new VBox();
         vbxPause.setPrefWidth(150);
-        btnResume.setMinHeight(30);
-        btnRestart.setMinHeight(30);
-        btnAbandon.setMinHeight(30);
-        btnResume.setMinWidth(vbxPause.getPrefWidth());
-        btnRestart.setMinWidth(vbxPause.getPrefWidth());
-        btnAbandon.setMinWidth(vbxPause.getPrefWidth());
         vbxPause.setTranslateX(650);
         vbxPause.setTranslateY(300);
         vbxPause.setSpacing(25);
-        vbxPause.getChildren().addAll(btnResume, btnRestart, btnAbandon);
+        vbxPause.getChildren().addAll(spnResume, spnRestart, spnAbandon);
         vbxPause.setVisible(false);
         add(vbxPause);
 
-        btnPause.setOnAction( event -> {
+        spnPause.setOnMouseClicked( event -> {
             vbxPause.setVisible(!vbxPause.isVisible());
-            btnResume.setVisible(true);
-            btnRestart.setVisible(true);
-            btnAbandon.setVisible(true);
+            spnResume.setVisible(true);
+            spnRestart.setVisible(true);
+            spnAbandon.setVisible(true);
         });
 
-        btnResume.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+        spnResume.setOnMouseClicked(mouseEvent ->  {
+            spnResume.setVisible(false);
+            spnRestart.setVisible(false);
+            spnAbandon.setVisible(false);
+        });
 
-            @Override
-            public void handle(ActionEvent event) {
-               btnResume.setVisible(false);
-               btnRestart.setVisible(false);
-               btnAbandon.setVisible(false);
+        spnRestart.setOnMouseClicked(mouseEvent -> {
+            try {
+                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex));
+            } catch (FileNotFoundException | CloneNotSupportedException e) {
+                e.printStackTrace();
             }
         });
 
-        btnRestart.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        btnAbandon.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                tryToEndGame();
-            }
+        spnAbandon.setOnMouseClicked(mouseEvent -> {
+            tryToEndGame();
         });
     }
 }

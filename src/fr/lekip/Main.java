@@ -47,7 +47,7 @@ public class Main extends Application {
         items.add(Item.NAIL);
         setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900));
 
-        primaryStage.setTitle("L'Ekip");
+        primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
