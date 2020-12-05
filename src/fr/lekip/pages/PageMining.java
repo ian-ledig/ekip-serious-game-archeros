@@ -47,7 +47,8 @@ public class PageMining extends GameGroup {
     private final int nextLayerIndex;
     private Item itemWin;
 
-    private final GameImage btnPause = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btnPause.png")), 0, 0, 40, 40, true);
+    private final GameImage btnPause = new GameImage(
+            new Image(new FileInputStream("src/assets/textures/pages/mining/btnPause.png")), 0, 0, 40, 40, true);
     private final GameImage btnResume;
     private final GameImage btnRestart;
     private final GameImage btnAbandon;
@@ -76,7 +77,8 @@ public class PageMining extends GameGroup {
         this.groundTypes = groundTypes;
         this.items = items;
         this.nextLayerIndex = nextLayerIndex;
-        this.btnResume = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btn.png")), 0, 0, 150, 30, true);
+        this.btnResume = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btn.png")), 0, 0,
+                150, 30, true);
         this.btnRestart = (GameImage) btnResume.clone();
         this.btnAbandon = (GameImage) btnResume.clone();
 
@@ -93,7 +95,7 @@ public class PageMining extends GameGroup {
 
             // Ground box spawning
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
-                if(i < GROUND_BLOCKS_LINE_NUMBER){
+                if (i < GROUND_BLOCKS_LINE_NUMBER) {
                     groundBox[i] = groundTypes.get(0).cloneGameImage();
                 } else if (i < nextLayerIndex) {
                     groundBox[i] = groundTypes.get(1).cloneGameImage();
@@ -122,20 +124,21 @@ public class PageMining extends GameGroup {
                 int spawnPosY = 0;
 
                 // Try to create a position far enough away from other items
-                while(!correctPos){
+                while (!correctPos) {
                     correctPos = true;
-                    spawnPosX = (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE);
-                    spawnPosY = (int) ((Math.random() * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
+                    spawnPosX = (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE
+                            - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE);
+                    spawnPosY = (int) ((Math.random()
+                            * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
 
-                    if(!groundItems.isEmpty()){
-                        for(GameImage imgItem : groundItems){
-                            if(
-                                    spawnPosX + itemSize >= imgItem.getXImage()  &&
-                                    spawnPosX <= imgItem.getXImage() + imgItem.getFitWidth() ||
-                                    spawnPosY + itemSize >= imgItem.getYImage()  &&
-                                    spawnPosY <= imgItem.getYImage() + imgItem.getFitHeight() ||
-                                    Math.abs(Math.sqrt(Math.pow(spawnPosX - imgItem.getXImage(), 2) + Math.pow(spawnPosY - imgItem.getYImage(), 2))) < 200
-                            ){
+                    if (!groundItems.isEmpty()) {
+                        for (GameImage imgItem : groundItems) {
+                            if (spawnPosX + itemSize >= imgItem.getXImage()
+                                    && spawnPosX <= imgItem.getXImage() + imgItem.getFitWidth()
+                                    || spawnPosY + itemSize >= imgItem.getYImage()
+                                            && spawnPosY <= imgItem.getYImage() + imgItem.getFitHeight()
+                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - imgItem.getXImage(), 2)
+                                            + Math.pow(spawnPosY - imgItem.getYImage(), 2))) < 200) {
                                 correctPos = false;
                                 break;
                             }
@@ -150,7 +153,7 @@ public class PageMining extends GameGroup {
                 add(newItem);
 
                 // Try to set item to mandatory object
-                if(!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 3) == 0)){
+                if (!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 3) == 0)) {
                     itemWinAssigned = true;
                     groundItemWin = newItem;
                     itemWin = item;
@@ -159,26 +162,25 @@ public class PageMining extends GameGroup {
 
                 // Delete the item and increase the number of objects found when item is clicked
                 newItem.setOnMouseClicked(mouseEvent -> {
-                    if(newItem.getImage() != null){
+                    if (newItem.getImage() != null) {
 
                         Tool tool = player.getTool();
 
                         // If the used tool is strong enough
                         // Try to add the item to the founded or lost lists
-                        if(tool != null && tool.getStrength() >= item.getMinResistance()){
-                            if(tool.getStrength() <= item.getMaxResistance()){
+                        if (tool != null && tool.getStrength() >= item.getMinResistance()) {
+                            if (tool.getStrength() <= item.getMaxResistance()) {
                                 this.itemsFound.add(item);
-                            }
-                            else{
+                            } else {
                                 this.itemsLost.add(item);
                                 itemsRemaining--;
                                 score.setTextFill(Color.INDIANRED);
                             }
 
                             // If the mandatory item is found : set it to null
-                            if(newItem.equals(groundItemWin)){
+                            if (newItem.equals(groundItemWin)) {
                                 groundItemWin = null;
-                                if(itemsFound.contains(item))
+                                if (itemsFound.contains(item))
                                     scoreMandatory.setTextFill(Color.DARKGREEN);
                             }
 
@@ -272,19 +274,16 @@ public class PageMining extends GameGroup {
         addEventHandler(PlayerMovementsEventHandler.class);
     }
 
-
-    public void tryToEndGame(){
-        if(isEnd()){
+    public void tryToEndGame() {
+        if (isEnd()) {
             System.out.println("END !");
         }
     }
 
-    
-    public boolean isEnd(){
-        return
-                groundItemWin == null && !itemsFound.contains(itemWin)||
-                itemsFound.size() + itemsLost.size() == groundItems.size() ||
-                energyBar.getProgress() <= 0;
+    public boolean isEnd() {
+        return groundItemWin == null && !itemsFound.contains(itemWin)
+                || itemsFound.size() + itemsLost.size() == groundItems.size() || energyBar.getProgress() <= 0;
+    }
 
     public List<GameImage> getGroundItems() {
         return groundItems;
@@ -347,7 +346,7 @@ public class PageMining extends GameGroup {
         add(hbox);
         setOnMouseClicked((e) -> {
             Tool tool = player.getTool();
-            if(tool != null)
+            if (tool != null)
                 decreaseEnergy(player.getTool().getStrength());
         });
 
@@ -429,14 +428,14 @@ public class PageMining extends GameGroup {
         vbxPause.setVisible(false);
         add(vbxPause);
 
-        spnPause.setOnMouseClicked( event -> {
+        spnPause.setOnMouseClicked(event -> {
             vbxPause.setVisible(!vbxPause.isVisible());
             spnResume.setVisible(true);
             spnRestart.setVisible(true);
             spnAbandon.setVisible(true);
         });
 
-        spnResume.setOnMouseClicked(mouseEvent ->  {
+        spnResume.setOnMouseClicked(mouseEvent -> {
             spnResume.setVisible(false);
             spnRestart.setVisible(false);
             spnAbandon.setVisible(false);

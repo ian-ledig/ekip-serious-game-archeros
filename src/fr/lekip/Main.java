@@ -50,7 +50,7 @@ public class Main extends Application {
         primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
+        // primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
         primaryStage.show();
     }
 

@@ -2,6 +2,10 @@ package fr.lekip.components;
 
 import fr.lekip.pages.PageMining;
 import fr.lekip.utils.*;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -23,10 +27,16 @@ public class GamePlayer extends GameGroup {
     private final int TEXTURE_WIDTH = 55;
     private final int TEXTURE_HEIGHT = 98;
 
-    private final GameImage playerTexture = new GameImage(new Image(new FileInputStream(Movement.DOWN.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH, TEXTURE_HEIGHT, true);
+    private final GameImage playerTexture = new GameImage(
+            new Image(new FileInputStream(Movement.DOWN.getTexturePath())), 0, TEXTURE_DELTA, TEXTURE_WIDTH,
+            TEXTURE_HEIGHT, true);
     private final GameImage toolTexture = new GameImage(null, 10, 76, 40, 48, true);
 
     private final PageMining parent;
+
+    // We declare it here because otherwise MediaPlayer class will delete it before
+    // the audio finish to play
+    private MediaPlayer audioPlayer;
 
     private Movement movements = Movement.DOWN;
     private Tool tool;
@@ -62,9 +72,9 @@ public class GamePlayer extends GameGroup {
         }
     }
 
-    public void tryToBreak(){
+    public void tryToBreak() {
         // Check for the target position
-        if(tool != null){
+        if (tool != null) {
             double breakPositionX = 0;
             double breakPositionY = 0;
             switch (movements) {
@@ -102,23 +112,38 @@ public class GamePlayer extends GameGroup {
             if (defaultIndex != -1) {
                 int nextIndex = getIndexOf(groundBox, posX, posY);
                 if (nextIndex != -1) {
+                    int groundTypeIndex = 0;
                     int indexBoxToBreak = getIndexOf(groundBox, posX, posY);
-                    if (indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER
-                            - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
-                        if (groundBox[indexBoxToBreak].getImage() != null)
-                            groundBox[indexBoxToBreak].setImage(null);
+                    int nextLayerIndex = parent.getNextLayerIndex();
+
+                    // Get the resistance of target block
+                    if (indexBoxToBreak > PageMining.GROUND_BLOCKS_LINE_NUMBER) {
+                        if (indexBoxToBreak < nextLayerIndex)
+                            groundTypeIndex = 1;
+                        else
+                            groundTypeIndex = 2;
+                    }
+                    int resistance = parent.getGroundTypes().get(groundTypeIndex).getResistance();
+
+                    // Break the block if the tool is sufficiently effective
+                    if (tool.getStrength() >= resistance) {
+                        if (indexBoxToBreak <= PageMining.GROUND_BLOCKS_NUMBER
+                                - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1)) {
+                            if (groundBox[indexBoxToBreak].getImage() != null) {
+                                groundBox[indexBoxToBreak].setImage(null);
+                            }
+                        }
+
+                        // Try to break the neighbors
+                        if (index < tool.getStrength() - resistance / 2) {
+                            index++;
+                            deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
+                            deleteGround(defaultIndex, index, groundBox, posX + 18, posY);
+                            deleteGround(defaultIndex, index, groundBox, posX, posY - 18);
+                            deleteGround(defaultIndex, index, groundBox, posX, posY + 18);
                         }
                     }
-                    // Try to break the neighbors
-                    if(index < tool.getStrength() - resistance / 2){
-                        index++;
-                        deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
-                        deleteGround(defaultIndex, index, groundBox, posX + 18, posY);
-                        deleteGround(defaultIndex, index, groundBox, posX, posY - 18);
-                        deleteGround(defaultIndex, index, groundBox, posX, posY + 18);
-                    }
                 }
-            }
             }
         }
 
@@ -163,7 +188,7 @@ public class GamePlayer extends GameGroup {
         int index;
 
         // Check for a direction
-        switch (direction){
+        switch (direction) {
             case DOWN:
                 posX = getTranslateX() + TEXTURE_WIDTH / 2;
                 posY = getTranslateY() + TEXTURE_HEIGHT + BREAKING_DELTA;
@@ -171,7 +196,7 @@ public class GamePlayer extends GameGroup {
 
                 movements = Movement.DOWN;
 
-                if(pos[0] != -1){
+                if (pos[0] != -1) {
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if (groundBox[index].getImage() != null
                             || index > PageMining.GROUND_BLOCKS_NUMBER - (PageMining.GROUND_BLOCKS_LINE_NUMBER + 1))
@@ -185,7 +210,7 @@ public class GamePlayer extends GameGroup {
 
                 movements = Movement.UP;
 
-                if(pos[0] != -1){
+                if (pos[0] != -1) {
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if (groundBox[index].getImage() != null)
                         result = false;
@@ -199,7 +224,7 @@ public class GamePlayer extends GameGroup {
 
                 movements = Movement.RIGHT;
 
-                if(pos[0] != -1){
+                if (pos[0] != -1) {
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if (groundBox[index].getImage() != null)
                         result = false;
@@ -212,7 +237,7 @@ public class GamePlayer extends GameGroup {
 
                 movements = Movement.LEFT;
 
-                if(pos[0] != -1){
+                if (pos[0] != -1) {
                     index = getIndexOf(groundBox, pos[0], pos[1]);
                     if (groundBox[index].getImage() != null)
                         result = false;
@@ -286,8 +311,8 @@ public class GamePlayer extends GameGroup {
 
         // We play the probe's sound
         Media media = new Media(new File("src/assets/audio/tools/probe.mp3").toURI().toString());
-        audioPlay = new MediaPlayer(media);
-        audioPlay.play();
+        audioPlayer = new MediaPlayer(media);
+        audioPlayer.play();
 
         // After 2 seconds of the sound
         PauseTransition waitAudio = new PauseTransition(Duration.seconds(2));
