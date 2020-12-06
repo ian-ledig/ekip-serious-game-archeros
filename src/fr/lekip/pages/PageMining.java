@@ -258,8 +258,12 @@ public class PageMining extends GameGroup {
     public void tryToEndGame() {
         if (isEnd()) {
             System.out.println("END !");
-            GameGroup PageSummary = new PageSummary();
-            add(PageSummary);
+            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
+            setOnKeyPressed(null);
+            setOnMouseClicked(null);
+            add(summary);
+
+            summary.start();
         }
     }
 
