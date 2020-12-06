@@ -22,18 +22,24 @@ public enum Item {
     private int minResistance;
     private int maxResistance;
     private GameImage gameImage;
+    private String texturePath;
 
     Item(String name, String lore, int minResistance, int maxResistance, String texturePath, int size) {
         this.name = name;
         this.lore = lore;
         this.minResistance = minResistance;
         this.maxResistance = maxResistance;
+        this.texturePath = texturePath;
 
         try {
             this.gameImage = new GameImage(new Image(new FileInputStream(texturePath)), 0, 0, size, size, true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getTexturePath() {
+        return texturePath;
     }
 
     public String getName() {

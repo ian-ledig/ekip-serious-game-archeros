@@ -33,10 +33,12 @@ public class PageSummary extends GameGroup {
     private GameImage arrowBefore;
     private GameImage finishBtn;
     private Text txtFinish;
+    private GameImage realPicture;
 
+    private StackPane btnPane;
     private StackPane pane;
 
-    public PageSummary(List<Item> found, List<Item> lost, Item specialItem, double percent) {
+    public PageSummary(List<Item> found, List<Item> lost, Item pSpecialItem, double percent) {
         try {
             pane = new StackPane();
             GameImage image = new GameImage(
@@ -52,10 +54,15 @@ public class PageSummary extends GameGroup {
 
         txt = new Text();
         add(txt);
+
+        specialItem = pSpecialItem;
         items.addAll(found);
         items.addAll(lost);
         indexFirstList = found.size() - 1;
         percentEnergy = percent;
+
+        realPicture = new GameImage(null, 265, 200, 200, 200, true);
+        add(realPicture);
     }
 
     public void start() {
@@ -72,7 +79,7 @@ public class PageSummary extends GameGroup {
             e.printStackTrace();
         }
         loadPicture();
-        loadText();
+        loadPage();
 
     }
 
@@ -89,16 +96,20 @@ public class PageSummary extends GameGroup {
         return temp;
     }
 
-    public void loadText() {
+    public void loadPage() {
         if (index == -1) {
             try {
+                realPicture.setImage(null);
+
                 // TODO le 425 est faux psk ca depends de la pos des items
+                // TODO ajouter une appréciation pour combler le vide ? genre si score +de 50%
+                // on écrit " PAS MAL" si - "Peut mieux faire !" etc.. ou des étoiles
                 String scoreShow = "Points obtenus : " + score + " / 425";
                 txt.setText(scoreShow);
                 txt.setFont(Font.loadFont(
                         new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
 
-                txt.setX(350);
+                txt.setX(500);
                 txt.setY(250);
 
             } catch (FileNotFoundException e) {
@@ -107,6 +118,11 @@ public class PageSummary extends GameGroup {
             }
 
         } else {
+            try {
+                realPicture.setImage(new Image(new FileInputStream(items.get(index).getTexturePath())));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             if (index <= indexFirstList) {
                 txt.setText("Item trouvé ! \n" + items.get(index).getLore());
             } else {
@@ -129,7 +145,7 @@ public class PageSummary extends GameGroup {
 
                 finishBtn = new GameImage(null, 980, 550, 150, 30, true);
                 txtFinish = new Text();
-                StackPane btnPane = new StackPane();
+                btnPane = new StackPane();
 
                 btnPane.setTranslateX(980);
                 btnPane.setTranslateY(550);
@@ -143,24 +159,15 @@ public class PageSummary extends GameGroup {
                 add(arrowBefore);
 
                 arrowNext.setOnMouseClicked((e) -> {
-                    System.out.println("cliqué");
                     index++;
-                    loadText();
+                    loadPage();
                     loadPicture();
                 });
 
                 arrowBefore.setOnMouseClicked((e) -> {
                     index--;
-                    loadText();
+                    loadPage();
                     loadPicture();
-                });
-
-                btnPane.setOnMouseClicked((e) -> {
-                    try {
-                        Main.setShowedPage(new PageMap(false));
-                    } catch (FileNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
                 });
 
             } catch (FileNotFoundException e) {
@@ -175,6 +182,8 @@ public class PageSummary extends GameGroup {
                 arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
                 finishBtn.setImage(null);
                 txtFinish.setText("");
+
+                btnPane.setOnMouseClicked(null);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -185,6 +194,14 @@ public class PageSummary extends GameGroup {
                 arrowNext.setImage(null);
                 finishBtn.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/btn.png")));
                 txtFinish.setText("Finir la fouille");
+
+                btnPane.setOnMouseClicked((e) -> {
+                    try {
+                        Main.setShowedPage(new PageMap(false));
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                });
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
