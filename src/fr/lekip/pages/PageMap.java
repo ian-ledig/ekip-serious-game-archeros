@@ -26,11 +26,13 @@ public class PageMap extends GameGroup {
     private final Pane mapp;
     private Object tempView;
     private Object[][] pinCombo;
+    private boolean intro;
 
-    public PageMap() throws FileNotFoundException {
+    public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/textures/pages/main/pin.png"));
 
+        intro = pIntro;
         // pinCombo = new HashMap<GameImage, Button>();
         pinCombo = new Object[3][3];
 
@@ -90,11 +92,13 @@ public class PageMap extends GameGroup {
             // ici on load le menu aussi <---
             loadMenu();
 
-            try {
-                loadIntro();
-            } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            if (intro) {
+                try {
+                    loadIntro();
+                } catch (FileNotFoundException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
 
             // Delete event
@@ -144,7 +148,6 @@ public class PageMap extends GameGroup {
     }
 
     private void loadButtons() {
-
 
         // TODO to refactor
         ((Button) pinCombo[0][2]).setOnAction(new EventHandler<ActionEvent>() {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.utils.Item;
@@ -27,14 +28,16 @@ public class PageSummary extends GameGroup {
     private Text txt;
     private double percentEnergy;
     private Item specialItem;
+
     private GameImage arrowNext;
     private GameImage arrowBefore;
+    private GameImage finishBtn;
+    private Text txtFinish;
 
     private StackPane pane;
 
     public PageSummary(List<Item> found, List<Item> lost, Item specialItem, double percent) {
         try {
-
             pane = new StackPane();
             GameImage image = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/summary/end_screen.png")), 1450 / 4,
@@ -53,7 +56,6 @@ public class PageSummary extends GameGroup {
         items.addAll(lost);
         indexFirstList = found.size() - 1;
         percentEnergy = percent;
-
     }
 
     public void start() {
@@ -122,10 +124,24 @@ public class PageSummary extends GameGroup {
                 arrowNext = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")),
                         980, 550, 150, 30, true);
 
-                arrowBefore = new GameImage(null, 250, 550, 150, 30, true);
+                arrowBefore = new GameImage(null, 350, 550, 150, 30, true);
+                arrowBefore.setRotate(180);
 
+                finishBtn = new GameImage(null, 980, 550, 150, 30, true);
+                txtFinish = new Text();
+                StackPane btnPane = new StackPane();
+
+                btnPane.setTranslateX(980);
+                btnPane.setTranslateY(550);
+
+                btnPane.getChildren().add(finishBtn);
+                btnPane.getChildren().add(txtFinish);
+                btnPane.setAlignment(Pos.CENTER);
+
+                add(btnPane);
                 add(arrowNext);
                 add(arrowBefore);
+
                 arrowNext.setOnMouseClicked((e) -> {
                     System.out.println("cliqué");
                     index++;
@@ -139,6 +155,14 @@ public class PageSummary extends GameGroup {
                     loadPicture();
                 });
 
+                btnPane.setOnMouseClicked((e) -> {
+                    try {
+                        Main.setShowedPage(new PageMap(false));
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                });
+
             } catch (FileNotFoundException e) {
 
                 e.printStackTrace();
@@ -149,13 +173,22 @@ public class PageSummary extends GameGroup {
             try {
                 arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
                 arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
+                finishBtn.setImage(null);
+                txtFinish.setText("");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         } else if (index < 0) {
             arrowBefore.setImage(null);
         } else if (index == 3) {
-            arrowNext.setImage(null);
+            try {
+                arrowNext.setImage(null);
+                finishBtn.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/btn.png")));
+                txtFinish.setText("Finir la fouille");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }
