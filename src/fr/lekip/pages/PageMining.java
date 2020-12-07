@@ -257,7 +257,6 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            System.out.println("END !");
             PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
             setOnKeyPressed(null);
             setOnMouseClicked(null);
