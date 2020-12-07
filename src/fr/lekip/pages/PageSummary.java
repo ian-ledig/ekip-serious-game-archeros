@@ -41,6 +41,7 @@ public class PageSummary extends GameGroup {
     public PageSummary(List<Item> found, List<Item> lost, Item pSpecialItem, double percent) {
         try {
             pane = new StackPane();
+            // We create the Background Image
             GameImage image = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/summary/end_screen.png")), 1450 / 4,
                     750 / 4, 1150, 590, true);
@@ -55,19 +56,24 @@ public class PageSummary extends GameGroup {
         txt = new Text();
         add(txt);
 
+        // We init the data
         specialItem = pSpecialItem;
+
+        // We put concatenate the 2 list in one and save index where the first list ends
         items.addAll(found);
         items.addAll(lost);
         indexFirstList = found.size() - 1;
         percentEnergy = percent;
 
-        realPicture = new GameImage(null, 265, 200, 200, 200, true);
+        realPicture = new GameImage(null, 275, 200, 200, 200, true);
         add(realPicture);
     }
 
     public void start() {
+        // We calculate the score
         score = calculateScore();
 
+        // Show a text
         try {
             Text end = new Text("FIN DE LA PARTIE");
             end.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")),
@@ -78,12 +84,16 @@ public class PageSummary extends GameGroup {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        // Then we load image data and the pages
         loadPicture();
         loadPage();
 
     }
 
     private int calculateScore() {
+        // If the item win was found, we gave him 100 points and then for each other
+        // items found we give him 75 points.
         int temp = 0;
         if (items.subList(0, indexFirstList).contains(specialItem)) {
             temp += 100;
@@ -92,7 +102,10 @@ public class PageSummary extends GameGroup {
             temp += 75 * items.subList(0, indexFirstList).size();
         }
 
+        // We add the percentage point
         temp += percentEnergy * 100;
+
+        // TODO add specialist point
         return temp;
     }
 
@@ -124,8 +137,10 @@ public class PageSummary extends GameGroup {
                 e.printStackTrace();
             }
             if (index <= indexFirstList) {
+                // If the item is in the list of found item we show his description
                 txt.setText("Item trouvé ! \n" + items.get(index).getLore());
             } else {
+                // If the item is in the list of lost item we show his description
                 txt.setText("Item perdu ! \n" + items.get(index).getLore());
             }
 
@@ -137,6 +152,8 @@ public class PageSummary extends GameGroup {
 
         if (!(getChildren().contains(arrowNext))) {
             try {
+
+                // We init the arrows and the last button
                 arrowNext = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")),
                         980, 550, 150, 30, true);
 
@@ -158,6 +175,8 @@ public class PageSummary extends GameGroup {
                 add(arrowNext);
                 add(arrowBefore);
 
+                // We add event handler on mouse clicked to recall the loadPage(to change
+                // item/page) and loadPicture(to change arrow display)
                 arrowNext.setOnMouseClicked((e) -> {
                     index++;
                     loadPage();
@@ -178,6 +197,7 @@ public class PageSummary extends GameGroup {
 
         if (index >= 0 && index < 3) {
             try {
+                // We show both arrows
                 arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
                 arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
                 finishBtn.setImage(null);
@@ -188,9 +208,11 @@ public class PageSummary extends GameGroup {
                 e.printStackTrace();
             }
         } else if (index < 0) {
+            // We hide the left arrow
             arrowBefore.setImage(null);
         } else if (index == 3) {
             try {
+                // We hide the right arrow and display the button to come back to map
                 arrowNext.setImage(null);
                 finishBtn.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/btn.png")));
                 txtFinish.setText("Finir la fouille");
