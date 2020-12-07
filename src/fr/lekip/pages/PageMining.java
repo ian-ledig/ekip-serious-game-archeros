@@ -188,7 +188,7 @@ public class PageMining extends GameGroup {
                             score.setText(SCORE_BASE_TEXT + this.itemsFound.size() + "/" + itemsRemaining);
 
                             // Check if the game can be stop
-                            tryToEndGame();
+                            tryToEndGame(false);
                         }
                     }
                 });
@@ -255,8 +255,8 @@ public class PageMining extends GameGroup {
         addEventHandler(PlayerMovementsEventHandler.class);
     }
 
-    public void tryToEndGame() {
-        if (isEnd()) {
+    public void tryToEndGame(boolean force) {
+        if (force || isEnd()) {
             System.out.println("END !");
         }
     }
@@ -427,7 +427,7 @@ public class PageMining extends GameGroup {
         });
 
         spnAbandon.setOnMouseClicked(mouseEvent -> {
-            tryToEndGame();
+            tryToEndGame(true);
         });
     }
 }
