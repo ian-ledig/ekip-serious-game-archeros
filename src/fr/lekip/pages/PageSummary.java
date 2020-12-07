@@ -146,26 +146,51 @@ public class PageSummary extends GameGroup {
             try {
                 realPicture.setImage(new Image(new FileInputStream(items.get(index).getTexturePath())));
             } catch (Exception e) {
+                // If we dont have found any item
                 realPicture.setImage(null);
             }
             if (index <= indexFirstList) {
                 end = false;
                 if (items.get(index) == null) {
                     txt.setText("Aucun item trouvé :/ \nPas grave ! Vous ferez mieux la prochaine fois !");
+                    try {
+                        // If there is no next item, we end
+                        if (items.get(index + 1) == null) {
+                            end = true;
+                        }
+                    } catch (Exception e) {
+                        end = true;
+                    }
+
                 } else {
                     // If the item is in the list of found item we show his description
                     txt.setText("Item trouvé ! \n" + items.get(index).getLore());
+
+                    // if this is the last item, we end
+                    if (index == items.size() - 1) {
+                        end = true;
+                    }
                 }
 
             } else {
-                if (items.get(index) == specialItem) {
-                    txt.setText("Vous avez détruis l'objectif !\n" + items.get(index).getLore());
+                try {
+                    end = false;
+                    if (items.get(index) == specialItem) {
+                        txt.setText("Vous avez détruis l'objectif !\n" + items.get(index).getLore());
+                        end = true;
+
+                    } else {
+                        // If the item is in the list of lost item we show his description
+                        txt.setText("Item perdu ! \n" + items.get(index).getLore());
+
+                        // if this is the last item, we end
+                        if (index == items.size() - 1) {
+                            end = true;
+                        }
+                    }
+                } catch (Exception e) {
                     end = true;
 
-                } else {
-                    // If the item is in the list of lost item we show his description
-                    txt.setText("Item perdu ! \n" + items.get(index).getLore());
-                    end = false;
                 }
 
             }
@@ -204,7 +229,6 @@ public class PageSummary extends GameGroup {
                 // We add event handler on mouse clicked to recall the loadPage(to change
                 // item/page) and loadPicture(to change arrow display)
                 arrowNext.setOnMouseClicked((e) -> {
-
                     index++;
 
                     loadPage();
@@ -223,23 +247,9 @@ public class PageSummary extends GameGroup {
             }
         }
 
-        if (index >= 0 && index < 3 && !end) {
+        if (end) {
             try {
-                // We show both arrows
                 arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
-                arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
-                finishBtn.setImage(null);
-                txtFinish.setText("");
-
-                btnPane.setOnMouseClicked(null);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else if (index < 0) {
-            // We hide the left arrow
-            arrowBefore.setImage(null);
-        } else if (index == 3 || end) {
-            try {
                 // We hide the right arrow and display the button to come back to map
                 arrowNext.setImage(null);
                 finishBtn.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/btn.png")));
@@ -255,7 +265,30 @@ public class PageSummary extends GameGroup {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        } else if (index < 0) {
+            // We hide the left arrow
+            arrowBefore.setImage(null);
+            try {
+                arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
+            finishBtn.setImage(null);
+            txtFinish.setText("");
+            btnPane.setOnMouseClicked(null);
+        } else {
+            try {
+                // We show both arrows
+                arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
+                arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
+                finishBtn.setImage(null);
+                txtFinish.setText("");
+
+                btnPane.setOnMouseClicked(null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
     }
