@@ -35,6 +35,7 @@ public class PageSummary extends GameGroup {
     private Text txtFinish;
     private GameImage realPicture;
 
+    private boolean end = false;
     private StackPane btnPane;
     private StackPane pane;
 
@@ -60,9 +61,16 @@ public class PageSummary extends GameGroup {
         specialItem = pSpecialItem;
 
         // We put concatenate the 2 list in one and save index where the first list ends
-        items.addAll(found);
+        if (found.isEmpty()) {
+            items.add(null);
+            indexFirstList = 0;
+
+        } else {
+            items.addAll(found);
+            indexFirstList = found.size() - 1;
+        }
+
         items.addAll(lost);
-        indexFirstList = found.size() - 1;
         percentEnergy = percent;
 
         realPicture = new GameImage(null, 275, 200, 200, 200, true);
@@ -95,10 +103,14 @@ public class PageSummary extends GameGroup {
         // If the item win was found, we gave him 100 points and then for each other
         // items found we give him 75 points.
         int temp = 0;
-        if (items.subList(0, indexFirstList).contains(specialItem)) {
-            temp += 100;
-            temp += 75 * (items.subList(0, indexFirstList).size() - 1);
-        } else {
+        try {
+            if (items.subList(0, indexFirstList).contains(specialItem)) {
+                temp += 100;
+                temp += 75 * (items.subList(0, indexFirstList).size() - 1);
+            } else {
+                temp += 75 * items.subList(0, indexFirstList).size();
+            }
+        } catch (Exception e) {
             temp += 75 * items.subList(0, indexFirstList).size();
         }
 
@@ -133,15 +145,29 @@ public class PageSummary extends GameGroup {
         } else {
             try {
                 realPicture.setImage(new Image(new FileInputStream(items.get(index).getTexturePath())));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                realPicture.setImage(null);
             }
             if (index <= indexFirstList) {
-                // If the item is in the list of found item we show his description
-                txt.setText("Item trouvé ! \n" + items.get(index).getLore());
+                end = false;
+                if (items.get(index) == null) {
+                    txt.setText("Aucun item trouvé :/ \nPas grave ! Vous ferez mieux la prochaine fois !");
+                } else {
+                    // If the item is in the list of found item we show his description
+                    txt.setText("Item trouvé ! \n" + items.get(index).getLore());
+                }
+
             } else {
-                // If the item is in the list of lost item we show his description
-                txt.setText("Item perdu ! \n" + items.get(index).getLore());
+                if (items.get(index) == specialItem) {
+                    txt.setText("Vous avez détruis l'objectif !\n" + items.get(index).getLore());
+                    end = true;
+
+                } else {
+                    // If the item is in the list of lost item we show his description
+                    txt.setText("Item perdu ! \n" + items.get(index).getLore());
+                    end = false;
+                }
+
             }
 
         }
@@ -178,7 +204,9 @@ public class PageSummary extends GameGroup {
                 // We add event handler on mouse clicked to recall the loadPage(to change
                 // item/page) and loadPicture(to change arrow display)
                 arrowNext.setOnMouseClicked((e) -> {
+
                     index++;
+
                     loadPage();
                     loadPicture();
                 });
@@ -195,7 +223,7 @@ public class PageSummary extends GameGroup {
             }
         }
 
-        if (index >= 0 && index < 3) {
+        if (index >= 0 && index < 3 && !end) {
             try {
                 // We show both arrows
                 arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
@@ -210,7 +238,7 @@ public class PageSummary extends GameGroup {
         } else if (index < 0) {
             // We hide the left arrow
             arrowBefore.setImage(null);
-        } else if (index == 3) {
+        } else if (index == 3 || end) {
             try {
                 // We hide the right arrow and display the button to come back to map
                 arrowNext.setImage(null);
