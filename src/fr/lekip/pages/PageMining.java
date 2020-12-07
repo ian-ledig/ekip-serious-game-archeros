@@ -261,6 +261,7 @@ public class PageMining extends GameGroup {
             PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
             setOnKeyPressed(null);
             setOnMouseClicked(null);
+            setOnMousePressed(null);
             add(summary);
 
             summary.start();
