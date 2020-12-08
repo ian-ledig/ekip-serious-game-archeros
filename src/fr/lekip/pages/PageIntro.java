@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import java.io.File;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,14 +24,19 @@ public class PageIntro extends GameGroup {
             "Appuyez sur n'importe quelle touche pour commencer..." };
 
     public PageIntro() throws FileNotFoundException {
-        Image overlayDialog = new Image(new FileInputStream("src/assets/images/dialogbox1.png"));
+        Image overlayDialog = new Image(new FileInputStream("src/assets/textures/pages/main/textbox.png"));
+
         StackPane mapp = new StackPane();
         GameImage image = new GameImage(overlayDialog, 0, 600, 1450, 150, false);
 
         txt = new Text(dialog[0]);
-        txt.setFont(new Font(18));
+        txt.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+
         mapp.getChildren().addAll(image);
         mapp.getChildren().addAll(txt);
+
+// TODO Change pos of text
 
         mapp.setTranslateY(600);
         mapp.setAlignment(Pos.CENTER);
