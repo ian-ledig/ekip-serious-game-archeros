@@ -1,0 +1,10 @@
+Distance hypothénuse = racine carré de (x+y)
+Si x et y >= 200, c'est bon les objets sont à bonne distance
+Sinon, on les replace
+
+Si les objets se trouve sur le meme axe, on replace les items
+
+Pour savoir l'energie max on regarde le Y des items et l'espacement hypothenuse des items entre eux.
+
+
+Formule pour calculer le bonus : |Y1*2 -Y2 - Y3|     Y1 = le plus profond

@@ -246,6 +246,7 @@ public class PageMining extends GameGroup {
         }
 
         add(player);
+        loadEnergyBar();
 
         loadEnergyBar();
         loadLabels();
@@ -253,6 +254,7 @@ public class PageMining extends GameGroup {
 
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
+
     }
 
     public void tryToEndGame(boolean force) {
