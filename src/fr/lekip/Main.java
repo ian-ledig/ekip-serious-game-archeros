@@ -1,61 +1,62 @@
 package fr.lekip;
 
-import java.io.FileInputStream;
-
 import fr.lekip.components.GameGroup;
-import fr.lekip.pages.PageMap;
 import fr.lekip.pages.PageMining;
-import fr.lekip.pages.SkyboxType;
 import fr.lekip.utils.GroundType;
+import fr.lekip.utils.Item;
+import fr.lekip.utils.SkyboxType;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
 
-    public static GameGroup showedPage;
+    public static int WINDOWS_WIDTH = 1450;
+    public static int WINDOWS_HEIGHT = 750;
+
+    public static GameGroup root = new GameGroup();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         // Setup scene
-        Group root = new Group();
-        Scene scene = new Scene(root, 1450, 750);
+        Scene scene = new Scene(root, WINDOWS_WIDTH, WINDOWS_HEIGHT);
         scene.setFill(Color.TRANSPARENT);
 
         // Set background image
-        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/images/brick2.png")));
+        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png")));
         scene.setFill(pattern);
-        // Page creation
 
+        // Page creation
         // Page Mining
         List<GroundType> groundTypes = new ArrayList<>();
-        groundTypes.add(GroundType.DIRT);
+        groundTypes.add(GroundType.SAND);
+        groundTypes.add(GroundType.SANDSTONE);
         groundTypes.add(GroundType.STONE);
-        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes));
+        List<Item> items = new ArrayList<>();
+        items.add(Item.COIN);
+        items.add(Item.BUTTON);
+        items.add(Item.PRIEST);
+        items.add(Item.NAIL);
+        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900));
 
-        // setShowedPage(new PageMap());
-
-        root.getChildren().add(showedPage);
-
-        primaryStage.setTitle("L'Ekip");
+        primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
         primaryStage.show();
     }
 
     public static void setShowedPage(GameGroup showedPage) {
-        Main.showedPage = showedPage;
+        Main.root.getChildren().clear();
+        Main.root.add(showedPage);
     }
 
     public static void main(String[] args) {

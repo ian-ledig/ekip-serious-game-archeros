@@ -1,18 +1,16 @@
 package fr.lekip.pages;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import java.io.File;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class PageIntro extends GameGroup {
 
@@ -27,6 +25,7 @@ public class PageIntro extends GameGroup {
 
     public PageIntro() throws FileNotFoundException {
         Image overlayDialog = new Image(new FileInputStream("src/assets/textures/pages/main/textbox.png"));
+
         StackPane mapp = new StackPane();
         GameImage image = new GameImage(overlayDialog, 0, 600, 1450, 150, false);
 

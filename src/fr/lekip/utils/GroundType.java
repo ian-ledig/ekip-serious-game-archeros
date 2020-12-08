@@ -8,7 +8,14 @@ import java.io.FileNotFoundException;
 
 public enum GroundType {
 
-    DIRT("src/assets/textures/pages/mining/dirt.png", 1), STONE("src/assets/textures/pages/mining/stone.png", 10);
+    GRASS("src/assets/textures/pages/mining/grass.png", 1),
+    DIRT("src/assets/textures/pages/mining/dirt.png", 1),
+    STONE("src/assets/textures/pages/mining/stone.png", 2),
+    SAND("src/assets/textures/pages/mining/sand.png", 1),
+    SANDSTONE("src/assets/textures/pages/mining/sandstone.png", 1)
+    ;
+
+    public static final int GROUND_SIZE = 18;
 
     private GameImage gameImage;
     private int resistance;
@@ -22,7 +29,7 @@ public enum GroundType {
         }
     }
 
-    public GameImage getGameImage() throws CloneNotSupportedException {
+    public GameImage cloneGameImage() throws CloneNotSupportedException {
         return (GameImage) gameImage.clone();
     }
 

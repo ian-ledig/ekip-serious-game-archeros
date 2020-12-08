@@ -1,6 +1,5 @@
 package fr.lekip.components;
 
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -39,9 +38,5 @@ public class GameGroup extends Group {
                 | InvocationTargetException e) {
             e.printStackTrace();
         }
-    }
-
-    public ObservableList getNode() {
-        return getChildren();
     }
 }

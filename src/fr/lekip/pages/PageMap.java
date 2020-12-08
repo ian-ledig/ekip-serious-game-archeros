@@ -1,15 +1,16 @@
 package fr.lekip.pages;
 
-import fr.lekip.components.GameGroup;
-import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.Button;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -20,10 +21,13 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
 
 public class PageMap extends GameGroup {
 
@@ -31,12 +35,16 @@ public class PageMap extends GameGroup {
     private final Image WORLD_PIN;
     private final VBox sideMenu;
     private final Pane mapp;
+    private Object tempView;
     private Object[][] pinCombo;
+    private boolean intro;
 
-    public PageMap() throws FileNotFoundException {
+    public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/textures/pages/main/pin.png"));
 
+        intro = pIntro;
+        // pinCombo = new HashMap<GameImage, Button>();
         pinCombo = new Object[3][4];
 
         // Create the map
@@ -92,13 +100,16 @@ public class PageMap extends GameGroup {
 
             loadPin();
 
-            // We load the menu
+            // ici on load le menu aussi <---
             loadMenu();
 
-            try {
-                loadIntro();
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
+            if (intro) {
+                try {
+                    loadIntro();
+                } catch (FileNotFoundException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
 
             // Delete event
@@ -108,7 +119,7 @@ public class PageMap extends GameGroup {
 
     private void loadPin() {
 
-        // Each pin
+         // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
         pinCombo[0][1] = "L'alaska";
         pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
@@ -119,9 +130,11 @@ public class PageMap extends GameGroup {
         pinCombo[2][1] = "L'inconnu";
         pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
 
+
         for (int i = 0; i < 3; i++) {
             ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
                 locationPreview((GameImage) mouseEvent.getSource());
+                System.out.println("Pin cliqué");
             });
             mapp.getChildren().addAll((GameImage) pinCombo[i][0]);
 
@@ -152,6 +165,7 @@ public class PageMap extends GameGroup {
             e.printStackTrace();
         }
 
+
     }
 
     private void loadButtons() throws FileNotFoundException {
@@ -172,7 +186,7 @@ public class PageMap extends GameGroup {
         }
 
         // TODO to refactor
-        // Event handler to move the map in the location clicked
+       // Event handler to move the map in the location clicked
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
             final double tX = ((GameImage) pinCombo[0][0]).getXImage() + 350;
@@ -203,7 +217,6 @@ public class PageMap extends GameGroup {
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
             tt.play();
-
         });
 
         ((Node) pinCombo[2][2]).setOnMouseClicked((e) -> {
@@ -218,39 +231,9 @@ public class PageMap extends GameGroup {
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
             tt.play();
-
         });
     }
 
-    private void loadIntro() throws FileNotFoundException {
-        GameGroup introPage = new PageIntro();
-
-        // Blur effect in the background
-        BoxBlur boxBlur = new BoxBlur();
-        boxBlur.setWidth(8);
-        boxBlur.setHeight(4);
-        boxBlur.setIterations(2);
-
-        // Add blur effect to all the nodes
-        for (Node objects : super.getChildren()) {
-            objects.setEffect(boxBlur);
-        }
-        add(introPage);
-
-        introPage.requestFocus();
-        introPage.setOnKeyPressed((e) -> {
-            if (((PageIntro) introPage).isFinished()) {
-                for (Node objects : super.getChildren()) {
-                    objects.setEffect(null);
-                }
-                remove(introPage);
-
-                // Add map event handler
-                addEventHandler(MapEventHandler.class);
-            }
-        });
-
-    }
 
     private void locationPreview(GameImage pinCombo2) {
         // TODO Add specialist choice
@@ -329,4 +312,36 @@ public class PageMap extends GameGroup {
         });
 
     }
+
+
+    private void loadIntro() throws FileNotFoundException {
+        GameGroup introPage = new PageIntro();
+
+        // Blur effect in the background
+        BoxBlur boxBlur = new BoxBlur();
+        boxBlur.setWidth(8);
+        boxBlur.setHeight(4);
+        boxBlur.setIterations(2);
+
+        // Add blur effect to all the nodes
+        for (Node objects : super.getChildren()) {
+            objects.setEffect(boxBlur);
+        }
+        add(introPage);
+
+        introPage.requestFocus();
+        introPage.setOnKeyPressed((e) -> {
+            if (((PageIntro) introPage).isFinished()) {
+                for (Node objects : super.getChildren()) {
+                    objects.setEffect(null);
+                }
+                remove(introPage);
+
+                // Add map event handler
+                addEventHandler(MapEventHandler.class);
+            }
+        });
+
+    }
+
 }
