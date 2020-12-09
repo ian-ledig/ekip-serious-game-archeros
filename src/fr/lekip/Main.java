@@ -1,6 +1,7 @@
 package fr.lekip;
 
 import fr.lekip.components.GameGroup;
+import fr.lekip.pages.PageMap;
 import fr.lekip.pages.PageMining;
 import fr.lekip.utils.GroundType;
 import fr.lekip.utils.Item;
@@ -13,6 +14,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,16 +25,14 @@ public class Main extends Application {
 
     public static GameGroup root = new GameGroup();
 
+    private static Scene scene;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         // Setup scene
-        Scene scene = new Scene(root, WINDOWS_WIDTH, WINDOWS_HEIGHT);
+        scene = new Scene(root, WINDOWS_WIDTH, WINDOWS_HEIGHT);
         scene.setFill(Color.TRANSPARENT);
-
-        // Set background image
-        ImagePattern pattern = new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png")));
-        scene.setFill(pattern);
 
         // Page creation
         // Page Mining
@@ -56,6 +56,16 @@ public class Main extends Application {
 
     public static void setShowedPage(GameGroup showedPage) {
         Main.root.getChildren().clear();
+
+        if(showedPage instanceof PageMap)
+            Main.scene.setFill(Color.web("86B4E4"));
+        else {
+            try {
+                Main.scene.setFill(new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png"))));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         Main.root.add(showedPage);
     }
 
