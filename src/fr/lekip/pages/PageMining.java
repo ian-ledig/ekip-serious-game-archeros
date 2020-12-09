@@ -256,7 +256,7 @@ public class PageMining extends GameGroup {
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
             Main.mediaPlayer.stop();
-            if(groundItemWin != null)
+            if(itemsFound.contains(itemWin))
                 Sound.WIN.getMediaPlayer().play();
             else
                 Sound.LOSE.getMediaPlayer().play();
