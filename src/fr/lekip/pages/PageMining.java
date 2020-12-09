@@ -254,7 +254,6 @@ public class PageMining extends GameGroup {
 
         add(player);
         loadEnergyBar();
-        loadEnergyBar();
         loadLabels();
         loadPause();
 
@@ -471,6 +470,7 @@ public class PageMining extends GameGroup {
     public void decreaseEnergy(int strength) {
         energyValue -= strength * 18;
         energyBar.setProgress(((energyValue * 100) / energyDefault) * 0.01);
+        tryToEndGame(false);
     }
 
     public void loadLabels() throws FileNotFoundException {
