@@ -5,15 +5,12 @@ import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
 import fr.lekip.inputs.PlayerMovementsEventHandler;
-import fr.lekip.utils.GroundType;
-import fr.lekip.utils.Item;
-import fr.lekip.utils.SkyboxType;
+import fr.lekip.utils.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
@@ -23,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -56,12 +54,13 @@ public class PageMining extends GameGroup {
     private final List<Item> itemsFound = new ArrayList<>();
     private final List<Item> itemsLost = new ArrayList<>();
 
+    private final GamePlayer player = new GamePlayer(this);
+
     private int itemsRemaining;
 
     private List<GameImage> groundItems = new ArrayList<>();
     private GameImage groundItemWin;
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
-    private GamePlayer player = new GamePlayer(this);
     private ProgressBar energyBar = new ProgressBar();
 
     private double energyValue = 0;
@@ -246,11 +245,13 @@ public class PageMining extends GameGroup {
         }
 
         add(player);
-        loadEnergyBar();
 
         loadEnergyBar();
         loadLabels();
         loadPause();
+
+        // Play game music
+        loadMusic();
 
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
@@ -259,6 +260,8 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
+            player.getAudioPlayer().stop();
+
             PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
             setOnKeyPressed(null);
             setOnMouseClicked(null);
@@ -437,5 +440,11 @@ public class PageMining extends GameGroup {
         spnAbandon.setOnMouseClicked(mouseEvent -> {
             tryToEndGame(true);
         });
+    }
+
+    public void loadMusic(){
+        player.setAudioPlayer(Sound.GAME.getMediaPlayer());
+        player.getAudioPlayer().setCycleCount(MediaPlayer.INDEFINITE);
+        player.getAudioPlayer().play();
     }
 }

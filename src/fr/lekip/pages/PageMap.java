@@ -3,6 +3,7 @@ package fr.lekip.pages;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
+import fr.lekip.utils.Sound;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -24,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.*;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -40,6 +42,10 @@ public class PageMap extends GameGroup {
     private Object tempView;
     private Object[][] pinCombo;
     private boolean intro;
+
+    // We declare it here because otherwise MediaPlayer class will delete it before
+    // the audio finish to play
+    private MediaPlayer audioPlayer;
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
@@ -63,6 +69,8 @@ public class PageMap extends GameGroup {
         // Display text while waiting for the user
         loadText();
 
+        // Play menu music
+        loadMusic();
     }
 
     /**
@@ -343,7 +351,11 @@ public class PageMap extends GameGroup {
                 addEventHandler(MapEventHandler.class);
             }
         });
-
     }
 
+    public void loadMusic(){
+        audioPlayer = Sound.MENU.getMediaPlayer();
+        audioPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        audioPlayer.play();
+    }
 }

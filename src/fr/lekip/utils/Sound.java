@@ -6,6 +6,9 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 
 public enum Sound {
+    MENU("src/assets/audio/musics/menu"),
+    GAME("src/assets/audio/musics/game"),
+
     SHOVEL("src/assets/audio/tools/shovel"),
     PICKAXE("src/assets/audio/tools/pickaxe"),
     PROBE("src/assets/audio/tools/probe"),

@@ -282,6 +282,14 @@ public class GamePlayer extends GameGroup {
         return tool;
     }
 
+    public MediaPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
+
+    public void setAudioPlayer(MediaPlayer audioPlayer) {
+        this.audioPlayer = audioPlayer;
+    }
+
     public void setTool(Tool tool) {
         this.tool = tool;
         try {

@@ -96,7 +96,6 @@ public class PageSummary extends GameGroup {
         // Then we load image data and the pages
         loadPicture();
         loadPage();
-
     }
 
     private int calculateScore() {
