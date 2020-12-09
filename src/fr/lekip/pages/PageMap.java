@@ -1,9 +1,12 @@
 package fr.lekip.pages;
 
+import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GameSpecialist;
 import fr.lekip.inputs.MapEventHandler;
+import fr.lekip.utils.Item;
+import fr.lekip.utils.SkyboxType;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -29,9 +32,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import fr.lekip.utils.GroundType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PageMap extends GameGroup {
 
@@ -42,6 +48,12 @@ public class PageMap extends GameGroup {
     private Object tempView;
     private Object[][] pinCombo;
     private boolean intro;
+    private int index;
+    private GameImage validate;
+    private Pane pane;
+
+    private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
+    private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
@@ -128,7 +140,7 @@ public class PageMap extends GameGroup {
 
         // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
-        pinCombo[0][1] = "L'alaska";
+        pinCombo[0][1] = "Brora";
         pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
         pinCombo[1][0] = new GameImage(WORLD_PIN, 240, 750, 80, 80, true);
         pinCombo[1][1] = "La tombe sacré";
@@ -242,7 +254,7 @@ public class PageMap extends GameGroup {
     private void locationPreview(GameImage pinCombo2) {
         // TODO Add specialist choice
 
-        int index = -1;
+        index = -1;
         for (int i = 0; i < pinCombo.length; i++) {
             if (pinCombo[i][0] == pinCombo2) {
                 index = i;
@@ -250,7 +262,7 @@ public class PageMap extends GameGroup {
         }
         System.out.println(pinCombo[index][1]);
         // Pane + Background color
-        Pane pane = new Pane();
+        pane = new Pane();
         try {
             // here we change the size of the background
             GameImage back = new GameImage(
@@ -265,9 +277,8 @@ public class PageMap extends GameGroup {
         try {
             crossClose = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/cross.png")), 1200,
                     5, 20, 20, true);
-            GameImage validate = new GameImage(
-                    new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970, 500, 200, 80,
-                    true);
+            validate = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970,
+                    500, 200, 80, true);
 
             GameImage landscape = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
@@ -278,17 +289,38 @@ public class PageMap extends GameGroup {
             e.printStackTrace();
         }
 
+        // Add description of the location
         Text description = new Text((String) pinCombo[index][3]);
         description.setTranslateX(500);
         description.setTranslateY(25);
         pane.getChildren().add(description);
 
-        GameSpecialist specialist1 = new GameSpecialist(50, 250, 0);
-        GameSpecialist specialist2 = new GameSpecialist(250, 250, 1);
-        GameSpecialist specialist3 = new GameSpecialist(450, 250, 2);
+        List<GameSpecialist> specialists = loadSpecialist(index);
+        List<Item[]> specialistItems = new ArrayList<>();
 
-        pane.getChildren().addAll(specialist1.getSpecialist(), specialist2.getSpecialist(),
-                specialist3.getSpecialist());
+        validate.setOnMouseClicked((e) -> {
+
+            for (GameSpecialist spe : specialists) {
+                specialistItems.add(spe.getItems());
+            }
+
+            List<GroundType> groundTypes = new ArrayList<>();
+            List<Item> items = new ArrayList<>();
+            int scoreInit = 0;
+            for (int j = 0; j < 4; j++) {
+                items.add(locationItems[index][j]);
+                if (j < 3) {
+                    groundTypes.add(locationGround[index][j]);
+                }
+
+            }
+
+            try {
+                Main.setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setTranslateX(100);
@@ -352,6 +384,23 @@ public class PageMap extends GameGroup {
             }
         });
 
+    }
+
+    private List<GameSpecialist> loadSpecialist(int index) {
+
+        // Add all the specialist that we can chose
+        List<GameSpecialist> specialists = new ArrayList<>();
+        GameSpecialist specialist1 = new GameSpecialist(50, 250, 0);
+        GameSpecialist specialist2 = new GameSpecialist(250, 250, 1);
+        GameSpecialist specialist3 = new GameSpecialist(450, 250, 2);
+
+        specialists.add(specialist1);
+        specialists.add(specialist2);
+        specialists.add(specialist3);
+        pane.getChildren().addAll(specialist1.getSpecialist(), specialist2.getSpecialist(),
+                specialist3.getSpecialist());
+
+        return specialists;
     }
 
 }

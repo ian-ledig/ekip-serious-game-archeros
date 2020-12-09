@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
+import fr.lekip.utils.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -39,6 +40,7 @@ public class GameSpecialist extends GameGroup {
             "L'Anthropologue étudie les ossements humains ainsi que leur méthode d’inhumation.",
             "Le Céramologue étudie les éléments de vaisselle en terre cuite, leur forme, leur fonction et leur mode de façonnage." };
     private String[] names = { "Xylologue", "Anthropologue", "Céramologue" };
+    private Item[][] specialistItems = { {}, { Item.PRIEST }, { Item.STATUETTE } };
 
     public GameSpecialist(int pX, int pY, int pId) {
         Random rand = new Random();
@@ -56,7 +58,6 @@ public class GameSpecialist extends GameGroup {
 
         GameImage help;
         try {
-
             Pane infoPop = new Pane();
             infoPop.setPrefSize(50, 50);
             infoPop.setTranslateX(50);
@@ -127,5 +128,9 @@ public class GameSpecialist extends GameGroup {
             e.printStackTrace();
         }
 
+    }
+
+    public Item[] getItems() {
+        return specialistItems[id];
     }
 }
