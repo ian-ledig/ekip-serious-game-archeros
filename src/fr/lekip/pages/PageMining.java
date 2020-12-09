@@ -74,6 +74,7 @@ public class PageMining extends GameGroup {
     private Label score;
     private boolean intro;
     private int initScore;
+    private int energyMaxScore;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex,
             boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
@@ -208,8 +209,10 @@ public class PageMining extends GameGroup {
             double Y1 = 0;
             double xG = 1450;
             double xD = 0;
+            energyMaxScore = 0;
             for (int i = 0; i < groundItems.size(); i++) {
                 energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
+                energyMaxScore += (getGroundItems().get(i).getYImage() - 262);
 
                 // We take the deepest item Y
                 if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
@@ -390,7 +393,8 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore);
+            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore,
+                    energyMaxScore);
             setOnKeyPressed(null);
             setOnMouseClicked(null);
             setOnMousePressed(null);
