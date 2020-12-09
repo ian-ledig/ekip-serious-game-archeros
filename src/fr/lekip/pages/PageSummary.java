@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.utils.Item;
+import fr.lekip.utils.Sound;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -230,6 +229,7 @@ public class PageSummary extends GameGroup {
                 // We add event handler on mouse clicked to recall the loadPage(to change
                 // item/page) and loadPicture(to change arrow display)
                 arrowNext.setOnMouseClicked((e) -> {
+                    Sound.BUTTON_END.getMediaPlayer().play();
                     index++;
 
                     loadPage();
@@ -237,7 +237,9 @@ public class PageSummary extends GameGroup {
                 });
 
                 arrowBefore.setOnMouseClicked((e) -> {
+                    Sound.BUTTON_END.getMediaPlayer().play();
                     index--;
+                    end = false;
                     loadPage();
                     loadPicture();
                 });
@@ -257,6 +259,7 @@ public class PageSummary extends GameGroup {
                 txtFinish.setText("Finir la fouille");
 
                 btnPane.setOnMouseClicked((e) -> {
+                    Sound.QUIT.getMediaPlayer().play();
                     try {
                         Main.setShowedPage(new PageMap(false));
                     } catch (FileNotFoundException e1) {

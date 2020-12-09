@@ -9,8 +9,11 @@ public enum Sound {
     MENU("src/assets/audio/musics/menu"),
     GAME("src/assets/audio/musics/game"),
 
-    BUTTON("src/assets/audio/musics/button"),
-    QUIT("src/assets/audio/musics/quit"),
+    BUTTON("src/assets/audio/fx/button"),
+    BUTTON_END("src/assets/audio/fx/buttonEnd"),
+    QUIT("src/assets/audio/fx/quit"),
+    LOSE("src/assets/audio/fx/lose"),
+    WIN("src/assets/audio/fx/win"),
 
     SHOVEL("src/assets/audio/tools/shovel"),
     PICKAXE("src/assets/audio/tools/pickaxe"),
@@ -18,10 +21,6 @@ public enum Sound {
     DYNAMITER("src/assets/audio/tools/dynamiter");
 
     private final String soundPath;
-
-    // We declare it here because otherwise MediaPlayer class will delete it before
-    // the audio finish to play
-    public static MediaPlayer audioPlayer;
 
     Sound(String soundPath){
         this.soundPath = soundPath;
@@ -31,21 +30,11 @@ public enum Sound {
         return soundPath;
     }
 
-    public static void playSound(Sound sound, int state){
-        Sound.audioPlayer = new MediaPlayer(new Media(new File(sound.getSoundPath() + ".mp3").toURI().toString()));
-        if(state != 0)
-            Sound.audioPlayer.setCycleCount(state);
-        Sound.audioPlayer.play();
+    public MediaPlayer getMediaPlayer(){
+        return new MediaPlayer(new Media(new File(soundPath + ".mp3").toURI().toString()));
     }
 
-    public static void playSound(Sound sound, int state, int index){
-        Sound.audioPlayer = new MediaPlayer(new Media(new File(sound.getSoundPath() + index + ".mp3").toURI().toString()));
-        if(state != 0)
-            Sound.audioPlayer.setCycleCount(state);
-        Sound.audioPlayer.play();
-    }
-
-    public static void stopSound(){
-        Sound.audioPlayer.stop();
+    public MediaPlayer getMediaPlayer(int index){
+        return new MediaPlayer(new Media(new File(soundPath + index + ".mp3").toURI().toString()));
     }
 }

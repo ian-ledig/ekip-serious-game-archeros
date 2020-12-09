@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class PageIntro extends GameGroup {
+public class GroupIntro extends GameGroup {
 
     private Text txt;
     private int index;
@@ -23,7 +23,7 @@ public class PageIntro extends GameGroup {
             "Vous allez devoir fouiller le sol à l'aide de plusieurs outils en faisant attention de ne pas endommager vos trouvailles !\nAttention ! Toutes les erreurs peuvent vous faire perdre !",
             "Appuyez sur n'importe quelle touche pour commencer..." };
 
-    public PageIntro() throws FileNotFoundException {
+    public GroupIntro() throws FileNotFoundException {
         Image overlayDialog = new Image(new FileInputStream("src/assets/textures/pages/main/textbox.png"));
 
         StackPane mapp = new StackPane();

@@ -9,6 +9,7 @@ import fr.lekip.utils.SkyboxType;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
@@ -23,6 +24,7 @@ public class Main extends Application {
     public static int WINDOWS_WIDTH = 1450;
     public static int WINDOWS_HEIGHT = 750;
 
+    public static MediaPlayer mediaPlayer;
     public static GameGroup root = new GameGroup();
 
     private static Scene scene;

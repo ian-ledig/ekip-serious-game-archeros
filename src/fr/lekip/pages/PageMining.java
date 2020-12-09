@@ -6,17 +6,10 @@ import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
 import fr.lekip.inputs.PlayerMovementsEventHandler;
 import fr.lekip.utils.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -251,7 +244,9 @@ public class PageMining extends GameGroup {
         loadPause();
 
         // Play game music
-        Sound.playSound(Sound.GAME, MediaPlayer.INDEFINITE);
+        Main.mediaPlayer = Sound.GAME.getMediaPlayer();
+        Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        Main.mediaPlayer.play();
 
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
@@ -260,7 +255,11 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            Sound.stopSound();
+            Main.mediaPlayer.stop();
+            if(groundItemWin != null)
+                Sound.WIN.getMediaPlayer().play();
+            else
+                Sound.LOSE.getMediaPlayer().play();
 
             PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
             setOnKeyPressed(null);
@@ -417,6 +416,8 @@ public class PageMining extends GameGroup {
         add(vbxPause);
 
         spnPause.setOnMouseClicked(event -> {
+            Sound.BUTTON.getMediaPlayer().play();
+
             vbxPause.setVisible(!vbxPause.isVisible());
             spnResume.setVisible(true);
             spnRestart.setVisible(true);
@@ -424,12 +425,17 @@ public class PageMining extends GameGroup {
         });
 
         spnResume.setOnMouseClicked(mouseEvent -> {
+            Sound.BUTTON.getMediaPlayer().play();
+
             spnResume.setVisible(false);
             spnRestart.setVisible(false);
             spnAbandon.setVisible(false);
         });
 
         spnRestart.setOnMouseClicked(mouseEvent -> {
+            Sound.QUIT.getMediaPlayer().play();
+            Main.mediaPlayer.stop();
+
             try {
                 Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex));
             } catch (FileNotFoundException | CloneNotSupportedException e) {
@@ -438,6 +444,8 @@ public class PageMining extends GameGroup {
         });
 
         spnAbandon.setOnMouseClicked(mouseEvent -> {
+            Sound.QUIT.getMediaPlayer().play();;
+
             tryToEndGame(true);
         });
     }

@@ -1,5 +1,6 @@
 package fr.lekip.pages;
 
+import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
@@ -8,12 +9,9 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.Button;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -24,7 +22,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -42,10 +39,6 @@ public class PageMap extends GameGroup {
     private Object tempView;
     private Object[][] pinCombo;
     private boolean intro;
-
-    // We declare it here because otherwise MediaPlayer class will delete it before
-    // the audio finish to play
-    private MediaPlayer audioPlayer;
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
@@ -70,7 +63,9 @@ public class PageMap extends GameGroup {
         loadText();
 
         // Play menu music
-        Sound.playSound(Sound.MENU, MediaPlayer.INDEFINITE);
+        Main.mediaPlayer = Sound.MENU.getMediaPlayer();
+        Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        Main.mediaPlayer.play();
     }
 
     /**
@@ -325,7 +320,7 @@ public class PageMap extends GameGroup {
 
 
     private void loadIntro() throws FileNotFoundException {
-        GameGroup introPage = new PageIntro();
+        GameGroup introPage = new GroupIntro();
 
         // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
@@ -341,7 +336,7 @@ public class PageMap extends GameGroup {
 
         introPage.requestFocus();
         introPage.setOnKeyPressed((e) -> {
-            if (((PageIntro) introPage).isFinished()) {
+            if (((GroupIntro) introPage).isFinished()) {
                 for (Node objects : super.getChildren()) {
                     objects.setEffect(null);
                 }

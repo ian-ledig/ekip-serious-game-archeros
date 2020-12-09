@@ -7,13 +7,10 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.util.Duration;
@@ -137,14 +134,14 @@ public class GamePlayer extends GameGroup {
                                 switch (tool){
                                     case SHOVEL:
                                         randomSoundIndex = (int) (Math.random() * 4);
-                                        Sound.playSound(Sound.SHOVEL, 0, randomSoundIndex);
+                                        Sound.SHOVEL.getMediaPlayer(randomSoundIndex).play();
                                         break;
                                     case PICKAXE:
                                         randomSoundIndex = (int) (Math.random() * 3);
-                                        Sound.playSound(Sound.PICKAXE, 0, randomSoundIndex);
+                                        Sound.PICKAXE.getMediaPlayer(randomSoundIndex).play();
                                         break;
                                     case DYNAMITER:
-                                        Sound.playSound(Sound.DYNAMITER, 0);
+                                        Sound.DYNAMITER.getMediaPlayer().play();
                                         break;
                                 }
                             }
@@ -322,7 +319,7 @@ public class GamePlayer extends GameGroup {
         }
 
         // We play the probe's sound
-        Sound.playSound(Sound.PROBE, 0);
+        Sound.PROBE.getMediaPlayer().play();
 
         // After 2 seconds of the sound
         PauseTransition waitAudio = new PauseTransition(Duration.seconds(2));
