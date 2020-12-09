@@ -13,6 +13,7 @@ import fr.lekip.components.GameImage;
 import fr.lekip.utils.Item;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -25,7 +26,7 @@ public class PageSummary extends GameGroup {
     private int indexFirstList;
 
     private int index = -1;
-    private Text txt;
+    private Label txt = new Label();
     private double percentEnergy;
     private Item specialItem;
 
@@ -54,7 +55,8 @@ public class PageSummary extends GameGroup {
             e.printStackTrace();
         }
 
-        txt = new Text();
+        txt.setWrapText(true);
+        txt.setMaxWidth(650);
         add(txt);
 
         // We init the data
@@ -133,8 +135,8 @@ public class PageSummary extends GameGroup {
                 txt.setFont(Font.loadFont(
                         new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
 
-                txt.setX(500);
-                txt.setY(250);
+                txt.setLayoutX(500);
+                txt.setLayoutY(250);
 
             } catch (FileNotFoundException e) {
 
