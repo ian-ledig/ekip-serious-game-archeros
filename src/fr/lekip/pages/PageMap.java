@@ -1,5 +1,7 @@
 package fr.lekip.pages;
 
+import fr.lekip.components.GameGroup;
+import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -27,7 +29,6 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 
 public class PageMap extends GameGroup {
 
@@ -110,6 +111,9 @@ public class PageMap extends GameGroup {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
+            } else {
+                // Add map event handler
+                addEventHandler(MapEventHandler.class);
             }
 
             // Delete event
@@ -119,7 +123,7 @@ public class PageMap extends GameGroup {
 
     private void loadPin() {
 
-         // Each pin
+        // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
         pinCombo[0][1] = "L'alaska";
         pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
@@ -129,7 +133,6 @@ public class PageMap extends GameGroup {
         pinCombo[2][0] = new GameImage(WORLD_PIN, 800, 230, 80, 80, true);
         pinCombo[2][1] = "L'inconnu";
         pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
-
 
         for (int i = 0; i < 3; i++) {
             ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
@@ -165,7 +168,6 @@ public class PageMap extends GameGroup {
             e.printStackTrace();
         }
 
-
     }
 
     private void loadButtons() throws FileNotFoundException {
@@ -186,7 +188,7 @@ public class PageMap extends GameGroup {
         }
 
         // TODO to refactor
-       // Event handler to move the map in the location clicked
+        // Event handler to move the map in the location clicked
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
             final double tX = ((GameImage) pinCombo[0][0]).getXImage() + 350;
@@ -233,7 +235,6 @@ public class PageMap extends GameGroup {
             tt.play();
         });
     }
-
 
     private void locationPreview(GameImage pinCombo2) {
         // TODO Add specialist choice
@@ -312,7 +313,6 @@ public class PageMap extends GameGroup {
         });
 
     }
-
 
     private void loadIntro() throws FileNotFoundException {
         GameGroup introPage = new PageIntro();

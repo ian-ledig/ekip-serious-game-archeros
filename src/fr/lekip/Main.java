@@ -45,12 +45,12 @@ public class Main extends Application {
         items.add(Item.BUTTON);
         items.add(Item.PRIEST);
         items.add(Item.NAIL);
-        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900));
+        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, true));
 
         primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
+        // primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
         primaryStage.show();
     }
 
