@@ -2,6 +2,7 @@ package fr.lekip.pages;
 
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
+import fr.lekip.components.GameSpecialist;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -21,6 +22,8 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.*;
@@ -245,7 +248,7 @@ public class PageMap extends GameGroup {
                 index = i;
             }
         }
-
+        System.out.println(pinCombo[index][1]);
         // Pane + Background color
         Pane pane = new Pane();
         try {
@@ -279,6 +282,13 @@ public class PageMap extends GameGroup {
         description.setTranslateX(500);
         description.setTranslateY(25);
         pane.getChildren().add(description);
+
+        GameSpecialist specialist1 = new GameSpecialist(50, 250, 0);
+        GameSpecialist specialist2 = new GameSpecialist(250, 250, 1);
+        GameSpecialist specialist3 = new GameSpecialist(450, 250, 2);
+
+        pane.getChildren().addAll(specialist1.getSpecialist(), specialist2.getSpecialist(),
+                specialist3.getSpecialist());
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setTranslateX(100);

@@ -1,6 +1,7 @@
 package fr.lekip;
 
 import fr.lekip.components.GameGroup;
+import fr.lekip.pages.PageMap;
 import fr.lekip.pages.PageMining;
 import fr.lekip.utils.GroundType;
 import fr.lekip.utils.Item;
@@ -45,8 +46,10 @@ public class Main extends Application {
         items.add(Item.BUTTON);
         items.add(Item.PRIEST);
         items.add(Item.NAIL);
-        setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, true));
+        // setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items,
+        // 900, true));
 
+        setShowedPage(new PageMap(false));
         primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
