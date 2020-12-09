@@ -272,25 +272,25 @@ public class PageMining extends GameGroup {
         tuto.setPrefSize(1450, 750);
 
         GameImage backgroundTuto = new GameImage(
-                new Image(new FileInputStream("src/assets/textures/pages/mining/probeSignal.png")), 0, 0, 1000, 615,
+                new Image(new FileInputStream("src/assets/textures/pages/mining/tutoBack.png")), 0, 0, 1000, 615,
                 false);
         tuto.getChildren().add(backgroundTuto);
         tuto.setAlignment(Pos.CENTER);
 
         add(tuto);
 
-        Text title = new Text("Tutoriel");
+        Text title = new Text("TUTORIEL");
         title.setFont(
                 Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
-        title.setFill(Color.WHITE);
-        title.setX(700);
+        title.setFill(Color.ORANGE);
+        title.setX(685);
         title.setY(100);
 
         Pane pnIntro = new Pane();
         Label txtIntro = new Label(
-                "Vous êtes arrivés à votre lieu de fouille. Il vous faut à présent fouiller pour trouver l'objectif que vous recherchez ! \nPour cela, une sonde ainsi que des outils de minage sont à votre dispotion. Leur utilisation n'est cependant pas \ngratuite ; ce sera à vous de les utiliser avec précaution ! Chaque lieu cache un total de 4 items à récupérer. \nMais garde à vous ; seul l'item objectif est nécessaire pour réussir votre fouille !");
+                "        Vous êtes arrivé à votre lieu de fouille. Il vous faut à présent fouiller pour trouver l'objectif que vous recherchez ! Pour cela, une sonde \nainsi que des outils de minage sont à votre dispotion. Leur utilisation n'est cependant pas gratuite ; ce sera à vous de les utiliser avec \nprécaution ! Chaque lieu cache un total de 4 items à récupérer. Mais garde à vous ; seul l'item objectif est nécessaire pour réussir votre fouille !");
         txtIntro.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
         txtIntro.setTextFill(Color.WHITE);
         txtIntro.setWrapText(true);
         txtIntro.maxWidth(100);
@@ -301,33 +301,42 @@ public class PageMining extends GameGroup {
 
         Pane pnOutils = new Pane();
         Label txtOutils = new Label(
-                "Liste des outils :\n- Pelle => Force et coût en energie : 1\n- Pioche => Force et coût en energie : 2\n- Dynamite => Force et coût en energie : 4\n- Sonde => Force et coût en energie : 0 - 7");
+                "Force et coût des outils :\n        : 1                                                                                      : 2\n\n        : 4                                                                                      : 0 - 7");
         txtOutils.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
         txtOutils.setTextFill(Color.WHITE);
         txtOutils.setWrapText(true);
         txtOutils.maxWidth(100);
         txtOutils.setTranslateX(10);
         pnOutils.getChildren().add(txtOutils);
         pnOutils.setTranslateX(250);
-        pnOutils.setTranslateY(275);
+        pnOutils.setTranslateY(270);
+
+        GameImage shovel = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/shovel.png")), 250,
+                290, 30, 30, true);
+        GameImage pickaxe = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/pickaxe.png")), 620,
+                290, 30, 30, true);
+        GameImage dynamite = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/dynamiter.png")),
+                250, 335, 30, 30, true);
+        GameImage probe = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/probe.png")), 620, 335,
+                30, 30, true);
 
         Label movement = new Label(
-                "Commandes : \nZ ou ↑ = Se déplacer vers le haut\nQ ou ← = Se déplacer à gauche\nS ou ↓ = Se déplacer vers le bas\nD ou → = Se déplacer à droite\nF = Changer d'outil");
+                "Commandes : \nZ = Se déplacer vers le haut\nQ = Se déplacer à gauche\nS = Se déplacer vers le bas\nD = Se déplacer à droite\nF = Changer d'outil\nClique gauche souris = Utiliser outil\nPour miner, indiquer la direction avec ZQSD avant de cliquer !");
         movement.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
         movement.setTextFill(Color.WHITE);
         movement.setTranslateX(250);
-        movement.setTranslateY(425);
+        movement.setTranslateY(390);
 
         Pane pnNrg = new Pane();
         GameImage nrgImage = new GameImage(
                 new Image(new FileInputStream("src/assets/textures/pages/mining/tutoEnergy.png")), 0, 0, 200, 100,
                 true);
         Label txtNrg = new Label(
-                "Vous avez une énergie limitée qui vous permettra de casser des blocs et d'utiliser vos outils. Lorsque votre énergie tombe à 0, la partie se termine. Votre energie totale est déterminée selon la difficulté de la fouille.");
+                "        Vous avez une énergie limitée qui vous permettra de casser des blocs et d'utiliser vos outils. Lorsque votre énergie tombe à 0, la partie se termine. Votre energie totale est déterminée selon la difficulté de la fouille.");
         txtNrg.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
         txtNrg.setTextFill(Color.WHITE);
         txtNrg.setWrapText(true);
         txtNrg.setMaxWidth(700);
@@ -342,13 +351,17 @@ public class PageMining extends GameGroup {
                 0, 0, 150, 30, true);
         Text txtValidate = new Text("Compris");
         txtValidate.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
         btnValidate.getChildren().add(validate);
         btnValidate.getChildren().add(txtValidate);
         btnValidate.setAlignment(Pos.CENTER);
         btnValidate.setTranslateX(650);
         btnValidate.setTranslateY(700);
 
+        add(shovel);
+        add(pickaxe);
+        add(dynamite);
+        add(probe);
         add(movement);
         add(title);
         add(pnIntro);
@@ -364,6 +377,10 @@ public class PageMining extends GameGroup {
             remove(pnIntro);
             remove(pnNrg);
             remove(pnOutils);
+            remove(shovel);
+            remove(pickaxe);
+            remove(dynamite);
+            remove(probe);
         });
 
         addEventHandler(PlayerMovementsEventHandler.class);

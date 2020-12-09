@@ -237,6 +237,7 @@ public class PageSummary extends GameGroup {
 
                 arrowBefore.setOnMouseClicked((e) -> {
                     index--;
+                    end = false;
                     loadPage();
                     loadPicture();
                 });
