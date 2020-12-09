@@ -7,8 +7,8 @@ public enum Tool {
     PROBE("src/assets/textures/tools/probe.png", 7),
     DYNAMITER("src/assets/textures/tools/dynamiter.png", 4);
 
-    private String texturePath;
-    private int strength;
+    private final String texturePath;
+    private final int strength;
 
     Tool(String texturePath, int strength) {
         this.texturePath = texturePath;

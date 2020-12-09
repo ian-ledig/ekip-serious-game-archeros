@@ -27,12 +27,13 @@ public enum Item {
 
     public static final int MAX_ITEM_SIZE = 36;
 
-    private String name;
-    private String lore;
-    private int minResistance;
-    private int maxResistance;
+    private final String name;
+    private final String lore;
+    private final int minResistance;
+    private final int maxResistance;
+    private final String texturePath;
+
     private GameImage gameImage;
-    private String texturePath;
 
     Item(String name, String lore, int minResistance, int maxResistance, String texturePath, int size) {
         this.name = name;

@@ -70,7 +70,7 @@ public class PageMap extends GameGroup {
         loadText();
 
         // Play menu music
-        loadMusic();
+        Sound.playSound(Sound.MENU, MediaPlayer.INDEFINITE);
     }
 
     /**
@@ -351,11 +351,5 @@ public class PageMap extends GameGroup {
                 addEventHandler(MapEventHandler.class);
             }
         });
-    }
-
-    public void loadMusic(){
-        audioPlayer = Sound.MENU.getMediaPlayer();
-        audioPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        audioPlayer.play();
     }
 }

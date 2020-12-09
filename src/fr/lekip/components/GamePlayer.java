@@ -34,10 +34,6 @@ public class GamePlayer extends GameGroup {
 
     private final PageMining parent;
 
-    // We declare it here because otherwise MediaPlayer class will delete it before
-    // the audio finish to play
-    private MediaPlayer audioPlayer;
-
     private Movement movements = Movement.DOWN;
     private Tool tool;
 
@@ -140,18 +136,17 @@ public class GamePlayer extends GameGroup {
                                 int randomSoundIndex;
                                 switch (tool){
                                     case SHOVEL:
-                                         randomSoundIndex = (int) (Math.random() * 4);
-                                        audioPlayer = Sound.SHOVEL.getMediaPlayer(randomSoundIndex);
+                                        randomSoundIndex = (int) (Math.random() * 4);
+                                        Sound.playSound(Sound.SHOVEL, 0, randomSoundIndex);
                                         break;
                                     case PICKAXE:
                                         randomSoundIndex = (int) (Math.random() * 3);
-                                        audioPlayer = Sound.PICKAXE.getMediaPlayer(randomSoundIndex);
+                                        Sound.playSound(Sound.PICKAXE, 0, randomSoundIndex);
                                         break;
                                     case DYNAMITER:
-                                        audioPlayer = Sound.DYNAMITER.getMediaPlayer();
+                                        Sound.playSound(Sound.DYNAMITER, 0);
                                         break;
                                 }
-                                audioPlayer.play();
                             }
                             index++;
                             deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
@@ -282,14 +277,6 @@ public class GamePlayer extends GameGroup {
         return tool;
     }
 
-    public MediaPlayer getAudioPlayer() {
-        return audioPlayer;
-    }
-
-    public void setAudioPlayer(MediaPlayer audioPlayer) {
-        this.audioPlayer = audioPlayer;
-    }
-
     public void setTool(Tool tool) {
         this.tool = tool;
         try {
@@ -335,8 +322,7 @@ public class GamePlayer extends GameGroup {
         }
 
         // We play the probe's sound
-        audioPlayer = Sound.PROBE.getMediaPlayer();
-        audioPlayer.play();
+        Sound.playSound(Sound.PROBE, 0);
 
         // After 2 seconds of the sound
         PauseTransition waitAudio = new PauseTransition(Duration.seconds(2));

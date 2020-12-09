@@ -251,7 +251,7 @@ public class PageMining extends GameGroup {
         loadPause();
 
         // Play game music
-        loadMusic();
+        Sound.playSound(Sound.GAME, MediaPlayer.INDEFINITE);
 
         // Add player movements event handler
         addEventHandler(PlayerMovementsEventHandler.class);
@@ -260,7 +260,7 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            player.getAudioPlayer().stop();
+            Sound.stopSound();
 
             PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
             setOnKeyPressed(null);
@@ -440,11 +440,5 @@ public class PageMining extends GameGroup {
         spnAbandon.setOnMouseClicked(mouseEvent -> {
             tryToEndGame(true);
         });
-    }
-
-    public void loadMusic(){
-        player.setAudioPlayer(Sound.GAME.getMediaPlayer());
-        player.getAudioPlayer().setCycleCount(MediaPlayer.INDEFINITE);
-        player.getAudioPlayer().play();
     }
 }
