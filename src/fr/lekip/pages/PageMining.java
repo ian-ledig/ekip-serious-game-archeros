@@ -381,9 +381,9 @@ public class PageMining extends GameGroup {
             remove(pickaxe);
             remove(dynamite);
             remove(probe);
+            addEventHandler(PlayerMovementsEventHandler.class);
         });
 
-        addEventHandler(PlayerMovementsEventHandler.class);
     }
 
     public void tryToEndGame(boolean force) {
