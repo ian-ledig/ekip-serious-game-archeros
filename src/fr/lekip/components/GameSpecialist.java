@@ -3,6 +3,8 @@ package fr.lekip.components;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import fr.lekip.utils.Item;
@@ -34,23 +36,33 @@ public class GameSpecialist extends GameGroup {
     private int id;
     private boolean inside = false;
     private Pane information;
+    private CheckBox checkBox1;
+    private boolean correct;
 
     private Color[] colors = { Color.AQUAMARINE, Color.BLUEVIOLET, Color.LAVENDER };
     private String[] info = { "Le Xylologue étudie les objets en bois, leur nature et leur fonction.",
             "L'Anthropologue étudie les ossements humains ainsi que leur méthode d’inhumation.",
-            "Le Céramologue étudie les éléments de vaisselle en terre cuite, leur forme, leur fonction et leur mode de façonnage." };
-    private String[] names = { "Xylologue", "Anthropologue", "Céramologue" };
-    private Item[][] specialistItems = { {}, { Item.PRIEST }, { Item.STATUETTE } };
+            "Le Céramologue étudie les éléments de vaisselle en terre cuite, leur forme, leur fonction et leur mode de façonnage.",
+            "Le Numismate est spécialiste des monnaies anciennes, il détermine leur provenance, leur technique et date de fabrication.",
+            "L'Archéogéologue est spécialiste des roches et de la recherche des carrières exploitées dans l’antiquité.",
+            "Le Paléométallurgiste est spécialiste des objets métalliques et de leur technique de fabrication." };
+    private String[] names = { "Xylologue", "Anthropologue", "Céramologue", "Numismate", "Archéogéologue",
+            "Paléométallurgiste" };
+    private static Item[][] specialistItems = { {}, { Item.PRIEST }, { Item.STATUETTE, Item.STATUETTE_G },
+            { Item.COIN, Item.BUTTON, Item.ARTEFACT }, { Item.MICROLITH_SCRAPER, Item.YORKSHIRE_SCRAPER, Item.STATUE },
+            { Item.NAIL, Item.COMB, Item.STATUETTE_BRONZE } };
 
-    public GameSpecialist(int pX, int pY, int pId) {
+    public GameSpecialist(int pX, int pY, int pId, boolean pCorrect) {
         Random rand = new Random();
         specialist = new Pane();
-        specialist.setTranslateX(pX);
-        specialist.setTranslateY(pY);
 
         x = pX;
         y = pY;
         id = pId;
+        correct = pCorrect;
+
+        specialist.setTranslateX(x);
+        specialist.setTranslateY(y);
 
         Rectangle backgroundRec = new Rectangle(150, 180);
         backgroundRec.setY(55);
@@ -95,10 +107,19 @@ public class GameSpecialist extends GameGroup {
             e.printStackTrace();
         }
 
-        CheckBox checkBox1 = new CheckBox("Recruter");
+        int perc;
+        if (correct) {
+            perc = (int) (Math.random() * (25 - 10) + 10);
+        } else {
+            perc = (int) (Math.random() * (15 - 0) + 0);
+        }
+        Text percentage = new Text(String.valueOf(perc) + "%");
+        percentage.setX(50);
+        percentage.setY(250);
+        checkBox1 = new CheckBox("Recruter");
         checkBox1.setTranslateX(50);
-        checkBox1.setTranslateY(240);
-        specialist.getChildren().addAll(backgroundRec, checkBox1);
+        checkBox1.setTranslateY(260);
+        specialist.getChildren().addAll(backgroundRec, percentage, checkBox1);
 
         loadPicture(id);
     }
@@ -130,7 +151,35 @@ public class GameSpecialist extends GameGroup {
 
     }
 
-    public Item[] getItems() {
-        return specialistItems[id];
+    public List<Item> getItems() {
+        // pa sur
+        return Arrays.asList(specialistItems[id]);
+    }
+
+    public void setPos(int x, int y) {
+        specialist.setTranslateX(x);
+        specialist.setTranslateY(y);
+    }
+
+    public static GameSpecialist getSpecificSpecialist(Item item) {
+        for (int i = 0; i < 6; i++) {
+            if (Arrays.asList(specialistItems[i]).contains(item)) {
+                return new GameSpecialist(0, 0, i, true);
+            }
+        }
+        return null;
+    }
+
+    public boolean getChecked() {
+        return checkBox1.isSelected();
+    }
+
+    public boolean getCorrect() {
+        return correct;
+    }
+
+    @Override
+    public String toString() {
+        return names[id];
     }
 }

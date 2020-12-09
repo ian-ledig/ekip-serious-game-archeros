@@ -37,7 +37,9 @@ import fr.lekip.utils.GroundType;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class PageMap extends GameGroup {
 
@@ -51,6 +53,7 @@ public class PageMap extends GameGroup {
     private int index;
     private GameImage validate;
     private Pane pane;
+    private Random rand = new Random();
 
     private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
     private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
@@ -123,7 +126,6 @@ public class PageMap extends GameGroup {
                 try {
                     loadIntro();
                 } catch (FileNotFoundException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             } else {
@@ -296,17 +298,21 @@ public class PageMap extends GameGroup {
         pane.getChildren().add(description);
 
         List<GameSpecialist> specialists = loadSpecialist(index);
-        List<Item[]> specialistItems = new ArrayList<>();
 
         validate.setOnMouseClicked((e) -> {
 
-            for (GameSpecialist spe : specialists) {
-                specialistItems.add(spe.getItems());
+            int scoreInit = 0;
+            for (GameSpecialist spec : specialists) {
+                if (spec.getChecked() && spec.getCorrect()) {
+                    scoreInit += 25;
+                } else if (spec.getChecked() && spec.getCorrect() == false) {
+                    scoreInit -= 15;
+                }
             }
 
             List<GroundType> groundTypes = new ArrayList<>();
             List<Item> items = new ArrayList<>();
-            int scoreInit = 0;
+
             for (int j = 0; j < 4; j++) {
                 items.add(locationItems[index][j]);
                 if (j < 3) {
@@ -316,7 +322,8 @@ public class PageMap extends GameGroup {
             }
 
             try {
-                Main.setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro));
+                Main.setShowedPage(
+                        new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro, scoreInit));
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -390,16 +397,45 @@ public class PageMap extends GameGroup {
 
         // Add all the specialist that we can chose
         List<GameSpecialist> specialists = new ArrayList<>();
-        GameSpecialist specialist1 = new GameSpecialist(50, 250, 0);
-        GameSpecialist specialist2 = new GameSpecialist(250, 250, 1);
-        GameSpecialist specialist3 = new GameSpecialist(450, 250, 2);
 
-        specialists.add(specialist1);
-        specialists.add(specialist2);
-        specialists.add(specialist3);
-        pane.getChildren().addAll(specialist1.getSpecialist(), specialist2.getSpecialist(),
-                specialist3.getSpecialist());
+        for (int i = 0; i < 4; i++) {
+            GameSpecialist temp = GameSpecialist.getSpecificSpecialist(locationItems[index][i]);
 
+            boolean test = false;
+            for (GameSpecialist gameSpecialist : specialists) {
+                if (gameSpecialist.toString() == temp.toString()) {
+                    test = true;
+                }
+            }
+            if (!test) {
+                specialists.add(temp);
+            }
+        }
+
+        boolean in = true;
+        while (in) {
+
+            GameSpecialist temp2 = new GameSpecialist(0, 0, rand.nextInt(6), false);
+
+            boolean test = false;
+            for (GameSpecialist gameSpecialist : specialists) {
+                if (gameSpecialist.toString() == temp2.toString()) {
+                    test = true;
+                }
+            }
+            if (!test) {
+                specialists.add(temp2);
+                in = false;
+            }
+
+        }
+        Collections.shuffle(specialists);
+        int x = 50;
+        for (GameSpecialist gameSpecialist : specialists) {
+            gameSpecialist.setPos(x, 250);
+            x += 200;
+            pane.getChildren().add(gameSpecialist.getSpecialist());
+        }
         return specialists;
     }
 

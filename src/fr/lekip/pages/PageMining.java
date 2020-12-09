@@ -73,10 +73,12 @@ public class PageMining extends GameGroup {
     private Label scoreMandatory;
     private Label score;
     private boolean intro;
+    private int initScore;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex,
-            boolean pIntro) throws FileNotFoundException, CloneNotSupportedException {
-        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0);
+            boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
+        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 27.0);
+
         this.skyboxType = skyboxType;
         this.groundTypes = groundTypes;
         this.items = items;
@@ -88,6 +90,7 @@ public class PageMining extends GameGroup {
         this.btnTutorial = (GameImage) btnResume.clone();
 
         intro = pIntro;
+        initScore = pInitScore;
 
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
@@ -387,7 +390,7 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
+            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore);
             setOnKeyPressed(null);
             setOnMouseClicked(null);
             setOnMousePressed(null);
@@ -567,7 +570,7 @@ public class PageMining extends GameGroup {
 
         spnRestart.setOnMouseClicked(mouseEvent -> {
             try {
-                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex, false));
+                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex, false, initScore));
             } catch (FileNotFoundException | CloneNotSupportedException e) {
                 e.printStackTrace();
             }
