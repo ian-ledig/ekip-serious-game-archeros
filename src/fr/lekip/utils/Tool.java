@@ -2,10 +2,10 @@ package fr.lekip.utils;
 
 public enum Tool {
 
-    PICKAXE("src/assets/textures/tools/pickaxe.png", 2),
     SHOVEL("src/assets/textures/tools/shovel.png", 1),
-    DYNAMITER("src/assets/textures/tools/dynamiter.png", 4),
-    PROBE("src/assets/textures/tools/probe.png", 7);
+    PICKAXE("src/assets/textures/tools/pickaxe.png", 2),
+    PROBE("src/assets/textures/tools/probe.png", 7),
+    DYNAMITER("src/assets/textures/tools/dynamiter.png", 4);
 
     private String texturePath;
     private int strength;
