@@ -111,6 +111,9 @@ public class PageMap extends GameGroup {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
+            } else {
+                // Add map event handler
+                addEventHandler(MapEventHandler.class);
             }
 
             // Delete event
