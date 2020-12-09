@@ -136,6 +136,23 @@ public class GamePlayer extends GameGroup {
 
                         // Try to break the neighbors
                         if (index < tool.getStrength() - resistance / 2) {
+                            if(index == 0){
+                                int randomSoundIndex;
+                                switch (tool){
+                                    case SHOVEL:
+                                         randomSoundIndex = (int) (Math.random() * 4);
+                                        audioPlayer = Sound.SHOVEL.getMediaPlayer(randomSoundIndex);
+                                        break;
+                                    case PICKAXE:
+                                        randomSoundIndex = (int) (Math.random() * 3);
+                                        audioPlayer = Sound.PICKAXE.getMediaPlayer(randomSoundIndex);
+                                        break;
+                                    case DYNAMITER:
+                                        audioPlayer = Sound.DYNAMITER.getMediaPlayer();
+                                        break;
+                                }
+                                audioPlayer.play();
+                            }
                             index++;
                             deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
                             deleteGround(defaultIndex, index, groundBox, posX + 18, posY);
