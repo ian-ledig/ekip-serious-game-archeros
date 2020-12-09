@@ -1,5 +1,7 @@
 package fr.lekip.pages;
 
+import fr.lekip.components.GameGroup;
+import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;

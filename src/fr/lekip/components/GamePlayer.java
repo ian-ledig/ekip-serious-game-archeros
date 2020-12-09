@@ -310,8 +310,7 @@ public class GamePlayer extends GameGroup {
         }
 
         // We play the probe's sound
-        Media media = new Media(new File("src/assets/audio/tools/probe.mp3").toURI().toString());
-        audioPlayer = new MediaPlayer(media);
+        audioPlayer = Sound.PROBE.getMediaPlayer();
         audioPlayer.play();
 
         // After 2 seconds of the sound
