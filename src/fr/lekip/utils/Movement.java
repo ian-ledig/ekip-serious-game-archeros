@@ -1,5 +1,8 @@
 package fr.lekip.utils;
 
+/**
+ * Enum of movements which is used in page mining
+ */
 public enum Movement {
 
     UP("src/assets/textures/player/player_up.png"),
@@ -13,6 +16,9 @@ public enum Movement {
         this.texturePath = texturePath;
     }
 
+    /**
+     * @return texture path of the movement type
+     */
     public String getTexturePath() {
         return texturePath;
     }

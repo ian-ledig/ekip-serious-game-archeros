@@ -1,5 +1,8 @@
 package fr.lekip.utils;
 
+/**
+ * Enum of tools which can be used in page mining
+ */
 public enum Tool {
 
     SHOVEL("src/assets/textures/tools/shovel.png", 1),
@@ -15,10 +18,16 @@ public enum Tool {
         this.strength = strength;
     }
 
+    /**
+     * @return texture path of the tool
+     */
     public String getTexturePath() {
         return texturePath;
     }
 
+    /**
+     * @return strength of the tool
+     */
     public int getStrength() {
         return strength;
     }

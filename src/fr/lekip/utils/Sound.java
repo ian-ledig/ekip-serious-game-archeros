@@ -5,6 +5,9 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 
+/**
+ * Enum of sounds which is loaded by any page
+ */
 public enum Sound {
     MENU("src/assets/audio/musics/menu"), GAME("src/assets/audio/musics/game"),
 
@@ -21,14 +24,24 @@ public enum Sound {
         this.soundPath = soundPath;
     }
 
+    /**
+     * @return sound path
+     */
     public String getSoundPath() {
         return soundPath;
     }
 
+    /**
+     * @return media player of the sound
+     */
     public MediaPlayer getMediaPlayer() {
         return new MediaPlayer(new Media(new File(soundPath + ".wav").toURI().toString()));
     }
 
+    /**
+     * @param index index of the sound type
+     * @return media player of the sound
+     */
     public MediaPlayer getMediaPlayer(int index) {
         return new MediaPlayer(new Media(new File(soundPath + index + ".wav").toURI().toString()));
     }

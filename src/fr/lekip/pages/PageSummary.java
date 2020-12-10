@@ -18,27 +18,32 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * Show the summary of a mining session
+ */
 public class PageSummary extends GameGroup {
 
     private int score;
     private List<Item> items = new ArrayList<>();
-    private int indexFirstList;
+    private final int indexFirstList;
 
     private int index = -1;
-    private Label txt = new Label();
-    private double percentEnergy;
-    private Item specialItem;
+    private final Label txt = new Label();
+    private final double percentEnergy;
+    private final Item specialItem;
 
+    // game images of buttons
     private GameImage arrowNext;
     private GameImage arrowBefore;
     private GameImage finishBtn;
+    private final GameImage realPicture;
+
     private Text txtFinish;
-    private GameImage realPicture;
 
     private boolean end = false;
+
     private StackPane btnPane;
     private StackPane pane;
-    private int energyMaxScore;
 
     public PageSummary(List<Item> found, List<Item> lost, Item pSpecialItem, double percent, int pInitScore,
             int maxScore) {
@@ -57,7 +62,7 @@ public class PageSummary extends GameGroup {
             e.printStackTrace();
         }
 
-        energyMaxScore = maxScore;
+        // show the end score of the session
         score = pInitScore;
         txt.setWrapText(true);
         txt.setMaxWidth(650);
@@ -83,6 +88,9 @@ public class PageSummary extends GameGroup {
         add(realPicture);
     }
 
+    /**
+     * start the summary content
+     */
     public void start() {
         // We calculate the score
         score = calculateScore();
@@ -104,6 +112,10 @@ public class PageSummary extends GameGroup {
         loadPage();
     }
 
+    /**
+     * Calcul the score of the session
+     * @return
+     */
     private int calculateScore() {
         // If the item win was found, we gave him 100 points and then for each other
         // items found we give him 75 points.
@@ -125,6 +137,9 @@ public class PageSummary extends GameGroup {
         return temp;
     }
 
+    /**
+     * load the page and show content
+     */
     public void loadPage() {
         if (index == -1) {
             try {
@@ -200,8 +215,10 @@ public class PageSummary extends GameGroup {
 
     }
 
+    /**
+     * load the pictures of items found or to found
+     */
     public void loadPicture() {
-
         if (!(getChildren().contains(arrowNext))) {
             try {
 
