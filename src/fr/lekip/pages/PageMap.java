@@ -31,10 +31,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import fr.lekip.utils.GroundType;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -143,8 +145,14 @@ public class PageMap extends GameGroup {
 
         // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 645, 98, 80, 80, true);
-        pinCombo[0][1] = "Brora";
-        pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
+        pinCombo[0][1] = "Wilkhouse";
+        pinCombo[0][3] = "Wilkhouse est situé à 5 km de Brora (village écossais).\n"
+                + "Le site se trouve entre la route A9 et la côte.\n" + "Le site se trouve sur une plage surélevée.\n"
+                + "Au total, le site comporte les vestiges de quatre bâtiments.\n"
+                + "Face à la plage, on a le bâtiment de l'auberge lui-même.\n"
+                + "Au nord de l'auberge, et annexée au mur de l'enceinte se trouve une éventuelle dépendance.\n"
+                + "Un autre petit bâtiment est situé à côté et immédiatement à l'ouest (à l'intérieur des terres) de l'auberge.\n"
+                + "Un quatrième bâtiment se trouve à 50m au sud-ouest de celles-ci.";
         pinCombo[1][0] = new GameImage(WORLD_PIN, 648, 200, 80, 80, true);
         pinCombo[1][1] = "Perth";
         pinCombo[1][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
@@ -209,7 +217,6 @@ public class PageMap extends GameGroup {
         // Event handler to move the map in the location clicked
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
-
             TranslateTransition tt = new TranslateTransition();
             tt.setNode(mapp);
             tt.setFromX(mapp.getTranslateX());
@@ -219,7 +226,6 @@ public class PageMap extends GameGroup {
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
-            
 
             ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
             transition1.setToX(3);
@@ -227,7 +233,6 @@ public class PageMap extends GameGroup {
 
             tt.play();
             transition1.play();
-            
 
         });
 
@@ -249,7 +254,7 @@ public class PageMap extends GameGroup {
 
             tt.play();
             transition1.play();
-            
+
         });
 
         ((Node) pinCombo[2][2]).setOnMouseClicked((e) -> {
@@ -263,7 +268,7 @@ public class PageMap extends GameGroup {
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
-            
+
             ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
             transition1.setToX(3);
             transition1.setToY(3);
@@ -315,6 +320,12 @@ public class PageMap extends GameGroup {
         Text description = new Text((String) pinCombo[index][3]);
         description.setTranslateX(500);
         description.setTranslateY(25);
+        try {
+            description.setFont(Font
+                    .loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        } catch (FileNotFoundException e2) {
+            e2.printStackTrace();
+        }
         pane.getChildren().add(description);
 
         List<GameSpecialist> specialists = loadSpecialist(index);
