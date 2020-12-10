@@ -11,8 +11,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -71,7 +69,6 @@ public class PageMap extends GameGroup {
         WORLD_PIN = new Image(new FileInputStream("src/assets/textures/pages/main/pin.png"));
 
         intro = pIntro;
-        // pinCombo = new HashMap<GameImage, Button>();
         pinCombo = new Object[3][4];
 
         // Create the map
@@ -215,6 +212,7 @@ public class PageMap extends GameGroup {
 
     /**
      * Load the buttons of search areas
+     * 
      * @throws FileNotFoundException if the is missing file
      */
     private void loadButtons() throws FileNotFoundException {
@@ -301,6 +299,7 @@ public class PageMap extends GameGroup {
 
     /**
      * Open the preview of a search aera
+     * 
      * @param pinCombo2 pin
      */
     private void locationPreview(GameImage pinCombo2) {
@@ -351,19 +350,35 @@ public class PageMap extends GameGroup {
             e.printStackTrace();
         }
 
+        Label title = new Label((String) pinCombo[index][1]);
+        title.setTranslateX(800);
+        title.setTranslateY(10);
+
         // Add description of the location
         Label description = new Label((String) pinCombo[index][3]);
         description.setWrapText(true);
         description.setMaxWidth(500);
         description.setTranslateX(500);
-        description.setTranslateY(25);
+        description.setTranslateY(45);
+
+        // Add help text
+        Label help = new Label(
+                "Les pourcentages indiquent la probabilité que le spécialiste soit utile à la fouille.\nAttention, un mauvais spécialiste vous enlève des points et un bon vous en rapporte !");
+        help.setTranslateX(100);
+        help.setTranslateY(550);
         try {
             description.setFont(Font
                     .loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+            help.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")),
+                    18.0));
+            title.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")),
+                    18.0));
         } catch (FileNotFoundException e2) {
             e2.printStackTrace();
         }
 
+        pane.getChildren().add(title);
+        pane.getChildren().add(help);
         pane.getChildren().add(description);
         pane.getChildren().add(validate);
         List<GameSpecialist> specialists = loadSpecialist(index);
@@ -431,6 +446,7 @@ public class PageMap extends GameGroup {
 
     /**
      * Showing the intro and waitting for player click
+     * 
      * @throws FileNotFoundException
      */
     private void loadIntro() throws FileNotFoundException {
@@ -464,6 +480,7 @@ public class PageMap extends GameGroup {
 
     /**
      * Load a specialist
+     * 
      * @param index of the item
      * @return the list of specialists used
      */

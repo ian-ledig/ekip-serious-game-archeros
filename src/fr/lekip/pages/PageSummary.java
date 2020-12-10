@@ -114,6 +114,7 @@ public class PageSummary extends GameGroup {
 
     /**
      * Calcul the score of the session
+     * 
      * @return
      */
     private int calculateScore() {
@@ -149,6 +150,9 @@ public class PageSummary extends GameGroup {
                 txt.setText(scoreShow);
                 txt.setFont(Font.loadFont(
                         new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+
+
+                GameImage star = new GameImage()
 
                 txt.setLayoutX(500);
                 txt.setLayoutY(250);
