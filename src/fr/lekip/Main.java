@@ -54,18 +54,19 @@ public class Main extends Application {
         primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        // primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
+        primaryStage.getIcons().add(new Image(new FileInputStream("src/assets/textures/icon.png")));
         primaryStage.show();
     }
 
     public static void setShowedPage(GameGroup showedPage) {
         Main.root.getChildren().clear();
 
-        if(showedPage instanceof PageMap)
+        if (showedPage instanceof PageMap)
             Main.scene.setFill(Color.web("86B4E4"));
         else {
             try {
-                Main.scene.setFill(new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png"))));
+                Main.scene.setFill(
+                        new ImagePattern(new Image(new FileInputStream("src/assets/textures/pages/brick.png"))));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
