@@ -8,12 +8,10 @@ import java.io.FileNotFoundException;
 
 public enum GroundType {
 
-    GRASS("src/assets/textures/pages/mining/grass.png", 1),
-    DIRT("src/assets/textures/pages/mining/dirt.png", 1),
-    STONE("src/assets/textures/pages/mining/stone.png", 2),
-    SAND("src/assets/textures/pages/mining/sand.png", 1),
-    SANDSTONE("src/assets/textures/pages/mining/sandstone.png", 1)
-    ;
+    GRASS("src/assets/textures/pages/mining/grass.png", 1), DIRT("src/assets/textures/pages/mining/dirt.png", 1),
+    STONE("src/assets/textures/pages/mining/stone.png", 2), SAND("src/assets/textures/pages/mining/sand.png", 1),
+    SANDSTONE("src/assets/textures/pages/mining/sandstone.png", 1),
+    SNOW("src/assets/textures/pages/mining/grass_snow.png", 1);
 
     public static final int GROUND_SIZE = 18;
 
