@@ -49,7 +49,7 @@ le bouton Télécharger.
 un dossier quelconque. 
 
 
-- Lancez le fichier Archeos.bat en double cliquant dessus.
+- Lancez le fichier Archeroes.bat (Windows) en double cliquant dessus. Pour Linux, lancez dans une console le fichier Archeroes.sh.
 
 
 - Le jeu Archeroes devrait se lancer et vous pourrez y jouer.
