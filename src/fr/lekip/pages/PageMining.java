@@ -148,27 +148,6 @@ public class PageMining extends GameGroup {
                     }
                 }
 
-            // Ground box spawning
-            for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
-                if (i < GROUND_BLOCKS_LINE_NUMBER) {
-                    groundBox[i] = groundTypes.get(0).cloneGameImage();
-                } else if (i < nextLayerIndex) {
-                    groundBox[i] = groundTypes.get(1).cloneGameImage();
-                } else
-                    groundBox[i] = groundTypes.get(2).cloneGameImage();
-
-                // Drawing ground blocks
-                x += GroundType.GROUND_SIZE;
-                if (i % GROUND_BLOCKS_LINE_NUMBER == 0) {
-                    y += GroundType.GROUND_SIZE;
-                    x = 0;
-                }
-
-                groundBox[i].setX(x);
-                groundBox[i].setY(y);
-                add(groundBox[i]);
-            }
-
                 // Add and position the item
                 Pane pneItem = new Pane();
                 GameImage newItem = item.cloneGameImage();
@@ -219,6 +198,27 @@ public class PageMining extends GameGroup {
                         }
                     }
                 });
+            }
+
+            // Ground box spawning
+            for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
+                if (i < GROUND_BLOCKS_LINE_NUMBER) {
+                    groundBox[i] = groundTypes.get(0).cloneGameImage();
+                } else if (i < nextLayerIndex) {
+                    groundBox[i] = groundTypes.get(1).cloneGameImage();
+                } else
+                    groundBox[i] = groundTypes.get(2).cloneGameImage();
+
+                // Drawing ground blocks
+                x += GroundType.GROUND_SIZE;
+                if (i % GROUND_BLOCKS_LINE_NUMBER == 0) {
+                    y += GroundType.GROUND_SIZE;
+                    x = 0;
+                }
+
+                groundBox[i].setX(x);
+                groundBox[i].setY(y);
+                add(groundBox[i]);
             }
 
             // Calculation of the energy max

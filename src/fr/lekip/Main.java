@@ -47,7 +47,7 @@ public class Main extends Application {
         scene.setFill(Color.TRANSPARENT);
 
         // Show the main page
-        setShowedPage(new PageMap(false));
+        setShowedPage(new PageMap(true));
 
         // Setting window
         primaryStage.setTitle("Archeroes");

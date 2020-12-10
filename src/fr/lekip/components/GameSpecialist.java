@@ -23,6 +23,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * Group of a specialist with percentage that determine if he is a good pick.
+ * We can see his information by passing the mouse on the info button.
+ */
 public class GameSpecialist extends GameGroup {
 
     private Pane specialist;
@@ -59,22 +63,23 @@ public class GameSpecialist extends GameGroup {
         specialist.setTranslateX(x);
         specialist.setTranslateY(y);
 
+        // setting the background of the specialist group
         Rectangle backgroundRec = new Rectangle(150, 180);
         backgroundRec.setY(55);
         backgroundRec.setFill(colors[rand.nextInt(3)]);
 
         GameImage help;
         try {
+            // the icon of info with its action
             Pane infoPop = new Pane();
             infoPop.setPrefSize(50, 50);
             infoPop.setTranslateX(50);
             help = new GameImage(new Image(new FileInputStream("src/assets/textures/specialist/info.png")), 0, -5, 50,
                     50, true);
-            infoPop.setOnMouseEntered((e) -> {
-                if (inside) {
 
-                } else {
-                    int i = -50;
+            infoPop.setOnMouseEntered((e) -> {
+                if (!inside) {
+                    // pane that is showed when the user put the mouse on the icon
                     information = new Pane();
                     information.setTranslateX(0);
                     information.setTranslateY(-80);
@@ -92,6 +97,7 @@ public class GameSpecialist extends GameGroup {
                 }
             });
 
+            // when the mouse exit the info icon, we move the description
             infoPop.setOnMouseExited((e) -> {
                 inside = false;
                 specialist.getChildren().remove(information);
@@ -103,6 +109,7 @@ public class GameSpecialist extends GameGroup {
         }
 
         int perc;
+        // calculate the percentage of the specialist depending if he is a good pick or not
         if (correct) {
             perc = (int) (Math.random() * (25 - 10) + 10);
         } else {
@@ -123,6 +130,10 @@ public class GameSpecialist extends GameGroup {
         return specialist;
     }
 
+    /**
+     * Show a specialist depending of its id
+     * @param id of the specialist
+     */
     public void loadPicture(int id) {
         try {
             GameImage head = new GameImage(
@@ -132,6 +143,8 @@ public class GameSpecialist extends GameGroup {
             StackPane name = new StackPane();
             name.setPrefSize(150, 10);
             Text nameId = new Text(names[id]);
+
+            // set the font of the text
             nameId.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")),
                     18.0));
 
@@ -146,16 +159,20 @@ public class GameSpecialist extends GameGroup {
 
     }
 
-    public List<Item> getItems() {
-        // pa sur
-        return Arrays.asList(specialistItems[id]);
-    }
-
+    /**
+     * set the pos of the group depending on the x and y pos
+     * @param x position
+     * @param y position
+     */
     public void setPos(int x, int y) {
         specialist.setTranslateX(x);
         specialist.setTranslateY(y);
     }
 
+    /**
+     * @param item item to analyse
+     * @return game specialist who can analyse the item in parameter
+     */
     public static GameSpecialist getSpecificSpecialist(Item item) {
         for (int i = 0; i < 6; i++) {
             if (Arrays.asList(specialistItems[i]).contains(item)) {
