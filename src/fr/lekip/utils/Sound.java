@@ -14,6 +14,8 @@ public enum Sound {
     QUIT("src/assets/audio/fx/quit"),
     LOSE("src/assets/audio/fx/lose"),
     WIN("src/assets/audio/fx/win"),
+    PICK_UP("src/assets/audio/fx/pickUp"),
+    BREAK("src/assets/audio/fx/break"),
 
     SHOVEL("src/assets/audio/tools/shovel"),
     PICKAXE("src/assets/audio/tools/pickaxe"),

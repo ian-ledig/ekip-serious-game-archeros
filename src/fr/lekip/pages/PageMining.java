@@ -51,6 +51,9 @@ public class PageMining extends GameGroup {
 
     private final GamePlayer player = new GamePlayer(this);
 
+    private final boolean intro;
+    private final int initScore;
+
     private int itemsRemaining;
 
     private List<Pane> groundItems = new ArrayList<>();
@@ -63,9 +66,9 @@ public class PageMining extends GameGroup {
 
     private Label scoreMandatory;
     private Label score;
-    private boolean intro;
-    private int initScore;
     private int energyMaxScore;
+
+    private boolean isInPause = false;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex,
             boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
@@ -175,10 +178,12 @@ public class PageMining extends GameGroup {
                         if (tool != null && tool.getStrength() >= item.getMinResistance()) {
                             if (tool.getStrength() <= item.getMaxResistance()) {
                                 this.itemsFound.add(item);
+                                Sound.PICK_UP.getMediaPlayer().play();
                             } else {
                                 this.itemsLost.add(item);
                                 itemsRemaining--;
                                 score.setTextFill(Color.INDIANRED);
+                                Sound.BREAK.getMediaPlayer().play();
                             }
 
                             // If the mandatory item is found : set it to null
@@ -451,6 +456,14 @@ public class PageMining extends GameGroup {
         return nextLayerIndex;
     }
 
+    public boolean isIntro() {
+        return intro;
+    }
+
+    public boolean isInPause() {
+        return isInPause;
+    }
+
     public void loadEnergyBar() throws FileNotFoundException {
 
         // Init energyBar
@@ -467,9 +480,11 @@ public class PageMining extends GameGroup {
         hbox.getChildren().addAll(lightning, energyBar);
         add(hbox);
         setOnMouseClicked((e) -> {
-            Tool tool = player.getTool();
-            if (tool != null)
-                decreaseEnergy(player.getTool().getStrength());
+            if(!isInPause && !intro){
+                Tool tool = player.getTool();
+                if (tool != null)
+                    decreaseEnergy(player.getTool().getStrength());
+            }
         });
 
         // Calculation of the maximal energy
@@ -561,6 +576,8 @@ public class PageMining extends GameGroup {
         spnPause.setOnMouseClicked(event -> {
             Sound.BUTTON.getMediaPlayer().play();
 
+            isInPause = !isInPause;
+
             vbxPause.setVisible(!vbxPause.isVisible());
             spnResume.setVisible(true);
             spnRestart.setVisible(true);
@@ -570,6 +587,8 @@ public class PageMining extends GameGroup {
 
         spnResume.setOnMouseClicked(mouseEvent -> {
             Sound.BUTTON.getMediaPlayer().play();
+
+            isInPause = !isInPause;
 
             vbxPause.setVisible(!vbxPause.isVisible());
             spnResume.setVisible(false);
