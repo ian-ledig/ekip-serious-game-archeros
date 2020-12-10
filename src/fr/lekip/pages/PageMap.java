@@ -156,9 +156,11 @@ public class PageMap extends GameGroup {
                 + "Au nord de l'auberge, et annexée au mur de l'enceinte se trouve une éventuelle dépendance.\n"
                 + "Un autre petit bâtiment est situé à côté et immédiatement à l'ouest (à l'intérieur des terres) de l'auberge.\n"
                 + "Un quatrième bâtiment se trouve à 50m au sud-ouest de celles-ci.";
-        pinCombo[1][0] = new GameImage(WORLD_PIN, 648, 200, 80, 80, true);
-        pinCombo[1][1] = "Perth";
-        pinCombo[1][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
+        pinCombo[1][0] = new GameImage(WORLD_PIN, 633, 180, 80, 80, true);
+        pinCombo[1][1] = "Amaya";
+        pinCombo[1][3] = "Amaya est le nom d'une cité antique cantabre, située au sommet du massif du même nom haut de 1 377\n"
+                + "mètres au nord-ouest de la Province de Burgos, en Espagne.\n"
+                + "La ville était située à la limite sud de la Cantabrie à l'époque romaine, à une position stratégique contrôlant \nl'accès au territoire cantabre depuis le sud.";
         pinCombo[2][0] = new GameImage(WORLD_PIN, 761, 211, 80, 80, true);
         pinCombo[2][1] = "Eretrie";
         pinCombo[2][3] = "Érétrie est une cité de la Grèce antique, située sur la côte occidentale de l'île d'Eubée, et qui a largement\ncontribué au développement et au rayonnement de la civilisation grecque.\n"
@@ -314,6 +316,17 @@ public class PageMap extends GameGroup {
 
             GameImage landscape = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
+
+            if (pinCombo[index][1] == "Amaya") {
+                landscape = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/amaya.png")),
+                        10, 10, 500, 225, true);
+            } else if (pinCombo[index][1] == "Eretrie") {
+                landscape = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/eretrie.png")),
+                        10, 10, 400, 225, false);
+            } else {
+
+            }
+
             pane.getChildren().add(landscape);
             pane.getChildren().add(crossClose);
             pane.getChildren().add(validate);
