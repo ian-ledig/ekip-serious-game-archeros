@@ -7,7 +7,7 @@ public enum Movement {
     RIGHT("src/assets/textures/player/player_right.png"),
     LEFT("src/assets/textures/player/player_left.png");
 
-    private String texturePath;
+    private final String texturePath;
 
     Movement(String texturePath){
         this.texturePath = texturePath;

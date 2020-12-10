@@ -1,9 +1,9 @@
 package fr.lekip.utils;
 
 public enum SkyboxType {
-    BLUE_SKY(0), BLUE_SKY_CLOUDS(1), DARK_SKY(2);
+    PLAIN(0), DESERT(1), MOUNTAIN(2);
 
-    private int id;
+    private final int id;
 
     SkyboxType(int id){
         this.id = id;

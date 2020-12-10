@@ -5,18 +5,13 @@ import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GameSpecialist;
 import fr.lekip.inputs.MapEventHandler;
-import fr.lekip.utils.Item;
-import fr.lekip.utils.SkyboxType;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.Button;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -32,9 +27,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import fr.lekip.utils.GroundType;
+import fr.lekip.utils.Item;
+import fr.lekip.utils.SkyboxType;
+import fr.lekip.utils.Sound;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,6 +85,10 @@ public class PageMap extends GameGroup {
         // Display text while waiting for the user
         loadText();
 
+        // Play menu music
+        Main.mediaPlayer = Sound.MENU.getMediaPlayer();
+        Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        Main.mediaPlayer.play();
     }
 
     /**
@@ -286,15 +289,12 @@ public class PageMap extends GameGroup {
     }
 
     private void locationPreview(GameImage pinCombo2) {
-        // TODO Add specialist choice
-
         index = -1;
         for (int i = 0; i < pinCombo.length; i++) {
             if (pinCombo[i][0] == pinCombo2) {
                 index = i;
             }
         }
-        System.out.println(pinCombo[index][1]);
         // Pane + Background color
         pane = new Pane();
         try {
@@ -312,7 +312,7 @@ public class PageMap extends GameGroup {
             crossClose = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/cross.png")), 1200,
                     5, 20, 20, true);
             validate = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970,
-                    500, 200, 80, true);
+                    490, 200, 80, true);
 
             GameImage landscape = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
@@ -367,7 +367,6 @@ public class PageMap extends GameGroup {
                 if (j < 3) {
                     groundTypes.add(locationGround[index][j]);
                 }
-
             }
 
             try {
@@ -377,13 +376,8 @@ public class PageMap extends GameGroup {
             }
         });
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setTranslateX(100);
-        scrollPane.setTranslateY(100);
-        scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        scrollPane.setContent(pane);
-        scrollPane.setPrefSize(1250, 550);
+        pane.setTranslateX(100);
+        pane.setTranslateY(100);
 
         // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
@@ -395,14 +389,14 @@ public class PageMap extends GameGroup {
         for (Node objects : super.getChildren()) {
             objects.setEffect(boxBlur);
         }
-        add(scrollPane);
+        add(pane);
 
         getChildren().get(0).setOnMouseDragged(null);
         pane.requestFocus();
 
         // Add event handler for cross click
         crossClose.setOnMouseClicked((e) -> {
-            remove(scrollPane);
+            remove(pane);
             addEventHandler(MapEventHandler.class);
             for (Node objects : super.getChildren()) {
                 objects.setEffect(null);
@@ -412,7 +406,7 @@ public class PageMap extends GameGroup {
     }
 
     private void loadIntro() throws FileNotFoundException {
-        GameGroup introPage = new PageIntro();
+        GameGroup introPage = new GroupIntro();
 
         // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
@@ -428,7 +422,7 @@ public class PageMap extends GameGroup {
 
         introPage.requestFocus();
         introPage.setOnKeyPressed((e) -> {
-            if (((PageIntro) introPage).isFinished()) {
+            if (((GroupIntro) introPage).isFinished()) {
                 for (Node objects : super.getChildren()) {
                     objects.setEffect(null);
                 }
@@ -438,7 +432,6 @@ public class PageMap extends GameGroup {
                 addEventHandler(MapEventHandler.class);
             }
         });
-
     }
 
     private List<GameSpecialist> loadSpecialist(int index) {
