@@ -209,7 +209,6 @@ public class PageMap extends GameGroup {
         // Event handler to move the map in the location clicked
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
-
             TranslateTransition tt = new TranslateTransition();
             tt.setNode(mapp);
             tt.setFromX(mapp.getTranslateX());
@@ -219,7 +218,6 @@ public class PageMap extends GameGroup {
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
-            
 
             ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
             transition1.setToX(3);
@@ -227,7 +225,6 @@ public class PageMap extends GameGroup {
 
             tt.play();
             transition1.play();
-            
 
         });
 
@@ -249,7 +246,7 @@ public class PageMap extends GameGroup {
 
             tt.play();
             transition1.play();
-            
+
         });
 
         ((Node) pinCombo[2][2]).setOnMouseClicked((e) -> {
@@ -263,7 +260,7 @@ public class PageMap extends GameGroup {
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
-            
+
             ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
             transition1.setToX(3);
             transition1.setToY(3);
@@ -274,15 +271,12 @@ public class PageMap extends GameGroup {
     }
 
     private void locationPreview(GameImage pinCombo2) {
-        // TODO Add specialist choice
-
         index = -1;
         for (int i = 0; i < pinCombo.length; i++) {
             if (pinCombo[i][0] == pinCombo2) {
                 index = i;
             }
         }
-        System.out.println(pinCombo[index][1]);
         // Pane + Background color
         pane = new Pane();
         try {
@@ -348,15 +342,9 @@ public class PageMap extends GameGroup {
             }
         });
 
-        // ScrollPane scrollPane = new ScrollPane();
-        // scrollPane.setTranslateX(100);
-        // scrollPane.setTranslateY(100);
-        // scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-        // scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        // scrollPane.setContent(pane);
-        // scrollPane.setPrefSize(1250, 550);
         pane.setTranslateX(100);
         pane.setTranslateY(100);
+
         // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
         boxBlur.setWidth(8);
