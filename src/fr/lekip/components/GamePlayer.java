@@ -7,6 +7,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -332,30 +333,32 @@ public class GamePlayer extends GameGroup {
             boxBlur.setIterations(10);
             List<Circle> tempShape = new ArrayList<>();
             for (GameImage signal : probeSignal) {
-                for (GameImage item : parent.getGroundItems()) {
-                    if (item.getImage() != null) {
-                        if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
-                            // We create a new circle to show area where is the item
-                            Circle cercTemp = new Circle(20);
-                            cercTemp.setFill(Color.GREEN);
-                            cercTemp.setCenterX(item.getXImage() + item.getFitWidth() / 2);
-                            cercTemp.setCenterY(item.getYImage() + item.getFitHeight() / 2);
+                for (Pane item : parent.getGroundItems()) {
+                    if(item.getChildren().get(0) instanceof GameImage){
+                        Image imgItem = ((GameImage) item.getChildren().get(0)).getImage();
 
-                            // We blur the circle
-                            cercTemp.setEffect(boxBlur);
-                            parent.add(cercTemp);
-                            tempShape.add(cercTemp);
+                        if (imgItem != null) {
+                            if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
+                                // We create a new circle to show area where is the item
+                                Circle cercTemp = new Circle(20);
+                                cercTemp.setFill(Color.GREEN);
+                                cercTemp.setCenterX(item.getLayoutX() + item.getWidth() / 2);
+                                cercTemp.setCenterY(item.getLayoutY() + item.getHeight() / 2);
 
-                            // We make a blinking animation
-                            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), cercTemp);
-                            fadeTransition.setFromValue(1.0);
-                            fadeTransition.setToValue(0.0);
-                            fadeTransition.setCycleCount(Animation.INDEFINITE);
-                            fadeTransition.play();
+                                // We blur the circle
+                                cercTemp.setEffect(boxBlur);
+                                parent.add(cercTemp);
+                                tempShape.add(cercTemp);
 
+                                // We make a blinking animation
+                                FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), cercTemp);
+                                fadeTransition.setFromValue(1.0);
+                                fadeTransition.setToValue(0.0);
+                                fadeTransition.setCycleCount(Animation.INDEFINITE);
+                                fadeTransition.play();
+                            }
                         }
                     }
-
                 }
             }
 

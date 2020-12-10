@@ -16,7 +16,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -54,7 +53,7 @@ public class PageMining extends GameGroup {
 
     private int itemsRemaining;
 
-    private List<GameImage> groundItems = new ArrayList<>();
+    private List<Pane> groundItems = new ArrayList<>();
     private GameImage groundItemWin;
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
     private ProgressBar energyBar = new ProgressBar();
@@ -135,13 +134,13 @@ public class PageMining extends GameGroup {
                             * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
 
                     if (!groundItems.isEmpty()) {
-                        for (GameImage imgItem : groundItems) {
-                            if (spawnPosX + itemSize >= imgItem.getXImage()
-                                    && spawnPosX <= imgItem.getXImage() + imgItem.getFitWidth()
-                                    || spawnPosY + itemSize >= imgItem.getYImage()
-                                            && spawnPosY <= imgItem.getYImage() + imgItem.getFitHeight()
-                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - imgItem.getXImage(), 2)
-                                            + Math.pow(spawnPosY - imgItem.getYImage(), 2))) < 200) {
+                        for (Pane pneItem : groundItems) {
+                            if (spawnPosX + itemSize >= pneItem.getLayoutX()
+                                    && spawnPosX <= pneItem.getLayoutX() + pneItem.getWidth()
+                                    || spawnPosY + itemSize >= pneItem.getLayoutY()
+                                            && spawnPosY <= pneItem.getLayoutY() + pneItem.getWidth()
+                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - pneItem.getLayoutX(), 2)
+                                            + Math.pow(spawnPosY - pneItem.getLayoutY(), 2))) < 200) {
                                 correctPos = false;
                                 break;
                             }
@@ -150,10 +149,12 @@ public class PageMining extends GameGroup {
                 }
 
                 // Add and position the item
+                Pane pneItem = new Pane();
                 GameImage newItem = item.cloneGameImage();
-                newItem.setX(spawnPosX);
-                newItem.setY(spawnPosY);
-                add(newItem);
+                pneItem.setLayoutX(spawnPosX);
+                pneItem.setLayoutY(spawnPosY);
+                pneItem.getChildren().add(newItem);
+                add(pneItem);
 
                 // Try to set item to mandatory object
                 if (!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 3) == 0)) {
@@ -161,10 +162,10 @@ public class PageMining extends GameGroup {
                     groundItemWin = newItem;
                     itemWin = item;
                 }
-                groundItems.add(newItem);
+                groundItems.add(pneItem);
 
                 // Delete the item and increase the number of objects found when item is clicked
-                newItem.setOnMouseClicked(mouseEvent -> {
+                pneItem.setOnMouseClicked(mouseEvent -> {
                     if (newItem.getImage() != null) {
 
                         Tool tool = player.getTool();
@@ -203,20 +204,20 @@ public class PageMining extends GameGroup {
             double xD = 0;
             energyMaxScore = 0;
             for (int i = 0; i < groundItems.size(); i++) {
-                energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
-                energyMaxScore += (getGroundItems().get(i).getYImage() - 262);
+                energyDefault += (getGroundItems().get(i).getLayoutX() - 262) * 1.2 + 7;
+                energyMaxScore += (getGroundItems().get(i).getLayoutY() - 262);
 
                 // We take the deepest item Y
-                if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
-                    Y1 = (getGroundItems().get(i).getYImage() - 262);
+                if ((getGroundItems().get(i).getLayoutY() - 262) > Y1) {
+                    Y1 = (getGroundItems().get(i).getLayoutY() - 262);
                 }
 
                 // We save the first item in X basis and the last item
-                if ((getGroundItems().get(i).getXImage()) < xG) {
-                    xG = getGroundItems().get(i).getXImage();
+                if ((getGroundItems().get(i).getLayoutX()) < xG) {
+                    xG = getGroundItems().get(i).getLayoutX();
                 }
-                if ((getGroundItems().get(i).getXImage()) > xD) {
-                    xD = getGroundItems().get(i).getXImage();
+                if ((getGroundItems().get(i).getLayoutX()) > xD) {
+                    xD = getGroundItems().get(i).getLayoutX();
                 }
 
             }
@@ -225,9 +226,9 @@ public class PageMining extends GameGroup {
             // We calculate the malus
             double malus;
             malus = Y1 * 3;
-            for (GameImage item : getGroundItems()) {
-                if (item.getY() != Y1) {
-                    malus -= item.getY();
+            for (Pane item : getGroundItems()) {
+                if (item.getLayoutY() != Y1) {
+                    malus -= item.getLayoutY();
                 }
             }
 
@@ -410,11 +411,11 @@ public class PageMining extends GameGroup {
                 || itemsFound.size() + itemsLost.size() == groundItems.size() || energyBar.getProgress() <= 0;
     }
 
-    public List<GameImage> getGroundItems() {
+    public List<Pane> getGroundItems() {
         return groundItems;
     }
 
-    public void setGroundItems(List<GameImage> groundItems) {
+    public void setGroundItems(List<Pane> groundItems) {
         this.groundItems = groundItems;
     }
 
@@ -485,7 +486,7 @@ public class PageMining extends GameGroup {
         scoreMandatory = new Label("Objectif : ");
         scoreMandatory.setFont(FONT);
         HBox hbxScoreMand = new HBox(20);
-        hbxScoreMand.setTranslateX(1285);
+        hbxScoreMand.setTranslateX(1288);
         hbxScoreMand.setTranslateY(71);
         hbxScoreMand.setSpacing(5);
         hbxScoreMand.getChildren().add(scoreMandatory);
@@ -493,7 +494,7 @@ public class PageMining extends GameGroup {
 
         try {
             GameImage imgItemWin = itemWin.cloneGameImage();
-            imgItemWin.setLayoutX(1370);
+            imgItemWin.setLayoutX(1378);
             imgItemWin.setLayoutY(71);
             add(imgItemWin);
         } catch (CloneNotSupportedException e) {
