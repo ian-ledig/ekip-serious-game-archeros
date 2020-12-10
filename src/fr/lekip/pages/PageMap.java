@@ -161,7 +161,9 @@ public class PageMap extends GameGroup {
         pinCombo[1][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
         pinCombo[2][0] = new GameImage(WORLD_PIN, 761, 211, 80, 80, true);
         pinCombo[2][1] = "Eretrie";
-        pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
+        pinCombo[2][3] = "Érétrie est une cité de la Grèce antique, située sur la côte occidentale de l'île d'Eubée, et qui a largement\ncontribué au développement et au rayonnement de la civilisation grecque.\n"
+                + "Les premières fouilles archéologiques ont eu lieu en 1885 par la société archéologique d'Athènes et \nl'école américaine.\n"
+                + "Depuis 1964, elle fait l'objet de recherches archéologiques conduites par l'École suisse d'archéologie en Grèce \net de publications dans le cadre de la collection Eretria, Fouilles et Recherches.\n";
 
         for (int i = 0; i < 3; i++) {
             ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
