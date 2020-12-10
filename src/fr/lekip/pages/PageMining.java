@@ -51,7 +51,7 @@ public class PageMining extends GameGroup {
 
     private final GamePlayer player = new GamePlayer(this);
 
-    private final boolean intro;
+    private boolean intro;
     private final int initScore;
 
     private int itemsRemaining;
@@ -67,6 +67,7 @@ public class PageMining extends GameGroup {
     private Label scoreMandatory;
     private Label score;
     private int energyMaxScore;
+    private VBox vbxPause;
 
     private boolean isInPause = false;
 
@@ -376,6 +377,8 @@ public class PageMining extends GameGroup {
         add(pnNrg);
         add(btnValidate);
 
+        intro = true;
+
         btnValidate.setOnMouseClicked((e) -> {
             remove(tuto);
             remove(movement);
@@ -389,6 +392,8 @@ public class PageMining extends GameGroup {
             remove(dynamite);
             remove(probe);
             addEventHandler(PlayerMovementsEventHandler.class);
+            isInPause = false;
+            intro = false;
         });
 
     }
@@ -462,6 +467,12 @@ public class PageMining extends GameGroup {
 
     public boolean isInPause() {
         return isInPause;
+    }
+
+    public void switchPause() {
+        isInPause = !isInPause;
+        Sound.BUTTON.getMediaPlayer().play();
+        vbxPause.setVisible(!vbxPause.isVisible());
     }
 
     public void loadEnergyBar() throws FileNotFoundException {
@@ -564,7 +575,7 @@ public class PageMining extends GameGroup {
         spnTutorial.getChildren().addAll(btnTutorial, txtTutorial);
         add(spnTutorial);
 
-        VBox vbxPause = new VBox();
+        vbxPause = new VBox();
         vbxPause.setPrefWidth(150);
         vbxPause.setTranslateX(650);
         vbxPause.setTranslateY(300);
@@ -574,27 +585,11 @@ public class PageMining extends GameGroup {
         add(vbxPause);
 
         spnPause.setOnMouseClicked(event -> {
-            Sound.BUTTON.getMediaPlayer().play();
-
-            isInPause = !isInPause;
-
-            vbxPause.setVisible(!vbxPause.isVisible());
-            spnResume.setVisible(true);
-            spnRestart.setVisible(true);
-            spnAbandon.setVisible(true);
-            spnTutorial.setVisible(true);
+            switchPause();
         });
 
         spnResume.setOnMouseClicked(mouseEvent -> {
-            Sound.BUTTON.getMediaPlayer().play();
-
-            isInPause = !isInPause;
-
-            vbxPause.setVisible(!vbxPause.isVisible());
-            spnResume.setVisible(false);
-            spnRestart.setVisible(false);
-            spnAbandon.setVisible(false);
-            spnTutorial.setVisible(false);
+            switchPause();
         });
 
         spnRestart.setOnMouseClicked(mouseEvent -> {
@@ -610,10 +605,6 @@ public class PageMining extends GameGroup {
 
         spnTutorial.setOnMouseClicked(mouseEvent -> {
             vbxPause.setVisible(!vbxPause.isVisible());
-            spnResume.setVisible(false);
-            spnRestart.setVisible(false);
-            spnAbandon.setVisible(false);
-            spnTutorial.setVisible(false);
             try {
                 loadTutorial();
             } catch (FileNotFoundException e) {

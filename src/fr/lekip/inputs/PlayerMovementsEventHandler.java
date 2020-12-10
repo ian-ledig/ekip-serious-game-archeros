@@ -8,6 +8,7 @@ import fr.lekip.utils.Direction;
 import fr.lekip.utils.Movement;
 import fr.lekip.utils.Tool;
 import javafx.event.Event;
+import javafx.scene.input.KeyCode;
 
 public class PlayerMovementsEventHandler extends GameEventHandler {
 
@@ -25,6 +26,12 @@ public class PlayerMovementsEventHandler extends GameEventHandler {
 
 
                 group.setOnKeyPressed(keyEvent -> {
+
+                    if(keyEvent.getCode().equals(KeyCode.ESCAPE) && !page.isIntro()){
+                        page.switchPause();
+                        return;
+                    }
+
                     if(!page.isInPause() && !page.isIntro()) {
                         int delta = 10;
                         switch (keyEvent.getCode()) {
