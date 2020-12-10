@@ -212,7 +212,6 @@ public class PageSummary extends GameGroup {
                         980, 550, 150, 30, true);
 
                 arrowBefore = new GameImage(null, 350, 550, 150, 30, true);
-                arrowBefore.setRotate(180);
 
                 finishBtn = new GameImage(null, 980, 550, 150, 30, true);
                 txtFinish = new Text();
@@ -255,7 +254,8 @@ public class PageSummary extends GameGroup {
 
         if (end) {
             try {
-                arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
+                arrowBefore
+                        .setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow_back.png")));
                 // We hide the right arrow and display the button to come back to map
                 arrowNext.setImage(null);
                 finishBtn.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/btn.png")));
@@ -287,7 +287,9 @@ public class PageSummary extends GameGroup {
         } else {
             try {
                 // We show both arrows
-                arrowBefore.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
+                arrowBefore
+                        .setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow_back.png")));
+
                 arrowNext.setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow.png")));
                 finishBtn.setImage(null);
                 txtFinish.setText("");

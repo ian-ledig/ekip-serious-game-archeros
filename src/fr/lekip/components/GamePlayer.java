@@ -292,12 +292,12 @@ public class GamePlayer extends GameGroup {
 
         // Create a shape of signal where items that are inside of this shape will
         // appear on screen
-        for (double i = playerTexture.getYImage() + 50; i < 751; i++) {
+        for (double i = this.getTranslateY() + 50; i < 751; i++) {
 
-            if (i < 280) {
+            if (i < getTranslateY() + 116) {
                 // Init size of the area
-                width += 0.3;
-                index += 0.15;
+                width += 1.0;
+                index += 0.7;
             } else {
                 // Starting from the player to the ground we create invisible GameImage that we
                 // will use to interact with hidden items
