@@ -63,7 +63,7 @@ public class PageMap extends GameGroup {
             { Item.STATUETTE_BRONZE, Item.STATUE, Item.ARTEFACT, Item.STATUETTE_G } };
     private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE },
             { GroundType.GRASS, GroundType.DIRT, GroundType.STONE },
-            { GroundType.SNOW, GroundType.DIRT, GroundType.STONE } };
+            { GroundType.SAND, GroundType.DIRT, GroundType.STONE } };
     private SkyboxType[] skybox = { SkyboxType.DESERT, SkyboxType.PLAIN, SkyboxType.MOUNTAIN };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
@@ -319,14 +319,15 @@ public class PageMap extends GameGroup {
                     490, 200, 80, true);
 
             GameImage landscape = new GameImage(
-                    new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
+                    new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 450, 225,
+                    false);
 
             if (pinCombo[index][1] == "Amaya") {
                 landscape = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/amaya.png")),
-                        10, 10, 500, 225, true);
+                        10, 10, 450, 225, false);
             } else if (pinCombo[index][1] == "Eretrie") {
                 landscape = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/eretrie.png")),
-                        10, 10, 400, 225, false);
+                        10, 10, 450, 225, false);
             } else {
 
             }
@@ -350,6 +351,7 @@ public class PageMap extends GameGroup {
         } catch (FileNotFoundException e2) {
             e2.printStackTrace();
         }
+
         pane.getChildren().add(description);
         pane.getChildren().add(validate);
         List<GameSpecialist> specialists = loadSpecialist(index);
@@ -460,7 +462,7 @@ public class PageMap extends GameGroup {
         }
 
         boolean in = true;
-        while (in) {
+        while (in && specialists.size() != 4) {
 
             GameSpecialist temp2 = new GameSpecialist(0, 0, rand.nextInt(6), false);
 
