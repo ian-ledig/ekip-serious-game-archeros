@@ -125,12 +125,18 @@ public class PageSummary extends GameGroup {
         // If the item win was found, we gave him 100 points and then for each other
         // items found we give him 75 points.
         int temp = score;
+
+        // If indexFirstList is null, that means that there is no found items
+        int temp1 = 1;
+        if (items.get(indexFirstList) == null) {
+            temp1 = 0;
+        }
         try {
             if (items.subList(0, indexFirstList + 1).contains(specialItem)) {
                 temp += 100;
                 temp += 75 * (items.subList(0, indexFirstList).size());
             } else {
-                temp += 75 * (items.subList(0, indexFirstList).size() + 1);
+                temp += 75 * (items.subList(0, indexFirstList).size() + temp1);
             }
         } catch (Exception e) {
             temp += 75 * items.subList(0, indexFirstList).size();
