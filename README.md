@@ -3,6 +3,7 @@
 Archeroes est un jeu sérieux ayant pour but d'introduire au joueur les bases et principes de l'archéologie.
 Il se joue seul et ne contient pas de moyen de sauvegarde.
 
+
 # Le jeu
 Le jeu se joue seul et propose au joueur un a priori sur l'archéologie.
 Il devra réaliser tes tâches simples tout en faisant attention à ne pas faire trop d'erreur.
@@ -27,6 +28,7 @@ Dans le cas où l'équipe ne contient pas un spécialiste important pour l'analy
 En fin de fouille, un récapitulatif contenant le nombre de points total gagné, les erreurs commises et les objets acquis se présente au joueur. Les objets sont alors bien plus détaillés (aspect visuel, nom, description) et la prouesse de leurs trouvaille apportera un certain nombre de points au joueur.
 Enfin, il aura la possibilité de retourner sur le menu principal pour procéder à une nouvelle fouille.
 
+
 ### Contrôles
 
 - Z ou UP : Se déplacer vers le haut,
@@ -37,11 +39,12 @@ Enfin, il aura la possibilité de retourner sur le menu principal pour procéder
 
 - Clic gauche : Casser / récupérer.
 
+
 ### Installation
 
 Temps nécessaire : 2 à 4 minutes.
 
-- Rendez-vous sur [la page de téléchargement du jeu](LIEN DE TELECHARGEMENT DU JEU) et cliquez sur 
+- Rendez-vous sur [la page de téléchargement du jeu](TELECHARGEMENT LIEN) et cliquez sur 
 le bouton Télécharger.
 
 
@@ -49,7 +52,7 @@ le bouton Télécharger.
 un dossier quelconque. 
 
 
-- Lancez le fichier Archeos.bat en double cliquant dessus.
+- Lancez le fichier Archeroes.bat (Windows) en double cliquant dessus. Pour Linux, lancez dans la console le fichier Archeroes.sh.
 
 
 - Le jeu Archeroes devrait se lancer et vous pourrez y jouer.
@@ -60,8 +63,8 @@ un dossier quelconque.
 Les plateformes de disponibilité sont Windows et Linux. 
 Voir le service Installation et accès au jeu pour plus de détails.
 
-### Assistance : mise en oeuvre
 
+### Assistance : mise en oeuvre
 
 Chaque utilisateur du jeu Archeroes peut contacter le support numérique.
 
@@ -70,9 +73,15 @@ Cette plateforme d’assistance permet de centraliser les demandes,             
 Pour accéder à ce service, il faut rejoindre notre serveur de support Discord en cliquant sur le lien suivant : https://discord.gg/fNruV7ccaK 
 Notre équipe se chargera de vous répondre dans les plus brefs délais.
 
+
 #### Auteurs
 
 - [SULTANOVIC Maid](https://git.unistra.fr/msultanovic)
 - [OZBEL Enescan](https://git.unistra.fr/eozbel)
 - [BRUMBTER Robin](https://git.unistra.fr/rbrumbter)
 - [LEDIG Ian](https://git.unistra.fr/iledig)
+
+
+### Documentation du code
+
+[Documentation officielle](https://enesxbx.github.io/index.html)

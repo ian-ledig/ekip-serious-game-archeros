@@ -24,8 +24,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
- * Group of a specialist with percentage that determine if he is a good pick.
- * We can see his information by passing the mouse on the info button.
+ * Group of a specialist with percentage that determine if he is a good pick. We
+ * can see his information by passing the mouse on the info button.
  */
 public class GameSpecialist extends GameGroup {
 
@@ -38,7 +38,8 @@ public class GameSpecialist extends GameGroup {
     private CheckBox checkBox1;
     private boolean correct;
 
-    private Color[] colors = { Color.AQUAMARINE, Color.BLUEVIOLET, Color.LAVENDER };
+    private Color[] colors = { Color.AQUAMARINE, Color.BLUEVIOLET, Color.LAVENDER, Color.RED, Color.CYAN,
+            Color.GREENYELLOW, Color.PINK, Color.ORANGE, Color.GRAY, Color.GOLD };
     private String[] info = { "Le Xylologue étudie les objets en bois, leur nature et leur fonction.",
             "L'Anthropologue étudie les ossements humains ainsi que leur méthode d’inhumation.",
             "Le Céramologue étudie les éléments de vaisselle en terre cuite, leur forme, leur fonction et leur mode de façonnage.",
@@ -66,7 +67,7 @@ public class GameSpecialist extends GameGroup {
         // setting the background of the specialist group
         Rectangle backgroundRec = new Rectangle(150, 180);
         backgroundRec.setY(55);
-        backgroundRec.setFill(colors[rand.nextInt(3)]);
+        backgroundRec.setFill(colors[rand.nextInt(10)]);
 
         GameImage help;
         try {
@@ -109,7 +110,8 @@ public class GameSpecialist extends GameGroup {
         }
 
         int perc;
-        // calculate the percentage of the specialist depending if he is a good pick or not
+        // calculate the percentage of the specialist depending if he is a good pick or
+        // not
         if (correct) {
             perc = (int) (Math.random() * (25 - 10) + 10);
         } else {
@@ -132,6 +134,7 @@ public class GameSpecialist extends GameGroup {
 
     /**
      * Show a specialist depending of its id
+     * 
      * @param id of the specialist
      */
     public void loadPicture(int id) {
@@ -161,6 +164,7 @@ public class GameSpecialist extends GameGroup {
 
     /**
      * set the pos of the group depending on the x and y pos
+     * 
      * @param x position
      * @param y position
      */

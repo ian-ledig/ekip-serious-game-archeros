@@ -12,6 +12,7 @@ import fr.lekip.components.GameImage;
 import fr.lekip.utils.Item;
 import fr.lekip.utils.Sound;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -39,11 +40,14 @@ public class PageSummary extends GameGroup {
     private final GameImage realPicture;
 
     private Text txtFinish;
+    private int specialistePoints;
 
     private boolean end = false;
 
     private StackPane btnPane;
     private StackPane pane;
+
+    private List<GameImage> listStars = new ArrayList<>();
 
     public PageSummary(List<Item> found, List<Item> lost, Item pSpecialItem, double percent, int pInitScore,
             int maxScore) {
@@ -64,6 +68,7 @@ public class PageSummary extends GameGroup {
 
         // show the end score of the session
         score = pInitScore;
+        specialistePoints = pInitScore;
         txt.setWrapText(true);
         txt.setMaxWidth(650);
         add(txt);
@@ -75,7 +80,6 @@ public class PageSummary extends GameGroup {
         if (found.isEmpty()) {
             items.add(null);
             indexFirstList = 0;
-
         } else {
             items.addAll(found);
             indexFirstList = found.size() - 1;
@@ -114,18 +118,25 @@ public class PageSummary extends GameGroup {
 
     /**
      * Calcul the score of the session
+     * 
      * @return
      */
     private int calculateScore() {
         // If the item win was found, we gave him 100 points and then for each other
         // items found we give him 75 points.
         int temp = score;
+
+        // If indexFirstList is null, that means that there is no found items
+        int temp1 = 1;
+        if (items.get(indexFirstList) == null) {
+            temp1 = 0;
+        }
         try {
-            if (items.subList(0, indexFirstList).contains(specialItem)) {
+            if (items.subList(0, indexFirstList + 1).contains(specialItem)) {
                 temp += 100;
-                temp += 75 * (items.subList(0, indexFirstList).size() - 1);
+                temp += 75 * (items.subList(0, indexFirstList).size());
             } else {
-                temp += 75 * items.subList(0, indexFirstList).size();
+                temp += 75 * (items.subList(0, indexFirstList).size() + temp1);
             }
         } catch (Exception e) {
             temp += 75 * items.subList(0, indexFirstList).size();
@@ -145,10 +156,68 @@ public class PageSummary extends GameGroup {
             try {
                 realPicture.setImage(null);
 
-                String scoreShow = "Points obtenus : " + score;
+                String debrief;
+                String signe = "";
+                if (specialistePoints > 0) {
+                    signe = "+";
+                }
+
+                // If indexFirstList is null, that means that there is no found items
+                int temp = 1;
+                if (items.get(indexFirstList) == null) {
+                    temp = 0;
+                }
+
+                // We show a detail of all the point gain
+                if (items.subList(0, indexFirstList + 1).contains(specialItem)) {
+                    debrief = indexFirstList + " objets trouvés : +" + ((indexFirstList) * 75)
+                            + "\nObjet objectif trouvé : +100\nEnergie restante : +" + (int) (percentEnergy * 100)
+                            + "\nChoix des spécialistes : " + signe + specialistePoints;
+                } else {
+                    debrief = (temp + indexFirstList) + " objets trouvés : +" + ((indexFirstList + temp) * 75)
+                            + "\nEnergie restante : +" + (int) (percentEnergy * 100) + "\nChoix des spécialistes : "
+                            + signe + specialistePoints;
+                }
+
+                String scoreShow = "Points obtenus : " + score + "\n" + debrief;
                 txt.setText(scoreShow);
                 txt.setFont(Font.loadFont(
                         new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+                int nbStars = 0;
+
+                if (score >= 300) {
+                    nbStars = 5;
+                } else if (score >= 230) {
+                    nbStars = 4;
+                } else if (score >= 170) {
+                    nbStars = 3;
+                } else if (score >= 100) {
+                    nbStars = 2;
+                } else if (score >= 1) {
+                    nbStars = 1;
+                } else {
+                    nbStars = 0;
+                }
+
+                int j = 0;
+                for (int i = 0; i < 5; i++) {
+
+                    if (nbStars > i) {
+                        GameImage star = new GameImage(
+                                new Image(new FileInputStream("src/assets/textures/pages/summary/star.png")), 300 + j,
+                                350, 150, 150, true);
+                        add(star);
+                        listStars.add(star);
+                    } else {
+                        GameImage starGray = new GameImage(
+                                new Image(new FileInputStream("src/assets/textures/pages/summary/starGray.png")),
+                                300 + j, 350, 150, 150, true);
+                        add(starGray);
+                        listStars.add(starGray);
+                    }
+                    j += 160;
+
+                }
 
                 txt.setLayoutX(500);
                 txt.setLayoutY(250);
@@ -168,7 +237,7 @@ public class PageSummary extends GameGroup {
             if (index <= indexFirstList) {
                 end = false;
                 if (items.get(index) == null) {
-                    txt.setText("Aucun item trouvé :/ \nPas grave ! Vous ferez mieux la prochaine fois !");
+                    txt.setText("Aucun objet trouvé :/ \nPas grave ! Vous ferez mieux la prochaine fois !");
                     try {
                         // If there is no next item, we end
                         if (items.get(index + 1) == null) {
@@ -180,7 +249,7 @@ public class PageSummary extends GameGroup {
 
                 } else {
                     // If the item is in the list of found item we show his description
-                    txt.setText("Item trouvé ! \n" + items.get(index).getLore());
+                    txt.setText("Objet trouvé ! \n" + items.get(index).getLore());
 
                     // if this is the last item, we end
                     if (index == items.size() - 1) {
@@ -197,7 +266,7 @@ public class PageSummary extends GameGroup {
 
                     } else {
                         // If the item is in the list of lost item we show his description
-                        txt.setText("Item perdu ! \n" + items.get(index).getLore());
+                        txt.setText("Objet perdu ! \n" + items.get(index).getLore());
 
                         // if this is the last item, we end
                         if (index == items.size() - 1) {
@@ -269,6 +338,12 @@ public class PageSummary extends GameGroup {
 
         if (end) {
             try {
+
+                // Set stars to null
+                for (GameImage item : listStars) {
+                    item.setImage(null);
+                }
+
                 arrowBefore
                         .setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow_back.png")));
                 // We hide the right arrow and display the button to come back to map
@@ -301,6 +376,11 @@ public class PageSummary extends GameGroup {
             btnPane.setOnMouseClicked(null);
         } else {
             try {
+
+                for (GameImage item : listStars) {
+                    item.setImage(null);
+                }
+
                 // We show both arrows
                 arrowBefore
                         .setImage(new Image(new FileInputStream("src/assets/textures/pages/summary/arrow_back.png")));
