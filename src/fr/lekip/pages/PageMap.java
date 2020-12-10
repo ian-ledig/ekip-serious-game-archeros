@@ -1,5 +1,9 @@
 package fr.lekip.pages;
 
+import fr.lekip.Main;
+import fr.lekip.components.GameGroup;
+import fr.lekip.components.GameImage;
+import fr.lekip.components.GameSpecialist;
 import fr.lekip.inputs.MapEventHandler;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -24,6 +28,9 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import fr.lekip.utils.GroundType;
+import fr.lekip.utils.Item;
+import fr.lekip.utils.SkyboxType;
+import fr.lekip.utils.Sound;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -317,8 +324,7 @@ public class PageMap extends GameGroup {
             }
 
             try {
-                Main.setShowedPage(
-                        new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro, scoreInit));
+                Main.setShowedPage(new PageMining(SkyboxType.PLAIN, groundTypes, items, 900, intro, scoreInit));
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
