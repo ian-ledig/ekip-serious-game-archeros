@@ -44,6 +44,7 @@ public class PageSummary extends GameGroup {
             int maxScore) {
         try {
             pane = new StackPane();
+
             // We create the Background Image
             GameImage image = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/summary/end_screen.png")), 1450 / 4,
@@ -129,10 +130,7 @@ public class PageSummary extends GameGroup {
             try {
                 realPicture.setImage(null);
 
-                // TODO le 425 est faux psk ca depends de la pos des items
-                // TODO ajouter une appréciation pour combler le vide ? genre si score +de 50%
-                // on écrit " PAS MAL" si - "Peut mieux faire !" etc.. ou des étoiles
-                String scoreShow = "Points obtenus : " + score + " / " + (100 + 100 + 75 + 75 + 75);
+                String scoreShow = "Points obtenus : " + score;
                 txt.setText(scoreShow);
                 txt.setFont(Font.loadFont(
                         new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
