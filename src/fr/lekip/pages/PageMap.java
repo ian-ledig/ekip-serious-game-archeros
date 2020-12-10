@@ -10,6 +10,9 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -20,6 +23,8 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -28,6 +33,7 @@ import fr.lekip.utils.Item;
 import fr.lekip.utils.SkyboxType;
 import fr.lekip.utils.Sound;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -52,8 +58,13 @@ public class PageMap extends GameGroup {
     private Pane pane;
     private final Random rand = new Random();
 
-    private final Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
-    private final GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
+    private final Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL },
+            { Item.MICROLITH_SCRAPER, Item.YORKSHIRE_SCRAPER, Item.COMB, Item.STATUETTE },
+            { Item.STATUETTE_BRONZE, Item.STATUE, Item.ARTEFACT, Item.STATUETTE_G } };
+    private final GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE },
+            { GroundType.GRASS, GroundType.DIRT, GroundType.STONE },
+            { GroundType.SAND, GroundType.DIRT, GroundType.STONE } };
+    private final SkyboxType[] skybox = { SkyboxType.DESERT, SkyboxType.PLAIN, SkyboxType.MOUNTAIN };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         Image WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
@@ -146,14 +157,24 @@ public class PageMap extends GameGroup {
 
         // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 645, 98, 80, 80, true);
-        pinCombo[0][1] = "Brora";
-        pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
-        pinCombo[1][0] = new GameImage(WORLD_PIN, 648, 200, 80, 80, true);
-        pinCombo[1][1] = "Perth";
-        pinCombo[1][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
+        pinCombo[0][1] = "Wilkhouse";
+        pinCombo[0][3] = "Wilkhouse est situé à 5 km de Brora (village écossais)."
+                + "Le site se trouve entre la route A9 et la côte." + "Le site se trouve sur une plage surélevée."
+                + "Au total, le site comporte les vestiges de quatre bâtiments."
+                + "Face à la plage, on a le bâtiment de l'auberge lui-même."
+                + "Au nord de l'auberge, et annexée au mur de l'enceinte se trouve une éventuelle dépendance."
+                + "Un autre petit bâtiment est situé à côté et immédiatement à l'ouest (à l'intérieur des terres) de l'auberge."
+                + "Un quatrième bâtiment se trouve à 50m au sud-ouest de celles-ci.";
+        pinCombo[1][0] = new GameImage(WORLD_PIN, 633, 180, 80, 80, true);
+        pinCombo[1][1] = "Amaya";
+        pinCombo[1][3] = "Amaya est le nom d'une cité antique cantabre, située au sommet du massif du même nom haut de 1 377"
+                + "mètres au nord-ouest de la Province de Burgos, en Espagne."
+                + "La ville était située à la limite sud de la Cantabrie à l'époque romaine, à une position stratégique contrôlant l'accès au territoire cantabre depuis le sud.";
         pinCombo[2][0] = new GameImage(WORLD_PIN, 761, 211, 80, 80, true);
         pinCombo[2][1] = "Eretrie";
-        pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
+        pinCombo[2][3] = "Érétrie est une cité de la Grèce antique, située sur la côte occidentale de l'île d'Eubée, et qui a largement contribué au développement et au rayonnement de la civilisation grecque."
+                + "Les premières fouilles archéologiques ont eu lieu en 1885 par la société archéologique d'Athènes et l'école américaine."
+                + "Depuis 1964, elle fait l'objet de recherches archéologiques conduites par l'École suisse d'archéologie en Grèce et de publications dans le cadre de la collection Eretria, Fouilles et Recherches.";
 
         // add pin and looking for a click
         for (int i = 0; i < 3; i++) {
@@ -289,6 +310,7 @@ public class PageMap extends GameGroup {
                 index = i;
             }
         }
+
         // Pane + Background color
         pane = new Pane();
         try {
@@ -309,20 +331,41 @@ public class PageMap extends GameGroup {
                     490, 200, 80, true);
 
             GameImage landscape = new GameImage(
-                    new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
+                    new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 450, 225,
+                    false);
+
+            if (pinCombo[index][1] == "Amaya") {
+                landscape = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/amaya.png")),
+                        10, 10, 450, 225, false);
+            } else if (pinCombo[index][1] == "Eretrie") {
+                landscape = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/eretrie.png")),
+                        10, 10, 450, 225, false);
+            } else {
+
+            }
+
             pane.getChildren().add(landscape);
             pane.getChildren().add(crossClose);
-            pane.getChildren().add(validate);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         // Add description of the location
-        Text description = new Text((String) pinCombo[index][3]);
+        Label description = new Label((String) pinCombo[index][3]);
+        description.setWrapText(true);
+        description.setMaxWidth(500);
         description.setTranslateX(500);
         description.setTranslateY(25);
-        pane.getChildren().add(description);
+        try {
+            description.setFont(Font
+                    .loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        } catch (FileNotFoundException e2) {
+            e2.printStackTrace();
+        }
 
+        pane.getChildren().add(description);
+        pane.getChildren().add(validate);
         List<GameSpecialist> specialists = loadSpecialist(index);
 
         // looking for starting a mining session
@@ -351,9 +394,18 @@ public class PageMap extends GameGroup {
 
             // try to show the mining page to begin the mining session
             try {
-                Main.setShowedPage(new PageMining(SkyboxType.PLAIN, groundTypes, items, 900, intro, scoreInit));
+                Main.setShowedPage(new PageMining(skybox[index], groundTypes, items, 900, intro, scoreInit));
             } catch (Exception e1) {
                 e1.printStackTrace();
+            }
+        });
+
+        // Add event handler for cross click
+        crossClose.setOnMouseClicked((e) -> {
+            remove(pane);
+            addEventHandler(MapEventHandler.class);
+            for (Node objects : super.getChildren()) {
+                objects.setEffect(null);
             }
         });
 
@@ -374,15 +426,6 @@ public class PageMap extends GameGroup {
 
         getChildren().get(0).setOnMouseDragged(null);
         pane.requestFocus();
-
-        // Add event handler for cross click
-        crossClose.setOnMouseClicked((e) -> {
-            remove(pane);
-            addEventHandler(MapEventHandler.class);
-            for (Node objects : super.getChildren()) {
-                objects.setEffect(null);
-            }
-        });
 
     }
 
@@ -443,7 +486,7 @@ public class PageMap extends GameGroup {
         }
 
         boolean in = true;
-        while (in) {
+        while (in && specialists.size() != 4) {
 
             GameSpecialist temp2 = new GameSpecialist(0, 0, rand.nextInt(6), false);
 
