@@ -31,7 +31,7 @@ public class PageIntro extends GameGroup {
 
         txt = new Text(dialog[0]);
         txt.setFont(
-                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
 
         mapp.getChildren().addAll(image);
         mapp.getChildren().addAll(txt);

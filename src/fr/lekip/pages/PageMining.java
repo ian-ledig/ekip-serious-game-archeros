@@ -73,10 +73,13 @@ public class PageMining extends GameGroup {
     private Label scoreMandatory;
     private Label score;
     private boolean intro;
+    private int initScore;
+    private int energyMaxScore;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex,
-            boolean pIntro) throws FileNotFoundException, CloneNotSupportedException {
-        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0);
+            boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
+        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 27.0);
+
         this.skyboxType = skyboxType;
         this.groundTypes = groundTypes;
         this.items = items;
@@ -88,6 +91,7 @@ public class PageMining extends GameGroup {
         this.btnTutorial = (GameImage) btnResume.clone();
 
         intro = pIntro;
+        initScore = pInitScore;
 
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
@@ -205,8 +209,10 @@ public class PageMining extends GameGroup {
             double Y1 = 0;
             double xG = 1450;
             double xD = 0;
+            energyMaxScore = 0;
             for (int i = 0; i < groundItems.size(); i++) {
                 energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
+                energyMaxScore += (getGroundItems().get(i).getYImage() - 262);
 
                 // We take the deepest item Y
                 if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
@@ -387,7 +393,8 @@ public class PageMining extends GameGroup {
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
+            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore,
+                    energyMaxScore);
             setOnKeyPressed(null);
             setOnMouseClicked(null);
             setOnMousePressed(null);
@@ -567,7 +574,7 @@ public class PageMining extends GameGroup {
 
         spnRestart.setOnMouseClicked(mouseEvent -> {
             try {
-                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex, false));
+                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex, false, initScore));
             } catch (FileNotFoundException | CloneNotSupportedException e) {
                 e.printStackTrace();
             }

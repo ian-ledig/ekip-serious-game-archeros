@@ -38,8 +38,10 @@ public class PageSummary extends GameGroup {
     private boolean end = false;
     private StackPane btnPane;
     private StackPane pane;
+    private int energyMaxScore;
 
-    public PageSummary(List<Item> found, List<Item> lost, Item pSpecialItem, double percent) {
+    public PageSummary(List<Item> found, List<Item> lost, Item pSpecialItem, double percent, int pInitScore,
+            int maxScore) {
         try {
             pane = new StackPane();
             // We create the Background Image
@@ -54,6 +56,8 @@ public class PageSummary extends GameGroup {
             e.printStackTrace();
         }
 
+        energyMaxScore = maxScore;
+        score = pInitScore;
         txt = new Text();
         add(txt);
 
@@ -84,8 +88,8 @@ public class PageSummary extends GameGroup {
         // Show a text
         try {
             Text end = new Text("FIN DE LA PARTIE");
-            end.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")),
-                    25.0));
+            end.setFont(Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")),
+                    18.0));
             end.setX(620);
             end.setY(180);
             add(end);
@@ -102,7 +106,7 @@ public class PageSummary extends GameGroup {
     private int calculateScore() {
         // If the item win was found, we gave him 100 points and then for each other
         // items found we give him 75 points.
-        int temp = 0;
+        int temp = score;
         try {
             if (items.subList(0, indexFirstList).contains(specialItem)) {
                 temp += 100;
@@ -117,7 +121,6 @@ public class PageSummary extends GameGroup {
         // We add the percentage point
         temp += percentEnergy * 100;
 
-        // TODO add specialist point
         return temp;
     }
 
@@ -129,10 +132,10 @@ public class PageSummary extends GameGroup {
                 // TODO le 425 est faux psk ca depends de la pos des items
                 // TODO ajouter une appréciation pour combler le vide ? genre si score +de 50%
                 // on écrit " PAS MAL" si - "Peut mieux faire !" etc.. ou des étoiles
-                String scoreShow = "Points obtenus : " + score + " / 425";
+                String scoreShow = "Points obtenus : " + score + " / " + (100 + 100 + 75 + 75 + 75);
                 txt.setText(scoreShow);
                 txt.setFont(Font.loadFont(
-                        new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+                        new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
 
                 txt.setX(500);
                 txt.setY(250);
