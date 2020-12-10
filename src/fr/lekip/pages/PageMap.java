@@ -58,8 +58,11 @@ public class PageMap extends GameGroup {
     private Pane pane;
     private Random rand = new Random();
 
-    private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
+    private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL },
+            { Item.MICROLITH_SCRAPER, Item.YORKSHIRE_SCRAPER, Item.COMB, Item.STATUETTE },
+            { Item.STATUETTE_BRONZE, Item.STATUE, Item.ARTEFACT, Item.STATUETTE_G } };
     private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
+    private SkyboxType[] skybox = { SkyboxType.BLUE_SKY_CLOUDS, SkyboxType.BLUE_SKY_CLOUDS };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
@@ -353,8 +356,7 @@ public class PageMap extends GameGroup {
             }
 
             try {
-                Main.setShowedPage(
-                        new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro, scoreInit));
+                Main.setShowedPage(new PageMining(skybox[index], groundTypes, items, 900, intro, scoreInit));
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
