@@ -5,18 +5,13 @@ import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GameSpecialist;
 import fr.lekip.inputs.MapEventHandler;
-import fr.lekip.utils.Item;
-import fr.lekip.utils.SkyboxType;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.Button;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -30,10 +25,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.*;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import fr.lekip.utils.GroundType;
+import fr.lekip.utils.Item;
+import fr.lekip.utils.SkyboxType;
+import fr.lekip.utils.Sound;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -81,6 +79,10 @@ public class PageMap extends GameGroup {
         // Display text while waiting for the user
         loadText();
 
+        // Play menu music
+        Main.mediaPlayer = Sound.MENU.getMediaPlayer();
+        Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        Main.mediaPlayer.play();
     }
 
     /**
@@ -335,8 +337,7 @@ public class PageMap extends GameGroup {
             }
 
             try {
-                Main.setShowedPage(
-                        new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro, scoreInit));
+                Main.setShowedPage(new PageMining(SkyboxType.PLAIN, groundTypes, items, 900, intro, scoreInit));
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -372,7 +373,7 @@ public class PageMap extends GameGroup {
     }
 
     private void loadIntro() throws FileNotFoundException {
-        GameGroup introPage = new PageIntro();
+        GameGroup introPage = new GroupIntro();
 
         // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
@@ -388,7 +389,7 @@ public class PageMap extends GameGroup {
 
         introPage.requestFocus();
         introPage.setOnKeyPressed((e) -> {
-            if (((PageIntro) introPage).isFinished()) {
+            if (((GroupIntro) introPage).isFinished()) {
                 for (Node objects : super.getChildren()) {
                     objects.setEffect(null);
                 }
@@ -398,7 +399,6 @@ public class PageMap extends GameGroup {
                 addEventHandler(MapEventHandler.class);
             }
         });
-
     }
 
     private List<GameSpecialist> loadSpecialist(int index) {

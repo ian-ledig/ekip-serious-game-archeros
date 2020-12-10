@@ -5,27 +5,17 @@ import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.components.GamePlayer;
 import fr.lekip.inputs.PlayerMovementsEventHandler;
-import fr.lekip.utils.GroundType;
-import fr.lekip.utils.Item;
-import fr.lekip.utils.SkyboxType;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import fr.lekip.utils.*;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import fr.lekip.utils.Tool;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -59,12 +49,16 @@ public class PageMining extends GameGroup {
     private final List<Item> itemsFound = new ArrayList<>();
     private final List<Item> itemsLost = new ArrayList<>();
 
+    private final GamePlayer player = new GamePlayer(this);
+
+    private boolean intro;
+    private final int initScore;
+
     private int itemsRemaining;
 
-    private List<GameImage> groundItems = new ArrayList<>();
+    private List<Pane> groundItems = new ArrayList<>();
     private GameImage groundItemWin;
     private GameImage[] groundBox = new GameImage[GROUND_BLOCKS_NUMBER];
-    private GamePlayer player = new GamePlayer(this);
     private ProgressBar energyBar = new ProgressBar();
 
     private double energyValue = 0;
@@ -72,9 +66,10 @@ public class PageMining extends GameGroup {
 
     private Label scoreMandatory;
     private Label score;
-    private boolean intro;
-    private int initScore;
     private int energyMaxScore;
+    private VBox vbxPause;
+
+    private boolean isInPause = false;
 
     public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex,
             boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
@@ -143,13 +138,13 @@ public class PageMining extends GameGroup {
                             * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
 
                     if (!groundItems.isEmpty()) {
-                        for (GameImage imgItem : groundItems) {
-                            if (spawnPosX + itemSize >= imgItem.getXImage()
-                                    && spawnPosX <= imgItem.getXImage() + imgItem.getFitWidth()
-                                    || spawnPosY + itemSize >= imgItem.getYImage()
-                                            && spawnPosY <= imgItem.getYImage() + imgItem.getFitHeight()
-                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - imgItem.getXImage(), 2)
-                                            + Math.pow(spawnPosY - imgItem.getYImage(), 2))) < 200) {
+                        for (Pane pneItem : groundItems) {
+                            if (spawnPosX + itemSize >= pneItem.getLayoutX()
+                                    && spawnPosX <= pneItem.getLayoutX() + pneItem.getWidth()
+                                    || spawnPosY + itemSize >= pneItem.getLayoutY()
+                                            && spawnPosY <= pneItem.getLayoutY() + pneItem.getWidth()
+                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - pneItem.getLayoutX(), 2)
+                                            + Math.pow(spawnPosY - pneItem.getLayoutY(), 2))) < 200) {
                                 correctPos = false;
                                 break;
                             }
@@ -158,10 +153,12 @@ public class PageMining extends GameGroup {
                 }
 
                 // Add and position the item
+                Pane pneItem = new Pane();
                 GameImage newItem = item.cloneGameImage();
-                newItem.setX(spawnPosX);
-                newItem.setY(spawnPosY);
-                add(newItem);
+                pneItem.setLayoutX(spawnPosX);
+                pneItem.setLayoutY(spawnPosY);
+                pneItem.getChildren().add(newItem);
+                add(pneItem);
 
                 // Try to set item to mandatory object
                 if (!itemWinAssigned && (item == items.get(items.size() - 1) || (int) (Math.random() * 3) == 0)) {
@@ -169,10 +166,10 @@ public class PageMining extends GameGroup {
                     groundItemWin = newItem;
                     itemWin = item;
                 }
-                groundItems.add(newItem);
+                groundItems.add(pneItem);
 
                 // Delete the item and increase the number of objects found when item is clicked
-                newItem.setOnMouseClicked(mouseEvent -> {
+                pneItem.setOnMouseClicked(mouseEvent -> {
                     if (newItem.getImage() != null) {
 
                         Tool tool = player.getTool();
@@ -182,10 +179,12 @@ public class PageMining extends GameGroup {
                         if (tool != null && tool.getStrength() >= item.getMinResistance()) {
                             if (tool.getStrength() <= item.getMaxResistance()) {
                                 this.itemsFound.add(item);
+                                Sound.PICK_UP.getMediaPlayer().play();
                             } else {
                                 this.itemsLost.add(item);
                                 itemsRemaining--;
                                 score.setTextFill(Color.INDIANRED);
+                                Sound.BREAK.getMediaPlayer().play();
                             }
 
                             // If the mandatory item is found : set it to null
@@ -211,20 +210,20 @@ public class PageMining extends GameGroup {
             double xD = 0;
             energyMaxScore = 0;
             for (int i = 0; i < groundItems.size(); i++) {
-                energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
-                energyMaxScore += (getGroundItems().get(i).getYImage() - 262);
+                energyDefault += (getGroundItems().get(i).getLayoutX() - 262) * 1.2 + 7;
+                energyMaxScore += (getGroundItems().get(i).getLayoutY() - 262);
 
                 // We take the deepest item Y
-                if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
-                    Y1 = (getGroundItems().get(i).getYImage() - 262);
+                if ((getGroundItems().get(i).getLayoutY() - 262) > Y1) {
+                    Y1 = (getGroundItems().get(i).getLayoutY() - 262);
                 }
 
                 // We save the first item in X basis and the last item
-                if ((getGroundItems().get(i).getXImage()) < xG) {
-                    xG = getGroundItems().get(i).getXImage();
+                if ((getGroundItems().get(i).getLayoutX()) < xG) {
+                    xG = getGroundItems().get(i).getLayoutX();
                 }
-                if ((getGroundItems().get(i).getXImage()) > xD) {
-                    xD = getGroundItems().get(i).getXImage();
+                if ((getGroundItems().get(i).getLayoutX()) > xD) {
+                    xD = getGroundItems().get(i).getLayoutX();
                 }
 
             }
@@ -233,9 +232,9 @@ public class PageMining extends GameGroup {
             // We calculate the malus
             double malus;
             malus = Y1 * 3;
-            for (GameImage item : getGroundItems()) {
-                if (item.getY() != Y1) {
-                    malus -= item.getY();
+            for (Pane item : getGroundItems()) {
+                if (item.getLayoutY() != Y1) {
+                    malus -= item.getLayoutY();
                 }
             }
 
@@ -263,6 +262,10 @@ public class PageMining extends GameGroup {
         loadLabels();
         loadPause();
 
+        // Play game music
+        Main.mediaPlayer = Sound.GAME.getMediaPlayer();
+        Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        Main.mediaPlayer.play();
         if (intro) {
             loadTutorial();
         } else {
@@ -374,6 +377,8 @@ public class PageMining extends GameGroup {
         add(pnNrg);
         add(btnValidate);
 
+        intro = true;
+
         btnValidate.setOnMouseClicked((e) -> {
             remove(tuto);
             remove(movement);
@@ -387,13 +392,20 @@ public class PageMining extends GameGroup {
             remove(dynamite);
             remove(probe);
             addEventHandler(PlayerMovementsEventHandler.class);
+            isInPause = false;
+            intro = false;
         });
 
     }
 
     public void tryToEndGame(boolean force) {
         if (force || isEnd()) {
-            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore,
+            Main.mediaPlayer.stop();
+            if(itemsFound.contains(itemWin))
+                Sound.WIN.getMediaPlayer().play();
+            else
+                Sound.LOSE.getMediaPlayer().play();
+ PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore,
                     energyMaxScore);
             setOnKeyPressed(null);
             setOnMouseClicked(null);
@@ -409,11 +421,11 @@ public class PageMining extends GameGroup {
                 || itemsFound.size() + itemsLost.size() == groundItems.size() || energyBar.getProgress() <= 0;
     }
 
-    public List<GameImage> getGroundItems() {
+    public List<Pane> getGroundItems() {
         return groundItems;
     }
 
-    public void setGroundItems(List<GameImage> groundItems) {
+    public void setGroundItems(List<Pane> groundItems) {
         this.groundItems = groundItems;
     }
 
@@ -449,6 +461,20 @@ public class PageMining extends GameGroup {
         return nextLayerIndex;
     }
 
+    public boolean isIntro() {
+        return intro;
+    }
+
+    public boolean isInPause() {
+        return isInPause;
+    }
+
+    public void switchPause() {
+        isInPause = !isInPause;
+        Sound.BUTTON.getMediaPlayer().play();
+        vbxPause.setVisible(!vbxPause.isVisible());
+    }
+
     public void loadEnergyBar() throws FileNotFoundException {
 
         // Init energyBar
@@ -465,9 +491,11 @@ public class PageMining extends GameGroup {
         hbox.getChildren().addAll(lightning, energyBar);
         add(hbox);
         setOnMouseClicked((e) -> {
-            Tool tool = player.getTool();
-            if (tool != null)
-                decreaseEnergy(player.getTool().getStrength());
+            if(!isInPause && !intro){
+                Tool tool = player.getTool();
+                if (tool != null)
+                    decreaseEnergy(player.getTool().getStrength());
+            }
         });
 
         // Calculation of the maximal energy
@@ -484,7 +512,7 @@ public class PageMining extends GameGroup {
         scoreMandatory = new Label("Objectif : ");
         scoreMandatory.setFont(FONT);
         HBox hbxScoreMand = new HBox(20);
-        hbxScoreMand.setTranslateX(1285);
+        hbxScoreMand.setTranslateX(1288);
         hbxScoreMand.setTranslateY(71);
         hbxScoreMand.setSpacing(5);
         hbxScoreMand.getChildren().add(scoreMandatory);
@@ -492,7 +520,7 @@ public class PageMining extends GameGroup {
 
         try {
             GameImage imgItemWin = itemWin.cloneGameImage();
-            imgItemWin.setLayoutX(1370);
+            imgItemWin.setLayoutX(1378);
             imgItemWin.setLayoutY(71);
             add(imgItemWin);
         } catch (CloneNotSupportedException e) {
@@ -547,7 +575,7 @@ public class PageMining extends GameGroup {
         spnTutorial.getChildren().addAll(btnTutorial, txtTutorial);
         add(spnTutorial);
 
-        VBox vbxPause = new VBox();
+        vbxPause = new VBox();
         vbxPause.setPrefWidth(150);
         vbxPause.setTranslateX(650);
         vbxPause.setTranslateY(300);
@@ -557,22 +585,17 @@ public class PageMining extends GameGroup {
         add(vbxPause);
 
         spnPause.setOnMouseClicked(event -> {
-            vbxPause.setVisible(!vbxPause.isVisible());
-            spnResume.setVisible(true);
-            spnRestart.setVisible(true);
-            spnAbandon.setVisible(true);
-            spnTutorial.setVisible(true);
+            switchPause();
         });
 
         spnResume.setOnMouseClicked(mouseEvent -> {
-            vbxPause.setVisible(!vbxPause.isVisible());
-            spnResume.setVisible(false);
-            spnRestart.setVisible(false);
-            spnAbandon.setVisible(false);
-            spnTutorial.setVisible(false);
+            switchPause();
         });
 
         spnRestart.setOnMouseClicked(mouseEvent -> {
+            Sound.QUIT.getMediaPlayer().play();
+            Main.mediaPlayer.stop();
+
             try {
                 Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex, false, initScore));
             } catch (FileNotFoundException | CloneNotSupportedException e) {
@@ -582,10 +605,6 @@ public class PageMining extends GameGroup {
 
         spnTutorial.setOnMouseClicked(mouseEvent -> {
             vbxPause.setVisible(!vbxPause.isVisible());
-            spnResume.setVisible(false);
-            spnRestart.setVisible(false);
-            spnAbandon.setVisible(false);
-            spnTutorial.setVisible(false);
             try {
                 loadTutorial();
             } catch (FileNotFoundException e) {
@@ -594,6 +613,8 @@ public class PageMining extends GameGroup {
         });
 
         spnAbandon.setOnMouseClicked(mouseEvent -> {
+            Sound.QUIT.getMediaPlayer().play();;
+
             tryToEndGame(true);
         });
     }

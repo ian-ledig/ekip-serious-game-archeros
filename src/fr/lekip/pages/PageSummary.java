@@ -4,15 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import fr.lekip.Main;
 import fr.lekip.components.GameGroup;
 import fr.lekip.components.GameImage;
 import fr.lekip.utils.Item;
+import fr.lekip.utils.Sound;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -25,7 +25,7 @@ public class PageSummary extends GameGroup {
     private int indexFirstList;
 
     private int index = -1;
-    private Text txt;
+    private Label txt = new Label();
     private double percentEnergy;
     private Item specialItem;
 
@@ -58,7 +58,8 @@ public class PageSummary extends GameGroup {
 
         energyMaxScore = maxScore;
         score = pInitScore;
-        txt = new Text();
+        txt.setWrapText(true);
+        txt.setMaxWidth(650);
         add(txt);
 
         // We init the data
@@ -100,7 +101,6 @@ public class PageSummary extends GameGroup {
         // Then we load image data and the pages
         loadPicture();
         loadPage();
-
     }
 
     private int calculateScore() {
@@ -137,8 +137,8 @@ public class PageSummary extends GameGroup {
                 txt.setFont(Font.loadFont(
                         new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
 
-                txt.setX(500);
-                txt.setY(250);
+                txt.setLayoutX(500);
+                txt.setLayoutY(250);
 
             } catch (FileNotFoundException e) {
 
@@ -231,6 +231,7 @@ public class PageSummary extends GameGroup {
                 // We add event handler on mouse clicked to recall the loadPage(to change
                 // item/page) and loadPicture(to change arrow display)
                 arrowNext.setOnMouseClicked((e) -> {
+                    Sound.BUTTON_END.getMediaPlayer().play();
                     index++;
 
                     loadPage();
@@ -238,6 +239,7 @@ public class PageSummary extends GameGroup {
                 });
 
                 arrowBefore.setOnMouseClicked((e) -> {
+                    Sound.BUTTON_END.getMediaPlayer().play();
                     index--;
                     end = false;
                     loadPage();
@@ -260,6 +262,7 @@ public class PageSummary extends GameGroup {
                 txtFinish.setText("Finir la fouille");
 
                 btnPane.setOnMouseClicked((e) -> {
+                    Sound.QUIT.getMediaPlayer().play();
                     try {
                         Main.setShowedPage(new PageMap(false));
                     } catch (FileNotFoundException e1) {

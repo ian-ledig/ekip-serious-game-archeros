@@ -7,13 +7,11 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.util.Duration;
@@ -33,10 +31,6 @@ public class GamePlayer extends GameGroup {
     private final GameImage toolTexture = new GameImage(null, 10, 76, 40, 48, true);
 
     private final PageMining parent;
-
-    // We declare it here because otherwise MediaPlayer class will delete it before
-    // the audio finish to play
-    private MediaPlayer audioPlayer;
 
     private Movement movements = Movement.DOWN;
     private Tool tool;
@@ -136,6 +130,22 @@ public class GamePlayer extends GameGroup {
 
                         // Try to break the neighbors
                         if (index < tool.getStrength() - resistance / 2) {
+                            if(index == 0){
+                                int randomSoundIndex;
+                                switch (tool){
+                                    case SHOVEL:
+                                        randomSoundIndex = (int) (Math.random() * 4);
+                                        Sound.SHOVEL.getMediaPlayer(randomSoundIndex).play();
+                                        break;
+                                    case PICKAXE:
+                                        randomSoundIndex = (int) (Math.random() * 3);
+                                        Sound.PICKAXE.getMediaPlayer(randomSoundIndex).play();
+                                        break;
+                                    case DYNAMITER:
+                                        Sound.DYNAMITER.getMediaPlayer().play();
+                                        break;
+                                }
+                            }
                             index++;
                             deleteGround(defaultIndex, index, groundBox, posX - 18, posY);
                             deleteGround(defaultIndex, index, groundBox, posX + 18, posY);
@@ -310,9 +320,7 @@ public class GamePlayer extends GameGroup {
         }
 
         // We play the probe's sound
-        Media media = new Media(new File("src/assets/audio/tools/probe.mp3").toURI().toString());
-        audioPlayer = new MediaPlayer(media);
-        audioPlayer.play();
+        Sound.PROBE.getMediaPlayer().play();
 
         // After 2 seconds of the sound
         PauseTransition waitAudio = new PauseTransition(Duration.seconds(2));
@@ -325,30 +333,32 @@ public class GamePlayer extends GameGroup {
             boxBlur.setIterations(10);
             List<Circle> tempShape = new ArrayList<>();
             for (GameImage signal : probeSignal) {
-                for (GameImage item : parent.getGroundItems()) {
-                    if (item.getImage() != null) {
-                        if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
-                            // We create a new circle to show area where is the item
-                            Circle cercTemp = new Circle(20);
-                            cercTemp.setFill(Color.GREEN);
-                            cercTemp.setCenterX(item.getXImage() + item.getFitWidth() / 2);
-                            cercTemp.setCenterY(item.getYImage() + item.getFitHeight() / 2);
+                for (Pane item : parent.getGroundItems()) {
+                    if(item.getChildren().get(0) instanceof GameImage){
+                        Image imgItem = ((GameImage) item.getChildren().get(0)).getImage();
 
-                            // We blur the circle
-                            cercTemp.setEffect(boxBlur);
-                            parent.add(cercTemp);
-                            tempShape.add(cercTemp);
+                        if (imgItem != null) {
+                            if (signal.getBoundsInParent().intersects(item.getBoundsInParent())) {
+                                // We create a new circle to show area where is the item
+                                Circle cercTemp = new Circle(20);
+                                cercTemp.setFill(Color.GREEN);
+                                cercTemp.setCenterX(item.getLayoutX() + item.getWidth() / 2);
+                                cercTemp.setCenterY(item.getLayoutY() + item.getHeight() / 2);
 
-                            // We make a blinking animation
-                            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), cercTemp);
-                            fadeTransition.setFromValue(1.0);
-                            fadeTransition.setToValue(0.0);
-                            fadeTransition.setCycleCount(Animation.INDEFINITE);
-                            fadeTransition.play();
+                                // We blur the circle
+                                cercTemp.setEffect(boxBlur);
+                                parent.add(cercTemp);
+                                tempShape.add(cercTemp);
 
+                                // We make a blinking animation
+                                FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), cercTemp);
+                                fadeTransition.setFromValue(1.0);
+                                fadeTransition.setToValue(0.0);
+                                fadeTransition.setCycleCount(Animation.INDEFINITE);
+                                fadeTransition.play();
+                            }
                         }
                     }
-
                 }
             }
 
