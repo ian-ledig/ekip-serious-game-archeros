@@ -60,8 +60,10 @@ public class PageMap extends GameGroup {
     private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL },
             { Item.MICROLITH_SCRAPER, Item.YORKSHIRE_SCRAPER, Item.COMB, Item.STATUETTE },
             { Item.STATUETTE_BRONZE, Item.STATUE, Item.ARTEFACT, Item.STATUETTE_G } };
-    private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
-    private SkyboxType[] skybox = { SkyboxType.PLAIN, SkyboxType.PLAIN, SkyboxType.DESERT };
+    private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE },
+            { GroundType.GRASS, GroundType.DIRT, GroundType.STONE },
+            { GroundType.SNOW, GroundType.DIRT, GroundType.STONE } };
+    private SkyboxType[] skybox = { SkyboxType.DESERT, SkyboxType.PLAIN, SkyboxType.MOUNTAIN };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
