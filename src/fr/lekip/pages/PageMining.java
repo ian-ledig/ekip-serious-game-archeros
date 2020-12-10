@@ -11,10 +11,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -43,6 +45,7 @@ public class PageMining extends GameGroup {
     private final GameImage btnResume;
     private final GameImage btnRestart;
     private final GameImage btnAbandon;
+    private final GameImage btnTutorial;
 
     private final List<Item> itemsFound = new ArrayList<>();
     private final List<Item> itemsLost = new ArrayList<>();
@@ -61,10 +64,14 @@ public class PageMining extends GameGroup {
 
     private Label scoreMandatory;
     private Label score;
+    private boolean intro;
+    private int initScore;
+    private int energyMaxScore;
 
-    public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex)
-            throws FileNotFoundException, CloneNotSupportedException {
-        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/bebas_neue/BebasNeue-Regular.ttf")), 27.0);
+    public PageMining(SkyboxType skyboxType, List<GroundType> groundTypes, List<Item> items, int nextLayerIndex,
+            boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
+        FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 27.0);
+
         this.skyboxType = skyboxType;
         this.groundTypes = groundTypes;
         this.items = items;
@@ -73,6 +80,10 @@ public class PageMining extends GameGroup {
                 150, 30, true);
         this.btnRestart = (GameImage) btnResume.clone();
         this.btnAbandon = (GameImage) btnResume.clone();
+        this.btnTutorial = (GameImage) btnResume.clone();
+
+        intro = pIntro;
+        initScore = pInitScore;
 
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
@@ -190,8 +201,10 @@ public class PageMining extends GameGroup {
             double Y1 = 0;
             double xG = 1450;
             double xD = 0;
+            energyMaxScore = 0;
             for (int i = 0; i < groundItems.size(); i++) {
                 energyDefault += (getGroundItems().get(i).getYImage() - 262) * 1.2 + 7;
+                energyMaxScore += (getGroundItems().get(i).getYImage() - 262);
 
                 // We take the deepest item Y
                 if ((getGroundItems().get(i).getYImage() - 262) > Y1) {
@@ -238,7 +251,6 @@ public class PageMining extends GameGroup {
         }
 
         add(player);
-
         loadEnergyBar();
         loadLabels();
         loadPause();
@@ -247,9 +259,131 @@ public class PageMining extends GameGroup {
         Main.mediaPlayer = Sound.GAME.getMediaPlayer();
         Main.mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         Main.mediaPlayer.play();
+        if (intro) {
+            loadTutorial();
+        } else {
+            // Add player movements event handler
+            addEventHandler(PlayerMovementsEventHandler.class);
+        }
 
-        // Add player movements event handler
-        addEventHandler(PlayerMovementsEventHandler.class);
+    }
+
+    public void loadTutorial() throws FileNotFoundException {
+        StackPane tuto = new StackPane();
+        tuto.setPrefSize(1450, 750);
+
+        GameImage backgroundTuto = new GameImage(
+                new Image(new FileInputStream("src/assets/textures/pages/mining/tutoBack.png")), 0, 0, 1000, 615,
+                false);
+        tuto.getChildren().add(backgroundTuto);
+        tuto.setAlignment(Pos.CENTER);
+
+        add(tuto);
+
+        Text title = new Text("TUTORIEL");
+        title.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/coco_gothic/CocoGothic_trial.ttf")), 18.0));
+        title.setFill(Color.ORANGE);
+        title.setX(685);
+        title.setY(100);
+
+        Pane pnIntro = new Pane();
+        Label txtIntro = new Label(
+                "        Vous êtes arrivé à votre lieu de fouille. Il vous faut à présent fouiller pour trouver l'objectif que vous recherchez ! Pour cela, une sonde \nainsi que des outils de minage sont à votre dispotion. Leur utilisation n'est cependant pas gratuite ; ce sera à vous de les utiliser avec \nprécaution ! Chaque lieu cache un total de 4 items à récupérer. Mais garde à vous ; seul l'item objectif est nécessaire pour réussir votre fouille !");
+        txtIntro.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        txtIntro.setTextFill(Color.WHITE);
+        txtIntro.setWrapText(true);
+        txtIntro.maxWidth(100);
+        txtIntro.setTranslateX(10);
+        pnIntro.getChildren().add(txtIntro);
+        pnIntro.setTranslateX(250);
+        pnIntro.setTranslateY(150);
+
+        Pane pnOutils = new Pane();
+        Label txtOutils = new Label(
+                "Force et coût des outils :\n        : 1                                                                                      : 2\n\n        : 4                                                                                      : 0 - 7");
+        txtOutils.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        txtOutils.setTextFill(Color.WHITE);
+        txtOutils.setWrapText(true);
+        txtOutils.maxWidth(100);
+        txtOutils.setTranslateX(10);
+        pnOutils.getChildren().add(txtOutils);
+        pnOutils.setTranslateX(250);
+        pnOutils.setTranslateY(270);
+
+        GameImage shovel = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/shovel.png")), 250,
+                290, 30, 30, true);
+        GameImage pickaxe = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/pickaxe.png")), 620,
+                290, 30, 30, true);
+        GameImage dynamite = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/dynamiter.png")),
+                250, 335, 30, 30, true);
+        GameImage probe = new GameImage(new Image(new FileInputStream("src/assets/textures/tools/probe.png")), 620, 335,
+                30, 30, true);
+
+        Label movement = new Label(
+                "Commandes : \nZ = Se déplacer vers le haut\nQ = Se déplacer à gauche\nS = Se déplacer vers le bas\nD = Se déplacer à droite\nF = Changer d'outil\nClique gauche souris = Utiliser outil\nPour miner, indiquer la direction avec ZQSD avant de cliquer !");
+        movement.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        movement.setTextFill(Color.WHITE);
+        movement.setTranslateX(250);
+        movement.setTranslateY(390);
+
+        Pane pnNrg = new Pane();
+        GameImage nrgImage = new GameImage(
+                new Image(new FileInputStream("src/assets/textures/pages/mining/tutoEnergy.png")), 0, 0, 200, 100,
+                true);
+        Label txtNrg = new Label(
+                "        Vous avez une énergie limitée qui vous permettra de casser des blocs et d'utiliser vos outils. Lorsque votre énergie tombe à 0, la partie se termine. Votre energie totale est déterminée selon la difficulté de la fouille.");
+        txtNrg.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        txtNrg.setTextFill(Color.WHITE);
+        txtNrg.setWrapText(true);
+        txtNrg.setMaxWidth(700);
+        txtNrg.setTranslateX(220);
+
+        pnNrg.getChildren().addAll(nrgImage, txtNrg);
+        pnNrg.setTranslateX(250);
+        pnNrg.setTranslateY(600);
+
+        StackPane btnValidate = new StackPane();
+        GameImage validate = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btn.png")),
+                0, 0, 150, 30, true);
+        Text txtValidate = new Text("Compris");
+        txtValidate.setFont(
+                Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
+        btnValidate.getChildren().add(validate);
+        btnValidate.getChildren().add(txtValidate);
+        btnValidate.setAlignment(Pos.CENTER);
+        btnValidate.setTranslateX(650);
+        btnValidate.setTranslateY(700);
+
+        add(shovel);
+        add(pickaxe);
+        add(dynamite);
+        add(probe);
+        add(movement);
+        add(title);
+        add(pnIntro);
+        add(pnOutils);
+        add(pnNrg);
+        add(btnValidate);
+
+        btnValidate.setOnMouseClicked((e) -> {
+            remove(tuto);
+            remove(movement);
+            remove(btnValidate);
+            remove(title);
+            remove(pnIntro);
+            remove(pnNrg);
+            remove(pnOutils);
+            remove(shovel);
+            remove(pickaxe);
+            remove(dynamite);
+            remove(probe);
+            addEventHandler(PlayerMovementsEventHandler.class);
+        });
 
     }
 
@@ -260,8 +394,8 @@ public class PageMining extends GameGroup {
                 Sound.WIN.getMediaPlayer().play();
             else
                 Sound.LOSE.getMediaPlayer().play();
-
-            PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress());
+ PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore,
+                    energyMaxScore);
             setOnKeyPressed(null);
             setOnMouseClicked(null);
             setOnMousePressed(null);
@@ -344,6 +478,7 @@ public class PageMining extends GameGroup {
     public void decreaseEnergy(int strength) {
         energyValue -= strength * 18;
         energyBar.setProgress(((energyValue * 100) / energyDefault) * 0.01);
+        tryToEndGame(false);
     }
 
     public void loadLabels() throws FileNotFoundException {
@@ -406,12 +541,19 @@ public class PageMining extends GameGroup {
         spnAbandon.getChildren().addAll(btnAbandon, txtAbandon);
         add(spnAbandon);
 
+        StackPane spnTutorial = new StackPane();
+        Text txtTutorial = new Text("Tutoriel");
+        txtTutorial.setFont(FONT);
+        spnTutorial.setAlignment(Pos.CENTER);
+        spnTutorial.getChildren().addAll(btnTutorial, txtTutorial);
+        add(spnTutorial);
+
         VBox vbxPause = new VBox();
         vbxPause.setPrefWidth(150);
         vbxPause.setTranslateX(650);
         vbxPause.setTranslateY(300);
         vbxPause.setSpacing(25);
-        vbxPause.getChildren().addAll(spnResume, spnRestart, spnAbandon);
+        vbxPause.getChildren().addAll(spnResume, spnRestart, spnTutorial, spnAbandon);
         vbxPause.setVisible(false);
         add(vbxPause);
 
@@ -422,14 +564,17 @@ public class PageMining extends GameGroup {
             spnResume.setVisible(true);
             spnRestart.setVisible(true);
             spnAbandon.setVisible(true);
+            spnTutorial.setVisible(true);
         });
 
         spnResume.setOnMouseClicked(mouseEvent -> {
             Sound.BUTTON.getMediaPlayer().play();
 
+            vbxPause.setVisible(!vbxPause.isVisible());
             spnResume.setVisible(false);
             spnRestart.setVisible(false);
             spnAbandon.setVisible(false);
+            spnTutorial.setVisible(false);
         });
 
         spnRestart.setOnMouseClicked(mouseEvent -> {
@@ -437,8 +582,21 @@ public class PageMining extends GameGroup {
             Main.mediaPlayer.stop();
 
             try {
-                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex));
+                Main.setShowedPage(new PageMining(skyboxType, groundTypes, items, nextLayerIndex, false, initScore));
             } catch (FileNotFoundException | CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        spnTutorial.setOnMouseClicked(mouseEvent -> {
+            vbxPause.setVisible(!vbxPause.isVisible());
+            spnResume.setVisible(false);
+            spnRestart.setVisible(false);
+            spnAbandon.setVisible(false);
+            spnTutorial.setVisible(false);
+            try {
+                loadTutorial();
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });

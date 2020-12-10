@@ -1,10 +1,6 @@
 package fr.lekip.pages;
 
-import fr.lekip.Main;
-import fr.lekip.components.GameGroup;
-import fr.lekip.components.GameImage;
 import fr.lekip.inputs.MapEventHandler;
-import fr.lekip.utils.Sound;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -20,15 +16,21 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import fr.lekip.utils.GroundType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class PageMap extends GameGroup {
 
@@ -39,6 +41,13 @@ public class PageMap extends GameGroup {
     private Object tempView;
     private Object[][] pinCombo;
     private boolean intro;
+    private int index;
+    private GameImage validate;
+    private Pane pane;
+    private Random rand = new Random();
+
+    private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
+    private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
         WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
@@ -112,9 +121,11 @@ public class PageMap extends GameGroup {
                 try {
                     loadIntro();
                 } catch (FileNotFoundException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
+            } else {
+                // Add map event handler
+                addEventHandler(MapEventHandler.class);
             }
 
             // Delete event
@@ -124,9 +135,9 @@ public class PageMap extends GameGroup {
 
     private void loadPin() {
 
-         // Each pin
+        // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
-        pinCombo[0][1] = "L'alaska";
+        pinCombo[0][1] = "Brora";
         pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
         pinCombo[1][0] = new GameImage(WORLD_PIN, 240, 750, 80, 80, true);
         pinCombo[1][1] = "La tombe sacré";
@@ -134,7 +145,6 @@ public class PageMap extends GameGroup {
         pinCombo[2][0] = new GameImage(WORLD_PIN, 800, 230, 80, 80, true);
         pinCombo[2][1] = "L'inconnu";
         pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
-
 
         for (int i = 0; i < 3; i++) {
             ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
@@ -170,7 +180,6 @@ public class PageMap extends GameGroup {
             e.printStackTrace();
         }
 
-
     }
 
     private void loadButtons() throws FileNotFoundException {
@@ -191,7 +200,7 @@ public class PageMap extends GameGroup {
         }
 
         // TODO to refactor
-       // Event handler to move the map in the location clicked
+        // Event handler to move the map in the location clicked
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
             final double tX = ((GameImage) pinCombo[0][0]).getXImage() + 350;
@@ -239,19 +248,18 @@ public class PageMap extends GameGroup {
         });
     }
 
-
     private void locationPreview(GameImage pinCombo2) {
         // TODO Add specialist choice
 
-        int index = -1;
+        index = -1;
         for (int i = 0; i < pinCombo.length; i++) {
             if (pinCombo[i][0] == pinCombo2) {
                 index = i;
             }
         }
-
+        System.out.println(pinCombo[index][1]);
         // Pane + Background color
-        Pane pane = new Pane();
+        pane = new Pane();
         try {
             // here we change the size of the background
             GameImage back = new GameImage(
@@ -266,9 +274,8 @@ public class PageMap extends GameGroup {
         try {
             crossClose = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/cross.png")), 1200,
                     5, 20, 20, true);
-            GameImage validate = new GameImage(
-                    new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970, 500, 200, 80,
-                    true);
+            validate = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970,
+                    500, 200, 80, true);
 
             GameImage landscape = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
@@ -279,10 +286,43 @@ public class PageMap extends GameGroup {
             e.printStackTrace();
         }
 
+        // Add description of the location
         Text description = new Text((String) pinCombo[index][3]);
         description.setTranslateX(500);
         description.setTranslateY(25);
         pane.getChildren().add(description);
+
+        List<GameSpecialist> specialists = loadSpecialist(index);
+
+        validate.setOnMouseClicked((e) -> {
+
+            int scoreInit = 0;
+            for (GameSpecialist spec : specialists) {
+                if (spec.getChecked() && spec.getCorrect()) {
+                    scoreInit += 25;
+                } else if (spec.getChecked() && spec.getCorrect() == false) {
+                    scoreInit -= 15;
+                }
+            }
+
+            List<GroundType> groundTypes = new ArrayList<>();
+            List<Item> items = new ArrayList<>();
+
+            for (int j = 0; j < 4; j++) {
+                items.add(locationItems[index][j]);
+                if (j < 3) {
+                    groundTypes.add(locationGround[index][j]);
+                }
+
+            }
+
+            try {
+                Main.setShowedPage(
+                        new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items, 900, intro, scoreInit));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setTranslateX(100);
@@ -318,7 +358,6 @@ public class PageMap extends GameGroup {
 
     }
 
-
     private void loadIntro() throws FileNotFoundException {
         GameGroup introPage = new GroupIntro();
 
@@ -347,4 +386,51 @@ public class PageMap extends GameGroup {
             }
         });
     }
+
+    private List<GameSpecialist> loadSpecialist(int index) {
+
+        // Add all the specialist that we can chose
+        List<GameSpecialist> specialists = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            GameSpecialist temp = GameSpecialist.getSpecificSpecialist(locationItems[index][i]);
+
+            boolean test = false;
+            for (GameSpecialist gameSpecialist : specialists) {
+                if (gameSpecialist.toString() == temp.toString()) {
+                    test = true;
+                }
+            }
+            if (!test) {
+                specialists.add(temp);
+            }
+        }
+
+        boolean in = true;
+        while (in) {
+
+            GameSpecialist temp2 = new GameSpecialist(0, 0, rand.nextInt(6), false);
+
+            boolean test = false;
+            for (GameSpecialist gameSpecialist : specialists) {
+                if (gameSpecialist.toString() == temp2.toString()) {
+                    test = true;
+                }
+            }
+            if (!test) {
+                specialists.add(temp2);
+                in = false;
+            }
+
+        }
+        Collections.shuffle(specialists);
+        int x = 50;
+        for (GameSpecialist gameSpecialist : specialists) {
+            gameSpecialist.setPos(x, 250);
+            x += 200;
+            pane.getChildren().add(gameSpecialist.getSpecialist());
+        }
+        return specialists;
+    }
+
 }

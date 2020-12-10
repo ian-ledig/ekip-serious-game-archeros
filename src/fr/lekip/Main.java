@@ -43,16 +43,18 @@ public class Main extends Application {
         groundTypes.add(GroundType.SANDSTONE);
         groundTypes.add(GroundType.STONE);
         List<Item> items = new ArrayList<>();
-        items.add(Item.STATUETTE_BRONZE);
-        items.add(Item.STATUE);
-        items.add(Item.ARTEFACT);
-        items.add(Item.STATUETTE_GOLD);
-        setShowedPage(new PageMining(SkyboxType.MOUNTAIN, groundTypes, items, 900));
+        items.add(Item.COIN);
+        items.add(Item.BUTTON);
+        items.add(Item.PRIEST);
+        items.add(Item.NAIL);
+        // setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items,
+        // 900, true));
 
+        setShowedPage(new PageMap(false));
         primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
+        // primaryStage.getIcons().add(new Image("src/assets/textures/icon.png"));
         primaryStage.show();
     }
 
