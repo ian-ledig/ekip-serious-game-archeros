@@ -280,7 +280,7 @@ public class PageMap extends GameGroup {
             crossClose = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/cross.png")), 1200,
                     5, 20, 20, true);
             validate = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/main/fouiller.png")), 970,
-                    500, 200, 80, true);
+                    490, 200, 80, true);
 
             GameImage landscape = new GameImage(
                     new Image(new FileInputStream("src/assets/textures/pages/main/brora.png")), 10, 10, 500, 225, true);
@@ -318,7 +318,6 @@ public class PageMap extends GameGroup {
                 if (j < 3) {
                     groundTypes.add(locationGround[index][j]);
                 }
-
             }
 
             try {
@@ -329,14 +328,15 @@ public class PageMap extends GameGroup {
             }
         });
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setTranslateX(100);
-        scrollPane.setTranslateY(100);
-        scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        scrollPane.setContent(pane);
-        scrollPane.setPrefSize(1250, 550);
-
+        // ScrollPane scrollPane = new ScrollPane();
+        // scrollPane.setTranslateX(100);
+        // scrollPane.setTranslateY(100);
+        // scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+        // scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+        // scrollPane.setContent(pane);
+        // scrollPane.setPrefSize(1250, 550);
+        pane.setTranslateX(100);
+        pane.setTranslateY(100);
         // Blur effect in the background
         BoxBlur boxBlur = new BoxBlur();
         boxBlur.setWidth(8);
@@ -347,14 +347,14 @@ public class PageMap extends GameGroup {
         for (Node objects : super.getChildren()) {
             objects.setEffect(boxBlur);
         }
-        add(scrollPane);
+        add(pane);
 
         getChildren().get(0).setOnMouseDragged(null);
         pane.requestFocus();
 
         // Add event handler for cross click
         crossClose.setOnMouseClicked((e) -> {
-            remove(scrollPane);
+            remove(pane);
             addEventHandler(MapEventHandler.class);
             for (Node objects : super.getChildren()) {
                 objects.setEffect(null);
