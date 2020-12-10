@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * Enum of ground types which is used in page mining
+ */
 public enum GroundType {
 
     GRASS("src/assets/textures/pages/mining/grass.png", 1),
@@ -29,10 +32,17 @@ public enum GroundType {
         }
     }
 
+    /**
+     * @return game image cloned from the ground type
+     * @throws CloneNotSupportedException
+     */
     public GameImage cloneGameImage() throws CloneNotSupportedException {
         return (GameImage) gameImage.clone();
     }
 
+    /**
+     * @return resistance of the ground type
+     */
     public int getResistance() {
         return resistance;
     }

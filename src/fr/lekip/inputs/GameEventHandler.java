@@ -3,6 +3,9 @@ package fr.lekip.inputs;
 import fr.lekip.components.GameGroup;
 import javafx.event.EventHandler;
 
+/**
+ * Parent class of archeroes events
+ */
 public abstract class GameEventHandler implements EventHandler {
 
     public GameEventHandler(GameGroup group){

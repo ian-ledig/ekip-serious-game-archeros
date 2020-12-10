@@ -16,22 +16,29 @@ public class PlayerMovementsEventHandler extends GameEventHandler {
         super(group);
     }
 
+    /**
+     * Load the event structure
+     * @param group to apply the event handler
+     */
     @Override
     public void loadEventHandler(GameGroup group) {
+
+        // try to get the page mining instance
         if (group instanceof PageMining) {
             PageMining page = (PageMining) group;
             GamePlayer player = page.getPlayer();
 
             if (player != null && player.getParent() instanceof PageMining) {
 
-
                 group.setOnKeyPressed(keyEvent -> {
 
+                    // if escape key is pressed, try to show the pause menu
                     if(keyEvent.getCode().equals(KeyCode.ESCAPE) && !page.isIntro()){
                         page.switchPause();
                         return;
                     }
 
+                    // if session is not in pause or intro : try to move the player or switch tool
                     if(!page.isInPause() && !page.isIntro()) {
                         int delta = 10;
                         switch (keyEvent.getCode()) {
@@ -85,7 +92,7 @@ public class PlayerMovementsEventHandler extends GameEventHandler {
                     }
                 });
 
-
+                // try to break or use the probe tool
                 group.setOnMousePressed(mouseEvent -> {
                     if(!page.isInPause() && !page.isIntro()) {
                         // If the tool is the probe, we call the function probe()

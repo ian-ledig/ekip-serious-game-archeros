@@ -19,6 +19,10 @@ public class MapEventHandler extends GameEventHandler {
         super(group);
     }
 
+    /**
+     * Load the event structure
+     * @param group to apply the event handler
+     */
     @Override
     public void loadEventHandler(GameGroup group) {
         // We only take the map + all the pins to move
@@ -62,6 +66,5 @@ public class MapEventHandler extends GameEventHandler {
 
     @Override
     public void handle(Event event) {
-        //
     }
 }

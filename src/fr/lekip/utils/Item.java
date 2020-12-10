@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * Enum of items which is used in page mining and page summary
+ */
 public enum Item {
 
     COIN("Pièce", "Pièce du 18ème siècle utilisé par la Géorgie, Diametre : 25mm", 1, 1,
@@ -64,30 +67,52 @@ public enum Item {
         }
     }
 
+    /**
+     * @return texture path of the item
+     */
     public String getTexturePath() {
         return texturePath;
     }
 
+    /**
+     * @return name of the item
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return lore of the item
+     */
     public String getLore() {
         return lore;
     }
 
+    /**
+     * @return minimum resistance of the item
+     */
     public int getMinResistance() {
         return minResistance;
     }
 
+    /**
+     * @return maximum resistance of the item
+     */
     public int getMaxResistance() {
         return maxResistance;
     }
 
+    /**
+     * @return texture size of the item
+     */
     public double getTextureSize() {
         return gameImage.getFitWidth();
     }
 
+    /**
+     * @return game image cloned from the item
+     * @throws CloneNotSupportedException
+     */
     public GameImage cloneGameImage() throws CloneNotSupportedException {
         return (GameImage) gameImage.clone();
     }

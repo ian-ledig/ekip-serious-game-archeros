@@ -10,8 +10,6 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -20,9 +18,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
@@ -40,25 +35,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The main page that show the map with clickable pins
+ */
 public class PageMap extends GameGroup {
 
-    private final Image WORLD_MAP;
     private final Image WORLD_PIN;
+
     private final VBox sideMenu;
-    private final Pane mapp;
+    private final Pane map;
     private Object tempView;
-    private Object[][] pinCombo;
-    private boolean intro;
+    private final Object[][] pinCombo;
+    private final boolean intro;
     private int index;
     private GameImage validate;
     private Pane pane;
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
-    private Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
-    private GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
+    private final Item[][] locationItems = { { Item.COIN, Item.PRIEST, Item.BUTTON, Item.NAIL }, {}, {} };
+    private final GroundType[][] locationGround = { { GroundType.SAND, GroundType.SANDSTONE, GroundType.STONE }, {}, {} };
 
     public PageMap(boolean pIntro) throws FileNotFoundException {
-        WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
+        Image WORLD_MAP = new Image(new FileInputStream("src/assets/textures/pages/main/worldMap.png"));
         WORLD_PIN = new Image(new FileInputStream("src/assets/textures/pages/main/pin.png"));
 
         intro = pIntro;
@@ -69,11 +67,11 @@ public class PageMap extends GameGroup {
         sideMenu = new VBox();
         sideMenu.setTranslateX(1200);
 
-        mapp = new Pane();
+        map = new Pane();
         GameImage image = new GameImage(WORLD_MAP, 0, 0, 1700, 1250, true);
 
-        mapp.getChildren().addAll(image);
-        add(mapp);
+        map.getChildren().addAll(image);
+        add(map);
         add(sideMenu);
 
         // Display text while waiting for the user
@@ -141,6 +139,9 @@ public class PageMap extends GameGroup {
         });
     }
 
+    /**
+     * Load pin of playable areas
+     */
     private void loadPin() {
 
         // Each pin
@@ -154,17 +155,18 @@ public class PageMap extends GameGroup {
         pinCombo[2][1] = "Eretrie";
         pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
 
+        // add pin and looking for a click
         for (int i = 0; i < 3; i++) {
             ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
                 locationPreview((GameImage) mouseEvent.getSource());
-                System.out.println("Pin cliqué");
             });
-            mapp.getChildren().addAll((GameImage) pinCombo[i][0]);
-
+            map.getChildren().addAll((GameImage) pinCombo[i][0]);
         }
-
     }
 
+    /**
+     * Load the choice menu of search areas at right
+     */
     private void loadMenu() {
         Image sand;
         try {
@@ -182,14 +184,18 @@ public class PageMap extends GameGroup {
         sideMenu.setMinSize(250, 750);
         sideMenu.setMaxSize(250, 750);
 
+        // try to load search areas buttons
         try {
             loadButtons();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Load the buttons of search areas
+     * @throws FileNotFoundException if the is missing file
+     */
     private void loadButtons() throws FileNotFoundException {
         int y = 10;
         for (int i = 0; i < 3; i++) {
@@ -212,16 +218,16 @@ public class PageMap extends GameGroup {
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
             TranslateTransition tt = new TranslateTransition();
-            tt.setNode(mapp);
-            tt.setFromX(mapp.getTranslateX());
-            tt.setFromY(mapp.getTranslateY());
+            tt.setNode(map);
+            tt.setFromX(map.getTranslateX());
+            tt.setFromY(map.getTranslateY());
             tt.setToX(400);
             tt.setToY(800);
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
 
-            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
+            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), map);
             transition1.setToX(3);
             transition1.setToY(3);
 
@@ -233,16 +239,16 @@ public class PageMap extends GameGroup {
         ((Node) pinCombo[1][2]).setOnMouseClicked((e) -> {
 
             TranslateTransition tt = new TranslateTransition();
-            tt.setNode(mapp);
-            tt.setFromX(mapp.getTranslateX());
-            tt.setFromY(mapp.getTranslateY());
+            tt.setNode(map);
+            tt.setFromX(map.getTranslateX());
+            tt.setFromY(map.getTranslateY());
             tt.setToX(400);
             tt.setToY(600);
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
 
-            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
+            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), map);
             transition1.setToX(3);
             transition1.setToY(3);
 
@@ -254,16 +260,16 @@ public class PageMap extends GameGroup {
         ((Node) pinCombo[2][2]).setOnMouseClicked((e) -> {
 
             TranslateTransition tt = new TranslateTransition();
-            tt.setNode(mapp);
-            tt.setFromX(mapp.getTranslateX());
-            tt.setFromY(mapp.getTranslateY());
+            tt.setNode(map);
+            tt.setFromX(map.getTranslateX());
+            tt.setFromY(map.getTranslateY());
             tt.setToX(70);
             tt.setToY(500);
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
 
-            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
+            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), map);
             transition1.setToX(3);
             transition1.setToY(3);
 
@@ -272,6 +278,10 @@ public class PageMap extends GameGroup {
         });
     }
 
+    /**
+     * Open the preview of a search aera
+     * @param pinCombo2 pin
+     */
     private void locationPreview(GameImage pinCombo2) {
         index = -1;
         for (int i = 0; i < pinCombo.length; i++) {
@@ -315,17 +325,20 @@ public class PageMap extends GameGroup {
 
         List<GameSpecialist> specialists = loadSpecialist(index);
 
+        // looking for starting a mining session
         validate.setOnMouseClicked((e) -> {
 
+            // initialize the score
             int scoreInit = 0;
             for (GameSpecialist spec : specialists) {
                 if (spec.getChecked() && spec.getCorrect()) {
                     scoreInit += 25;
-                } else if (spec.getChecked() && spec.getCorrect() == false) {
+                } else if (spec.getChecked() && !spec.getCorrect()) {
                     scoreInit -= 15;
                 }
             }
 
+            // initialize mining session
             List<GroundType> groundTypes = new ArrayList<>();
             List<Item> items = new ArrayList<>();
 
@@ -336,6 +349,7 @@ public class PageMap extends GameGroup {
                 }
             }
 
+            // try to show the mining page to begin the mining session
             try {
                 Main.setShowedPage(new PageMining(SkyboxType.PLAIN, groundTypes, items, 900, intro, scoreInit));
             } catch (Exception e1) {
@@ -372,6 +386,10 @@ public class PageMap extends GameGroup {
 
     }
 
+    /**
+     * Showing the intro and waitting for player click
+     * @throws FileNotFoundException
+     */
     private void loadIntro() throws FileNotFoundException {
         GameGroup introPage = new GroupIntro();
 
@@ -401,8 +419,12 @@ public class PageMap extends GameGroup {
         });
     }
 
+    /**
+     * Load a specialist
+     * @param index of the item
+     * @return the list of specialists used
+     */
     private List<GameSpecialist> loadSpecialist(int index) {
-
         // Add all the specialist that we can chose
         List<GameSpecialist> specialists = new ArrayList<>();
 

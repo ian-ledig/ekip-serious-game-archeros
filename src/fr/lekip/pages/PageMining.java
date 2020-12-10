@@ -25,14 +25,22 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The mining session page that can handle different type of skybox, ground, item and ground layer size
+ */
 public class PageMining extends GameGroup {
 
+    // redundant values
     public static final int GROUND_BLOCKS_NUMBER = 2187;
     public static final int GROUND_BLOCKS_LINE_NUMBER = 81;
     public static final int GROUND_BLOCKS_ROW_NUMBER = 27;
-    public final Font FONT;
-    public static final String SCORE_BASE_TEXT = "Objets : ";
 
+
+    // font used by all page mining text
+    public final Font FONT;
+    public final String SCORE_BASE_TEXT = "Objets : ";
+
+    // basics information
     private final SkyboxType skyboxType;
     private final List<GroundType> groundTypes;
     private final List<Item> items;
@@ -46,9 +54,13 @@ public class PageMining extends GameGroup {
     private final GameImage btnAbandon;
     private final GameImage btnTutorial;
 
+    // list of found items
     private final List<Item> itemsFound = new ArrayList<>();
+
+    // list of lost items
     private final List<Item> itemsLost = new ArrayList<>();
 
+    // instance of player
     private final GamePlayer player = new GamePlayer(this);
 
     private boolean intro;
@@ -75,10 +87,13 @@ public class PageMining extends GameGroup {
             boolean pIntro, int pInitScore) throws FileNotFoundException, CloneNotSupportedException {
         FONT = Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 27.0);
 
+        // setting base informations
         this.skyboxType = skyboxType;
         this.groundTypes = groundTypes;
         this.items = items;
         this.nextLayerIndex = nextLayerIndex;
+
+        // setting buttons texture
         this.btnResume = new GameImage(new Image(new FileInputStream("src/assets/textures/pages/mining/btn.png")), 0, 0,
                 150, 30, true);
         this.btnRestart = (GameImage) btnResume.clone();
@@ -88,6 +103,7 @@ public class PageMining extends GameGroup {
         intro = pIntro;
         initScore = pInitScore;
 
+        // setting the skybox
         Image skyBox = new Image(
                 new FileInputStream("src/assets/textures/pages/mining/skybox" + skyboxType.getId() + ".png"));
 
@@ -98,6 +114,39 @@ public class PageMining extends GameGroup {
         int x = 0;
         int y = 262;
         try {
+            // setting the number of item to pickup
+            this.itemsRemaining = this.items.size();
+            boolean itemWinAssigned = false;
+
+            // Item spawning
+            for (Item item : items) {
+                double itemSize = item.getTextureSize();
+                boolean correctPos = false;
+                int spawnPosX = 0;
+                int spawnPosY = 0;
+
+                // Try to create a position far enough away from other items
+                while (!correctPos) {
+                    correctPos = true;
+                    spawnPosX = (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE
+                            - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE);
+                    spawnPosY = (int) ((Math.random()
+                            * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
+
+                    if (!groundItems.isEmpty()) {
+                        for (Pane pneItem : groundItems) {
+                            if (spawnPosX + itemSize >= pneItem.getLayoutX()
+                                    && spawnPosX <= pneItem.getLayoutX() + pneItem.getWidth()
+                                    || spawnPosY + itemSize >= pneItem.getLayoutY()
+                                    && spawnPosY <= pneItem.getLayoutY() + pneItem.getWidth()
+                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - pneItem.getLayoutX(), 2)
+                                    + Math.pow(spawnPosY - pneItem.getLayoutY(), 2))) < 200) {
+                                correctPos = false;
+                                break;
+                            }
+                        }
+                    }
+                }
 
             // Ground box spawning
             for (int i = 0; i < GROUND_BLOCKS_NUMBER; i++) {
@@ -119,38 +168,6 @@ public class PageMining extends GameGroup {
                 groundBox[i].setY(y);
                 add(groundBox[i]);
             }
-
-            this.itemsRemaining = this.items.size();
-            boolean itemWinAssigned = false;
-            // Item spawning
-            for (Item item : items) {
-                double itemSize = item.getTextureSize();
-                boolean correctPos = false;
-                int spawnPosX = 0;
-                int spawnPosY = 0;
-
-                // Try to create a position far enough away from other items
-                while (!correctPos) {
-                    correctPos = true;
-                    spawnPosX = (int) ((Math.random() * (GROUND_BLOCKS_LINE_NUMBER * GroundType.GROUND_SIZE
-                            - Item.MAX_ITEM_SIZE * 2 - Item.MAX_ITEM_SIZE * 2)) + Item.MAX_ITEM_SIZE);
-                    spawnPosY = (int) ((Math.random()
-                            * (GROUND_BLOCKS_ROW_NUMBER * GroundType.GROUND_SIZE - Item.MAX_ITEM_SIZE * 2)) + 262);
-
-                    if (!groundItems.isEmpty()) {
-                        for (Pane pneItem : groundItems) {
-                            if (spawnPosX + itemSize >= pneItem.getLayoutX()
-                                    && spawnPosX <= pneItem.getLayoutX() + pneItem.getWidth()
-                                    || spawnPosY + itemSize >= pneItem.getLayoutY()
-                                            && spawnPosY <= pneItem.getLayoutY() + pneItem.getWidth()
-                                    || Math.abs(Math.sqrt(Math.pow(spawnPosX - pneItem.getLayoutX(), 2)
-                                            + Math.pow(spawnPosY - pneItem.getLayoutY(), 2))) < 200) {
-                                correctPos = false;
-                                break;
-                            }
-                        }
-                    }
-                }
 
                 // Add and position the item
                 Pane pneItem = new Pane();
@@ -275,9 +292,16 @@ public class PageMining extends GameGroup {
 
     }
 
+    /**
+     * Load the tutorial page
+     * Called at the first mining session and if the player click to the tutorial button in pause menu
+     * @throws FileNotFoundException if there is missing file
+     */
     public void loadTutorial() throws FileNotFoundException {
         StackPane tuto = new StackPane();
         tuto.setPrefSize(1450, 750);
+
+        // show the content of the menu
 
         GameImage backgroundTuto = new GameImage(
                 new Image(new FileInputStream("src/assets/textures/pages/mining/tutoBack.png")), 0, 0, 1000, 615,
@@ -346,6 +370,8 @@ public class PageMining extends GameGroup {
         txtNrg.setFont(
                 Font.loadFont(new FileInputStream(new File("src/assets/font/squad_goals/SquadGoalsTTF.ttf")), 18.0));
         txtNrg.setTextFill(Color.WHITE);
+
+        // setting the maximum width of the label
         txtNrg.setWrapText(true);
         txtNrg.setMaxWidth(700);
         txtNrg.setTranslateX(220);
@@ -379,6 +405,7 @@ public class PageMining extends GameGroup {
 
         intro = true;
 
+        // if the button validate is pressed, it will resume the session
         btnValidate.setOnMouseClicked((e) -> {
             remove(tuto);
             remove(movement);
@@ -398,13 +425,21 @@ public class PageMining extends GameGroup {
 
     }
 
+    /**
+     * Check for the end of the session
+     * @param force to force the end of the session
+     */
     public void tryToEndGame(boolean force) {
+        // try to end the session
         if (force || isEnd()) {
+            // stop music and play sound
             Main.mediaPlayer.stop();
             if(itemsFound.contains(itemWin))
                 Sound.WIN.getMediaPlayer().play();
             else
                 Sound.LOSE.getMediaPlayer().play();
+
+            // show the summary page
  PageSummary summary = new PageSummary(itemsFound, itemsLost, itemWin, energyBar.getProgress(), initScore,
                     energyMaxScore);
             setOnKeyPressed(null);
@@ -416,15 +451,25 @@ public class PageMining extends GameGroup {
         }
     }
 
+    /**
+     * @return if the session have to be ended
+     */
     public boolean isEnd() {
         return groundItemWin == null && !itemsFound.contains(itemWin)
                 || itemsFound.size() + itemsLost.size() == groundItems.size() || energyBar.getProgress() <= 0;
     }
 
+    /**
+     * @return the list of ground items panes that contains game image of an item
+     */
     public List<Pane> getGroundItems() {
         return groundItems;
     }
 
+    /**
+     * set the list of ground items panes that contains game image of an item
+     * @param groundItems ground items list
+     */
     public void setGroundItems(List<Pane> groundItems) {
         this.groundItems = groundItems;
     }
@@ -469,12 +514,19 @@ public class PageMining extends GameGroup {
         return isInPause;
     }
 
+    /**
+     * Try to pause or unpause the game
+     */
     public void switchPause() {
         isInPause = !isInPause;
         Sound.BUTTON.getMediaPlayer().play();
         vbxPause.setVisible(!vbxPause.isVisible());
     }
 
+    /**
+     * Load the energy bar at top right corner of the screen
+     * @throws FileNotFoundException if there is a missing file
+     */
     public void loadEnergyBar() throws FileNotFoundException {
 
         // Init energyBar
@@ -490,6 +542,8 @@ public class PageMining extends GameGroup {
         hbox.setSpacing(5);
         hbox.getChildren().addAll(lightning, energyBar);
         add(hbox);
+
+        // try to decrease energy value if player click
         setOnMouseClicked((e) -> {
             if(!isInPause && !intro){
                 Tool tool = player.getTool();
@@ -497,18 +551,24 @@ public class PageMining extends GameGroup {
                     decreaseEnergy(player.getTool().getStrength());
             }
         });
-
-        // Calculation of the maximal energy
-        //
     }
 
+    /**
+     * decrease the energy value of the session
+     * @param strength delta to decrease
+     */
     public void decreaseEnergy(int strength) {
         energyValue -= strength * 18;
         energyBar.setProgress(((energyValue * 100) / energyDefault) * 0.01);
         tryToEndGame(false);
     }
 
-    public void loadLabels() throws FileNotFoundException {
+
+    /*
+     * Load texts in the interface to show the objectifs
+     */
+    public void loadLabels() {
+        // show the main objectif
         scoreMandatory = new Label("Objectif : ");
         scoreMandatory.setFont(FONT);
         HBox hbxScoreMand = new HBox(20);
@@ -527,6 +587,7 @@ public class PageMining extends GameGroup {
             e.printStackTrace();
         }
 
+        // show the number of item found and to found
         score = new Label(SCORE_BASE_TEXT + "0/" + groundItems.size());
         score.setFont(FONT);
         HBox hbxScore = new HBox(20);
@@ -537,7 +598,11 @@ public class PageMining extends GameGroup {
         add(hbxScore);
     }
 
+    /**
+     * Load the pause menu
+     */
     public void loadPause() {
+        // Adding the first button to set visible the pause menu
         StackPane spnPause = new StackPane();
         Text txtPause = new Text("II");
         txtPause.setFont(FONT);
@@ -546,6 +611,8 @@ public class PageMining extends GameGroup {
         spnPause.setAlignment(Pos.CENTER);
         spnPause.getChildren().addAll(btnPause, txtPause);
         add(spnPause);
+
+        //Adding the pause menu buttons
 
         StackPane spnResume = new StackPane();
         Text txtResume = new Text("Reprendre");
@@ -584,14 +651,19 @@ public class PageMining extends GameGroup {
         vbxPause.setVisible(false);
         add(vbxPause);
 
+        // if pause menu buttons are pressed
+
         spnPause.setOnMouseClicked(event -> {
+            // open or close the pause menu
             switchPause();
         });
 
         spnResume.setOnMouseClicked(mouseEvent -> {
+            // close the pause menu
             switchPause();
         });
 
+        // Restart the session
         spnRestart.setOnMouseClicked(mouseEvent -> {
             Sound.QUIT.getMediaPlayer().play();
             Main.mediaPlayer.stop();
@@ -603,6 +675,7 @@ public class PageMining extends GameGroup {
             }
         });
 
+        // show the tutorial menu
         spnTutorial.setOnMouseClicked(mouseEvent -> {
             vbxPause.setVisible(!vbxPause.isVisible());
             try {
@@ -612,6 +685,7 @@ public class PageMining extends GameGroup {
             }
         });
 
+        // force the end of the session
         spnAbandon.setOnMouseClicked(mouseEvent -> {
             Sound.QUIT.getMediaPlayer().play();;
 

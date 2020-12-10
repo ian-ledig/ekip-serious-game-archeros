@@ -21,14 +21,24 @@ import java.util.List;
 
 public class Main extends Application {
 
+    // size of the window
     public static int WINDOWS_WIDTH = 1450;
     public static int WINDOWS_HEIGHT = 750;
 
+    //the media player used for the main musics
     public static MediaPlayer mediaPlayer;
+
+    // main group of contents
     public static GameGroup root = new GameGroup();
 
+    // the main scene
     private static Scene scene;
 
+    /**
+     * Initialize the application
+     * @param primaryStage windows stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -36,21 +46,10 @@ public class Main extends Application {
         scene = new Scene(root, WINDOWS_WIDTH, WINDOWS_HEIGHT);
         scene.setFill(Color.TRANSPARENT);
 
-        // Page creation
-        // Page Mining
-        List<GroundType> groundTypes = new ArrayList<>();
-        groundTypes.add(GroundType.SAND);
-        groundTypes.add(GroundType.SANDSTONE);
-        groundTypes.add(GroundType.STONE);
-        List<Item> items = new ArrayList<>();
-        items.add(Item.COIN);
-        items.add(Item.BUTTON);
-        items.add(Item.PRIEST);
-        items.add(Item.NAIL);
-        // setShowedPage(new PageMining(SkyboxType.BLUE_SKY_CLOUDS, groundTypes, items,
-        // 900, true));
-
+        // Show the main page
         setShowedPage(new PageMap(false));
+
+        // Setting window
         primaryStage.setTitle("Archeroes");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -58,9 +57,14 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Switch to a new page
+     * @param showedPage page to show
+     */
     public static void setShowedPage(GameGroup showedPage) {
         Main.root.getChildren().clear();
 
+        // set background
         if (showedPage instanceof PageMap)
             Main.scene.setFill(Color.web("86B4E4"));
         else {

@@ -18,6 +18,9 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Player object used for mining session. It contain informations of the player
+ */
 public class GamePlayer extends GameGroup {
 
     private final int BREAKING_DELTA = 30;
@@ -42,22 +45,41 @@ public class GamePlayer extends GameGroup {
         add(toolTexture);
     }
 
+    /**
+     * decrement the position X of the player
+     * @param delta to decrement
+     */
     public void decrementX(int delta) {
         setTranslateX(getTranslateX() - delta);
     }
 
+    /**
+     * increment the position X of the player
+     * @param delta to increment
+     */
     public void incrementX(int delta) {
         setTranslateX(getTranslateX() + delta);
     }
 
+    /**
+     * decrement the position Y of the player
+     * @param delta to decrement
+     */
     public void decrementY(int delta) {
         setTranslateY(getTranslateY() + delta);
     }
 
+    /**
+     * increment the position Y of the player
+     * @param delta to increment
+     */
     public void incrementY(int delta) {
         setTranslateY(getTranslateY() - delta);
     }
 
+    /**
+     * set the player direction image
+     */
     public void updateMovements() {
         try {
             playerTexture.setImage(new Image(new FileInputStream(movements.getTexturePath())));
@@ -66,6 +88,9 @@ public class GamePlayer extends GameGroup {
         }
     }
 
+    /**
+     * try to break the ground
+     */
     public void tryToBreak() {
         // Check for the target position
         if (tool != null) {
@@ -96,11 +121,20 @@ public class GamePlayer extends GameGroup {
             deleteGround(getIndexOf(groundBox, pos[0], pos[1]), 0, groundBox, pos[0], pos[1]);
             parent.setGroundBox(groundBox);
 
+            // if player is breaking ground below him : decrement his Y position
             while (movements == Movement.DOWN && canPlayerGo(Direction.DOWN))
                 decrementY(7);
         }
     }
 
+    /**
+     * recursive method that delete the ground around a given index
+     * @param defaultIndex the main targeted point
+     * @param index the current index of ground box
+     * @param groundBox the list of all ground box
+     * @param posX x position targeted
+     * @param posY y position targeted
+     */
     public void deleteGround(int defaultIndex, int index, GameImage[] groundBox, double posX, double posY) {
         if (tool.getStrength() != 7) {
             if (defaultIndex != -1) {
@@ -159,9 +193,16 @@ public class GamePlayer extends GameGroup {
 
     }
 
+    /**
+     * @param groundBox list of all ground box
+     * @param posX position X searched
+     * @param posY position Y searched
+     * @return the index of a ground box by positions
+     */
     public int getIndexOf(GameImage[] groundBox, double posX, double posY) {
         int result = -1;
 
+        // for each ground box, try to get the box who match to positions
         for (int i = 0; i < groundBox.length; i++) {
             if (groundBox[i].getX() == posX && groundBox[i].getY() == posY) {
                 result = i;
@@ -172,9 +213,16 @@ public class GamePlayer extends GameGroup {
         return result;
     }
 
+    /**
+     * @param groundBox list of all ground box
+     * @param posX position X
+     * @param posY position Y
+     * @return the exact position of a ground box in an array of two element. [0] for X and [1] for Y
+     */
     public double[] getBoxPos(GameImage[] groundBox, double posX, double posY) {
         double[] result = { -1, -1 };
 
+        // for each ground box, try to get the exact position of the right box
         for (int i = 0; i < groundBox.length; i++) {
             double boxPosX = groundBox[i].getX();
             double boxPosY = groundBox[i].getY();
@@ -188,6 +236,11 @@ public class GamePlayer extends GameGroup {
         return result;
     }
 
+    /**
+     * check if the player can go to a direction
+     * @param direction direction to go
+     * @return if the player can go to the direction
+     */
     public boolean canPlayerGo(Direction direction) {
         boolean result = true;
         GameImage[] groundBox = parent.getGroundBox();
@@ -254,6 +307,7 @@ public class GamePlayer extends GameGroup {
                 }
                 break;
         }
+        // update the player image to match with the direction
         updateMovements();
 
         return result;
@@ -284,8 +338,10 @@ public class GamePlayer extends GameGroup {
         }
     }
 
+    /**
+     * using probe method
+     */
     public void probe() {
-
         double width = 25.0;
         double index = 1.0;
         List<GameImage> probeSignal = new ArrayList<>();

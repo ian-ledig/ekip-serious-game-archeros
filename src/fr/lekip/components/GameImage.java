@@ -14,15 +14,26 @@ public class GameImage extends ImageView {
         setPreserveRatio(preserveRatio);
     }
 
+    /**
+     * Clone the current game image
+     * @return the new instance of game image cloned
+     * @throws CloneNotSupportedException if the clone fails
+     */
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         return new GameImage(getImage(), getX(), getY(), getFitWidth(), getFitHeight(), isPreserveRatio());
     }
 
+    /**
+     * @return get the X position
+     */
     public double getXImage() {
         return xProperty().get();
     }
 
+    /**
+     * @return get the Y position
+     */
     public double getYImage() {
         return yProperty().get();
     }
