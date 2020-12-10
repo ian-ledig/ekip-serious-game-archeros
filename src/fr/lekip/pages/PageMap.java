@@ -99,7 +99,7 @@ public class PageMap extends GameGroup {
         Text text = new Text("Cliquez pour commencer...");
         text.setTranslateX(550);
         text.setTranslateY(375);
-        text.setStyle("-fx-fill: purple;-fx-font: 30 arial; ");
+        text.setStyle("-fx-fill: black;-fx-font: 30 arial; ");
 
         add(text);
 
