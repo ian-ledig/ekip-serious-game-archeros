@@ -26,6 +26,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -141,14 +142,14 @@ public class PageMap extends GameGroup {
     private void loadPin() {
 
         // Each pin
-        pinCombo[0][0] = new GameImage(WORLD_PIN, 150, 150, 80, 80, true);
+        pinCombo[0][0] = new GameImage(WORLD_PIN, 645, 98, 80, 80, true);
         pinCombo[0][1] = "Brora";
         pinCombo[0][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout\nRetour à la ligne test\n\nSaut de ligne test ";
-        pinCombo[1][0] = new GameImage(WORLD_PIN, 240, 750, 80, 80, true);
-        pinCombo[1][1] = "La tombe sacré";
+        pinCombo[1][0] = new GameImage(WORLD_PIN, 648, 200, 80, 80, true);
+        pinCombo[1][1] = "Perth";
         pinCombo[1][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
-        pinCombo[2][0] = new GameImage(WORLD_PIN, 800, 230, 80, 80, true);
-        pinCombo[2][1] = "L'inconnu";
+        pinCombo[2][0] = new GameImage(WORLD_PIN, 761, 211, 80, 80, true);
+        pinCombo[2][1] = "Eretrie";
         pinCombo[2][3] = "Description du lieu lalalalalalalalalalalala c 'est bo et c grand et tout ";
 
         for (int i = 0; i < 3; i++) {
@@ -208,19 +209,25 @@ public class PageMap extends GameGroup {
         // Event handler to move the map in the location clicked
         ((Node) pinCombo[0][2]).setOnMouseClicked((e) -> {
 
-            final double tX = ((GameImage) pinCombo[0][0]).getXImage() + 350;
-            final double tY = ((GameImage) pinCombo[0][0]).getYImage() + 75;
 
             TranslateTransition tt = new TranslateTransition();
             tt.setNode(mapp);
             tt.setFromX(mapp.getTranslateX());
             tt.setFromY(mapp.getTranslateY());
-            tt.setToX(tX);
-            tt.setToY(tY);
+            tt.setToX(400);
+            tt.setToY(800);
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
+            
+
+            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
+            transition1.setToX(3);
+            transition1.setToY(3);
+
             tt.play();
+            transition1.play();
+            
 
         });
 
@@ -230,12 +237,19 @@ public class PageMap extends GameGroup {
             tt.setNode(mapp);
             tt.setFromX(mapp.getTranslateX());
             tt.setFromY(mapp.getTranslateY());
-            tt.setToX(500);
-            tt.setToY(-400);
+            tt.setToX(400);
+            tt.setToY(600);
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
+
+            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
+            transition1.setToX(3);
+            transition1.setToY(3);
+
             tt.play();
+            transition1.play();
+            
         });
 
         ((Node) pinCombo[2][2]).setOnMouseClicked((e) -> {
@@ -244,12 +258,18 @@ public class PageMap extends GameGroup {
             tt.setNode(mapp);
             tt.setFromX(mapp.getTranslateX());
             tt.setFromY(mapp.getTranslateY());
-            tt.setToX(-350);
-            tt.setToY(-115);
+            tt.setToX(70);
+            tt.setToY(500);
             tt.setDuration(new Duration(1500));
             tt.setCycleCount(1);
             tt.setAutoReverse(true);
+            
+            ScaleTransition transition1 = new ScaleTransition(Duration.seconds(2), mapp);
+            transition1.setToX(3);
+            transition1.setToY(3);
+
             tt.play();
+            transition1.play();
         });
     }
 
