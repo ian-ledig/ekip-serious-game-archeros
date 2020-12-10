@@ -10,6 +10,7 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.BoxBlur;
@@ -154,23 +155,23 @@ public class PageMap extends GameGroup {
         // Each pin
         pinCombo[0][0] = new GameImage(WORLD_PIN, 645, 98, 80, 80, true);
         pinCombo[0][1] = "Wilkhouse";
-        pinCombo[0][3] = "Wilkhouse est situé à 5 km de Brora (village écossais).\n"
-                + "Le site se trouve entre la route A9 et la côte.\n" + "Le site se trouve sur une plage surélevée.\n"
-                + "Au total, le site comporte les vestiges de quatre bâtiments.\n"
-                + "Face à la plage, on a le bâtiment de l'auberge lui-même.\n"
-                + "Au nord de l'auberge, et annexée au mur de l'enceinte se trouve une éventuelle dépendance.\n"
-                + "Un autre petit bâtiment est situé à côté et immédiatement à l'ouest (à l'intérieur des terres) de l'auberge.\n"
+        pinCombo[0][3] = "Wilkhouse est situé à 5 km de Brora (village écossais)."
+                + "Le site se trouve entre la route A9 et la côte." + "Le site se trouve sur une plage surélevée."
+                + "Au total, le site comporte les vestiges de quatre bâtiments."
+                + "Face à la plage, on a le bâtiment de l'auberge lui-même."
+                + "Au nord de l'auberge, et annexée au mur de l'enceinte se trouve une éventuelle dépendance."
+                + "Un autre petit bâtiment est situé à côté et immédiatement à l'ouest (à l'intérieur des terres) de l'auberge."
                 + "Un quatrième bâtiment se trouve à 50m au sud-ouest de celles-ci.";
         pinCombo[1][0] = new GameImage(WORLD_PIN, 633, 180, 80, 80, true);
         pinCombo[1][1] = "Amaya";
-        pinCombo[1][3] = "Amaya est le nom d'une cité antique cantabre, située au sommet du massif du même nom haut de 1 377\n"
-                + "mètres au nord-ouest de la Province de Burgos, en Espagne.\n"
-                + "La ville était située à la limite sud de la Cantabrie à l'époque romaine, à une position stratégique contrôlant \nl'accès au territoire cantabre depuis le sud.";
+        pinCombo[1][3] = "Amaya est le nom d'une cité antique cantabre, située au sommet du massif du même nom haut de 1 377"
+                + "mètres au nord-ouest de la Province de Burgos, en Espagne."
+                + "La ville était située à la limite sud de la Cantabrie à l'époque romaine, à une position stratégique contrôlant l'accès au territoire cantabre depuis le sud.";
         pinCombo[2][0] = new GameImage(WORLD_PIN, 761, 211, 80, 80, true);
         pinCombo[2][1] = "Eretrie";
-        pinCombo[2][3] = "Érétrie est une cité de la Grèce antique, située sur la côte occidentale de l'île d'Eubée, et qui a largement\ncontribué au développement et au rayonnement de la civilisation grecque.\n"
-                + "Les premières fouilles archéologiques ont eu lieu en 1885 par la société archéologique d'Athènes et \nl'école américaine.\n"
-                + "Depuis 1964, elle fait l'objet de recherches archéologiques conduites par l'École suisse d'archéologie en Grèce \net de publications dans le cadre de la collection Eretria, Fouilles et Recherches.\n";
+        pinCombo[2][3] = "Érétrie est une cité de la Grèce antique, située sur la côte occidentale de l'île d'Eubée, et qui a largement contribué au développement et au rayonnement de la civilisation grecque."
+                + "Les premières fouilles archéologiques ont eu lieu en 1885 par la société archéologique d'Athènes et l'école américaine."
+                + "Depuis 1964, elle fait l'objet de recherches archéologiques conduites par l'École suisse d'archéologie en Grèce et de publications dans le cadre de la collection Eretria, Fouilles et Recherches.";
 
         for (int i = 0; i < 3; i++) {
             ((GameImage) pinCombo[i][0]).setOnMouseClicked(mouseEvent -> {
@@ -297,6 +298,7 @@ public class PageMap extends GameGroup {
                 index = i;
             }
         }
+
         // Pane + Background color
         pane = new Pane();
         try {
@@ -331,13 +333,15 @@ public class PageMap extends GameGroup {
 
             pane.getChildren().add(landscape);
             pane.getChildren().add(crossClose);
-            pane.getChildren().add(validate);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         // Add description of the location
-        Text description = new Text((String) pinCombo[index][3]);
+        Label description = new Label((String) pinCombo[index][3]);
+        description.setWrapText(true);
+        description.setMaxWidth(500);
         description.setTranslateX(500);
         description.setTranslateY(25);
         try {
@@ -347,7 +351,7 @@ public class PageMap extends GameGroup {
             e2.printStackTrace();
         }
         pane.getChildren().add(description);
-
+        pane.getChildren().add(validate);
         List<GameSpecialist> specialists = loadSpecialist(index);
 
         validate.setOnMouseClicked((e) -> {
@@ -378,6 +382,15 @@ public class PageMap extends GameGroup {
             }
         });
 
+        // Add event handler for cross click
+        crossClose.setOnMouseClicked((e) -> {
+            remove(pane);
+            addEventHandler(MapEventHandler.class);
+            for (Node objects : super.getChildren()) {
+                objects.setEffect(null);
+            }
+        });
+
         pane.setTranslateX(100);
         pane.setTranslateY(100);
 
@@ -395,15 +408,6 @@ public class PageMap extends GameGroup {
 
         getChildren().get(0).setOnMouseDragged(null);
         pane.requestFocus();
-
-        // Add event handler for cross click
-        crossClose.setOnMouseClicked((e) -> {
-            remove(pane);
-            addEventHandler(MapEventHandler.class);
-            for (Node objects : super.getChildren()) {
-                objects.setEffect(null);
-            }
-        });
 
     }
 
