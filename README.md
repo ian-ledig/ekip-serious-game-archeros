@@ -1,4 +1,4 @@
-# Archeroes (T432_XXXXX_T3_Y)
+# Archeroes (T432_VOC20_T3_A)
 
 Archeroes est un jeu sérieux ayant pour but d'introduire au joueur les bases et principes de l'archéologie.
 Il se joue seul et ne contient pas de moyen de sauvegarde.
@@ -44,8 +44,8 @@ Enfin, il aura la possibilité de retourner sur le menu principal pour procéder
 
 Temps nécessaire : 2 à 4 minutes.
 
-- Rendez-vous sur [la page de téléchargement du jeu](TELECHARGEMENT LIEN) et cliquez sur 
-le bouton Télécharger.
+- Rendez-vous sur [la page de téléchargement du jeu](https://git.unistra.fr/l-ekip/t432_voc20_t3_a/-/releases/1.0) et cliquez sur 
+le lien ArcheroesWindows.zip ou ArcheroesLinux.zip selon votre système d'exploitation.
 
 
 - Lancez le fichier téléchargé et extrayez son contenu dans 
