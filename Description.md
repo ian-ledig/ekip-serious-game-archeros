@@ -33,9 +33,9 @@ Connaître les étapes de la fouille :
   - [x] Possibilité d'utilisation de différents outils
   - [x] Affichage du nombre d'objet à trouver
 - Compte rendu post-fouille :
-  - [ ] Nombre de points de fouille obtenus
-  - [ ] Erreurs
-  - [ ] Objets obtenus avec possibilité de description
+  - [x] Nombre de points de fouille obtenus
+  - [x] Erreurs
+  - [x] Objets obtenus avec possibilité de description
 
 ### Actions
 
