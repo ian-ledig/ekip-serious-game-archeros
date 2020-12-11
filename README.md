@@ -61,6 +61,10 @@ un dossier quelconque.
 
 - Le jeu Archeroes devrait se lancer et vous pourrez y jouer.
 
+## Developpé avec 
+
+  - [Java](https://www.java.com/fr/)
+  - [JavaFx](https://openjfx.io/)
 
 ### Plateformes de disponibilité
 
