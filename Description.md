@@ -27,7 +27,7 @@ Enfin, il aura la possibilité de retourner sur le menu principal pour procéder
 
 Connaître les étapes de la fouille :
 - [x] Prise de connaissance des informations concernant le site de fouille
-- [ ] Appel des spécialistes
+- [x] Appel des spécialistes
 - Fouille :
   - [x] Gestion de l'énergie
   - [x] Possibilité d'utilisation de différents outils
@@ -44,9 +44,9 @@ Connaître les étapes de la fouille :
 - [x] Choix des outils
 - [x] Fouiller le sol
 - [x] Ramasser les objets trouvés
-- [ ] Lire les explications des objets trouvés
+- [x] Lire les explications des objets trouvés
 - [x] Localiser les objets en utilisant la sonde
-- [ ] Gagner des points
+- [x] Gagner des points
 - [x] Perdre de l'énergie
 - [x] Détruire des objets
 - [x] Abandonner la fouille
