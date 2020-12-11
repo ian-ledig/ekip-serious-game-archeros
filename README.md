@@ -28,6 +28,10 @@ Dans le cas où l'équipe ne contient pas un spécialiste important pour l'analy
 En fin de fouille, un récapitulatif contenant le nombre de points total gagné, les erreurs commises et les objets acquis se présente au joueur. Les objets sont alors bien plus détaillés (aspect visuel, nom, description) et la prouesse de leurs trouvaille apportera un certain nombre de points au joueur.
 Enfin, il aura la possibilité de retourner sur le menu principal pour procéder à une nouvelle fouille.
 
+### Captures d'écran
+
+![Capture1](https://cdn.discordapp.com/attachments/775347167128059905/786890749883056168/unknown.png)
+![Capture2](https://cdn.discordapp.com/attachments/775347167128059905/786891905086521354/unknown.png)
 
 ### Contrôles
 
